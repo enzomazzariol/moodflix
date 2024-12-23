@@ -1,0 +1,17 @@
+.___  ___.   ______     ______    _______   _______  __       __  ___   ___
+|   \/   |  /  __  \   /  __  \  |       \ |   ____||  |     |  | \  \ /  /
+|  \  /  | |  |  |  | |  |  |  | |  .--.  ||  |__   |  |     |  |  \  V  /
+|  |\/|  | |  |  |  | |  |  |  | |  |  |  ||   __|  |  |     |  |   >   <
+|  |  |  | |  `--'  | |  `--'  | |  '--'  ||  |     |  `----.|  |  /  .  \
+|__|  |__|  \______/   \______/  |_______/ |__|     |_______||__| /__/ \__\
+
+🛰️ Welcome to Moodflix! 🚀
+            App for searching information points of interest 📌
+     ${application.title} ${application.version}
+             Powered by Spring Boot ${spring-boot.version}
+              Version: ${application.version}
+                 Java Version: ${java.version}
+                 Operating System: ${os.name} (${os.arch})
+                 Running on port: ${server.port}
+                 Profiles Active: ${spring.profiles.active:default}
+                 Executed by: ${user.name}
