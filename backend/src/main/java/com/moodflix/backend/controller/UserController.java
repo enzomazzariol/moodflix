@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")  // Endpoint: /api/users/...
+@RequestMapping("/moodflix")  // Endpoint: /api/users/...
 public class UserController {
 
     @GetMapping

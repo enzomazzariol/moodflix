@@ -15,3 +15,4 @@
                  Running on port: ${server.port}
                  Profiles Active: ${spring.profiles.active:default}
                  Executed by: ${user.name}
+                 Database URL: ${spring.datasource.url}
