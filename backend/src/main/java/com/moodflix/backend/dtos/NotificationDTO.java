@@ -1,19 +1,17 @@
-package com.moodflix.backend.model;
+package com.moodflix.backend.dtos;
 
-public class Notification {
+import com.moodflix.backend.model.NotificationType;
+
+public class NotificationDTO {
 
     private int notification_id;
     private int user_id;
     private NotificationType notification_type;
     private String message;
     private boolean read_status;
-    private String created_at;
 
-    public Notification() {
-
-    }
-
-    public Notification(int notification_id, int user_id, NotificationType notification_type, String message, boolean read_status, String created_at) {
+    public NotificationDTO() {}
+    public NotificationDTO(int notification_id, int user_id, NotificationType notification_type, String message, boolean read_status) {
         this.notification_id = notification_id;
         this.user_id = user_id;
         this.notification_type = notification_type;
@@ -59,13 +57,5 @@ public class Notification {
 
     public void setRead_status(boolean read_status) {
         this.read_status = read_status;
-    }
-
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
     }
 }
