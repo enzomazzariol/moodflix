@@ -1,5 +1,4 @@
 package com.moodflix.backend.model;
-
 import java.util.Date;
 
 public class Movie {
@@ -13,10 +12,11 @@ public class Movie {
     private String trailer_url;
     private String genre;
     private double rating;
+    private String created_at;
 
     public Movie() {}
 
-    public Movie(int movie_id, String title, String description, Date release_date, int duration, String poster_url, String trailer_url, String genre, double rating) {
+    public Movie(int movie_id, String title, String description, Date release_date, int duration, String poster_url, String trailer_url, String genre, double rating, String created_at) {
         this.movie_id = movie_id;
         this.title = title;
         this.description = description;
@@ -26,6 +26,7 @@ public class Movie {
         this.trailer_url = trailer_url;
         this.genre = genre;
         this.rating = rating;
+        this.created_at = created_at;
     }
 
     public int getMovie_id() {
@@ -98,6 +99,14 @@ public class Movie {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
     @Override
