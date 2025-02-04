@@ -7,6 +7,7 @@
     "icon": "./assets/splash-expo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "scheme": "moodflix-mobile",
     "splash": {
       "image": "./assets/splash-expo.png",
       "resizeMode": "cover",
@@ -22,7 +23,11 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
