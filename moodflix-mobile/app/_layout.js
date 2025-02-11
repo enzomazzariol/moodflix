@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   //TODO: Obtener usuario autenticado con un useEffect
@@ -9,13 +10,15 @@ export default function RootLayout() {
 
   useEffect(() => {
     setTimeout(() => {
-      router.replace('login')
+      router.replace('home')
     }, 2000)
   }, [])
 
   return (
-    <Stack>
-        <Stack.Screen name="auth" options={{ headerShown: false }} />
-    </Stack>
+    <SafeAreaProvider>
+      <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
+    </SafeAreaProvider>
   )
 }

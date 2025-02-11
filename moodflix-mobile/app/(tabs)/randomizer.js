@@ -1,9 +1,10 @@
 import { View, Text } from "react-native";
+import TabsScreen from "../../components/screens/TabsScreen";
 
 export default function Randomizer() {
   return (
-    <View>
-      <Text>Randomizer</Text>
-    </View>
+    <TabsScreen>
+      <Text className="text-stone-100 text-3xl">Randomizer</Text>
+    </TabsScreen>
   )
 }
