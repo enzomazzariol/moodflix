@@ -4,16 +4,16 @@
     "slug": "moodflix-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/splash-expo.png",
+    "icon": "./assets/william.jpg",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "scheme": "moodflix-mobile",
     "splash": {
-      "image": "./assets/splash-expo.png",
+      "image": "./assets/william.jpg",
       "resizeMode": "cover",
       "backgroundColor": "#000000",
       "dark": {
-        "image": "./assets/splash-expo.png",
+        "image": "./assets/william.jpg",
         "backgroundColor": "#000000"
       }
     },
