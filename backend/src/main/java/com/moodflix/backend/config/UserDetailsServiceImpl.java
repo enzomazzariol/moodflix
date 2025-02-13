@@ -1,11 +1,14 @@
 package com.moodflix.backend.config;
 
+import com.moodflix.backend.exceptions.NotFoundException;
 import com.moodflix.backend.model.User;
 import com.moodflix.backend.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -17,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() ->
-                new UsernameNotFoundException(String.format("User does not exist, email: %s", email)));
+                new NotFoundException(String.format("User does not exist, email: %s", email)));
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())

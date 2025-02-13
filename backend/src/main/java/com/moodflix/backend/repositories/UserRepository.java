@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public class UserRepository {
 
-    private static final String INSERT = "INSERT INTO users (username, email, password) VALUES (:name, :email, :password)";
+    private static final String INSERT = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
     private static final String FIND_BY_EMAIL = "SELECT * FROM users WHERE email = :email";
 
     private final JdbcClient jdbcClient;

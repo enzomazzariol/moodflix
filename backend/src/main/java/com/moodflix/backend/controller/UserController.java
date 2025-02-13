@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
+@RequestMapping("/moodflix")
 public class UserController {
 
-    @GetMapping("/")
+    @GetMapping("/getApp")
     public ResponseEntity<?> getHealth(Principal principal){
-        return ResponseEntity.ok("Moodflix API is running!" + principal.getName());
+        return ResponseEntity.ok("Moodflix API is running! " + principal.getName());
     }
 }
