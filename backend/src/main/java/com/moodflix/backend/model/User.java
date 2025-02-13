@@ -10,7 +10,6 @@ public class User {
     private String created_at;
 
     public User() {
-
     }
 
     public User(int user_id, String username, String email, String password, String avatar_url, String created_at) {
@@ -20,6 +19,12 @@ public class User {
         this.password = password;
         this.avatar_url = avatar_url;
         this.created_at = created_at;
+    }
+
+    public User(String username, String email, String password){
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 
     public int getUser_id() {
