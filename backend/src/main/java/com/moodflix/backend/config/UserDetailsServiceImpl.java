@@ -18,12 +18,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() ->
-                new NotFoundException(String.format("User does not exist, email: %s", email)));
+    public UserDetails loadUserByUsername(String identifier) {
+        User user = userRepository.findByEmailOrUsername(identifier)
+                .orElseThrow(() ->  new UsernameNotFoundException(String.format("\u001B[31m Credenciales incorrectas para usuario: %s \u001B[0m", identifier)));
 
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
+                .username(user.getUsername())
                 .password(user.getPassword())
                 .build();
     }

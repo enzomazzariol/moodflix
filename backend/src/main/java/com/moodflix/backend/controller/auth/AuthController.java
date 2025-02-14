@@ -1,6 +1,7 @@
 package com.moodflix.backend.controller.auth;
 
 import com.moodflix.backend.config.JwtHelper;
+import com.moodflix.backend.config.UserDetailsServiceImpl;
 import com.moodflix.backend.dtos.LoginRequest;
 import com.moodflix.backend.dtos.LoginResponse;
 import com.moodflix.backend.dtos.SignupRequest;
@@ -22,8 +23,6 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-    @Autowired
-    AuthenticationManager authenticationManager;
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@Valid @RequestBody SignupRequest signupRequest) {
@@ -32,9 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password()));
-        String token = JwtHelper.generateToken(loginRequest.email());
-        return ResponseEntity.ok(new LoginResponse(loginRequest.email(), token));
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+        return authService.authenticateUser(loginRequest);
     }
 }
