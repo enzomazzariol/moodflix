@@ -17,11 +17,24 @@ import java.util.Date;
 public class JwtHelper {
 
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private static final int HOURS = 48;
+    private static final int ACCESS_TOKEN_EXPIRATION_HOURS = 24;
+    private static final int REFRESH_TOKEN_EXPIRATION_DAYS = 7;
 
     public static String generateToken(String email) {
         Instant now = Instant.now();
-        Instant expiration = now.plus(HOURS, ChronoUnit.HOURS);
+        Instant expiration = now.plus(ACCESS_TOKEN_EXPIRATION_HOURS, ChronoUnit.HOURS);
+
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(expiration))
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                .compact();
+    }
+    // Generar el Refresh Token
+    public static String generateRefreshToken(String email) {
+        Instant now = Instant.now();
+        Instant expiration = now.plus(REFRESH_TOKEN_EXPIRATION_DAYS, ChronoUnit.DAYS);
 
         return Jwts.builder()
                 .setSubject(email)
@@ -31,13 +44,20 @@ public class JwtHelper {
                 .compact();
     }
 
+    // Extrer nombre de usuario del token
     public static String extractUsername(String token) {
         return getTokenBody(token).getSubject();
     }
 
+    // Validar token de acceso
     public static Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    }
+
+    // Validar el Refresh Token
+    public static Boolean validateRefreshToken(String token) {
+        return !isTokenExpired(token);
     }
 
     private static Claims getTokenBody(String token) {
@@ -52,7 +72,7 @@ public class JwtHelper {
         }
     }
 
-    private static boolean isTokenExpired(String token)  {
+    private static boolean isTokenExpired(String token) {
         Claims claims = getTokenBody(token);
         return claims.getExpiration().before(new Date());
     }
