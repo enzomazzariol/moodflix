@@ -36,13 +36,15 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsServiceImpl userDetailsService;
     private final LoginAttemptRepository loginAttemptRepository;
+    private final JwtHelper jwtHelper;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsService, LoginAttemptRepository loginAttemptRepository){
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsService, LoginAttemptRepository loginAttemptRepository, JwtHelper jwtHelper){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.loginAttemptRepository = loginAttemptRepository;
+        this.jwtHelper = jwtHelper;
     }
 
     @Transactional
@@ -77,7 +79,7 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(userDetails.getUsername(), loginRequest.password())
             );
             // Generamos el token si la autenticacion es exitosa
-            String token = JwtHelper.generateToken(userDetails.getUsername());
+            String token = jwtHelper.generateToken(userDetails.getUsername());
 
             // Registrar el intento de login exitoso
             addLoginAttempt(user, true);
@@ -90,13 +92,13 @@ public class AuthService {
             // Registrar intento fallido si el usuario no existe
             addLoginAttempt(loginRequest.emailOrUsername(), false);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiErrorResponse(HttpStatus.NOT_FOUND.value(), "Usuario no encontrado: " + loginRequest.emailOrUsername()));
+                    .body(new ApiErrorResponse(HttpStatus.NOT_FOUND.value(), "Usuario no existe: " + loginRequest.emailOrUsername()));
         }
         catch (BadCredentialsException e) {
             // Registrar el intento de login fallido
             addLoginAttempt(user, false);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Credenciales incorrectas para usuario: " + loginRequest.emailOrUsername()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), "Contraseña incorrecta"));
         }
     }
 

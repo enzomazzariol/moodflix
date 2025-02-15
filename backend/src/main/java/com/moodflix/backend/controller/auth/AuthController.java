@@ -24,6 +24,9 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
+    @Autowired
+    JwtHelper jwtHelper;
+
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@Valid @RequestBody SignupRequest signupRequest) {
         authService.signup(signupRequest);
@@ -38,9 +41,9 @@ public class AuthController {
     @PostMapping("/refresh-token")
     @PreAuthorize("isAuthenticated()")  // Asegura que el usuario esté autenticado
     public ResponseEntity<?> refreshToken(@RequestBody String refreshToken){
-        if(JwtHelper.validateRefreshToken(refreshToken)) {
-            String username = JwtHelper.extractUsername(refreshToken);
-            String newAccessToken = JwtHelper.generateToken(username);
+        if(jwtHelper.validateRefreshToken(refreshToken)) {
+            String username = jwtHelper.extractUsername(refreshToken);
+            String newAccessToken = jwtHelper.generateToken(username);
             return ResponseEntity.ok(newAccessToken);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Refresh token is expired or invalid");

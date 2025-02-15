@@ -4,23 +4,36 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-
+@Component
 public class JwtHelper {
 
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final Key SECRET_KEY;
+
+    public JwtHelper(@Value("${jwt.secret}") String secret) {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        this.SECRET_KEY = Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public Key getSecretKey() {
+        return SECRET_KEY;
+    }
+
     private static final int ACCESS_TOKEN_EXPIRATION_HOURS = 24;
     private static final int REFRESH_TOKEN_EXPIRATION_DAYS = 7;
 
-    public static String generateToken(String email) {
+    public String generateToken(String email) {
         Instant now = Instant.now();
         Instant expiration = now.plus(ACCESS_TOKEN_EXPIRATION_HOURS, ChronoUnit.HOURS);
 
@@ -28,11 +41,11 @@ public class JwtHelper {
                 .setSubject(email)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiration))
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
     // Generar el Refresh Token
-    public static String generateRefreshToken(String email) {
+    public String generateRefreshToken(String email) {
         Instant now = Instant.now();
         Instant expiration = now.plus(REFRESH_TOKEN_EXPIRATION_DAYS, ChronoUnit.DAYS);
 
@@ -40,39 +53,39 @@ public class JwtHelper {
                 .setSubject(email)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiration))
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
     // Extrer nombre de usuario del token
-    public static String extractUsername(String token) {
+    public String extractUsername(String token) {
         return getTokenBody(token).getSubject();
     }
 
     // Validar token de acceso
-    public static Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
     // Validar el Refresh Token
-    public static Boolean validateRefreshToken(String token) {
+    public Boolean validateRefreshToken(String token) {
         return !isTokenExpired(token);
     }
 
-    private static Claims getTokenBody(String token) {
+    private Claims getTokenBody(String token) {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(SECRET_KEY)
+                    .setSigningKey(getSecretKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
         } catch (SignatureException | ExpiredJwtException e) { // Invalid signature or expired token
-            throw new AccessDeniedException("Access denied: " + e.getMessage());
+            throw new AccessDeniedException("Acceso denegado: " + e.getMessage());
         }
     }
 
-    private static boolean isTokenExpired(String token) {
+    private boolean isTokenExpired(String token) {
         Claims claims = getTokenBody(token);
         return claims.getExpiration().before(new Date());
     }
