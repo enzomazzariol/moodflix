@@ -7,7 +7,7 @@ public record LoginRequest(
         @NotBlank(message = "Email o username no puede estar vacío")
         String emailOrUsername,
 
-        @NotBlank(message = "Password no puede estar vacío")
+        @NotBlank(message = "La contraseña no puede estar vacío")
         String password
 ) {
 }

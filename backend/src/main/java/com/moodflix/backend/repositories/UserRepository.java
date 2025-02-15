@@ -12,6 +12,7 @@ public class UserRepository {
 
     private static final String INSERT = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
     private static final String FIND_BY_EMAIL = "SELECT * FROM users WHERE email = :email";
+    private static final String FIND_BY_USERNAME = "SELECT * FROM users WHERE username = :username";
     private static final String FIND_BY_EMAIL_OR_USERNAME = "SELECT * FROM users WHERE email = :identifier OR username = :identifier";
 
     private final JdbcClient jdbcClient;
@@ -32,6 +33,13 @@ public class UserRepository {
     public Optional<User> findByEmail(String email) {
         return jdbcClient.sql(FIND_BY_EMAIL)
                 .param("email", email)
+                .query(User.class)
+                .optional();
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return jdbcClient.sql(FIND_BY_USERNAME)
+                .param("username", username)
                 .query(User.class)
                 .optional();
     }

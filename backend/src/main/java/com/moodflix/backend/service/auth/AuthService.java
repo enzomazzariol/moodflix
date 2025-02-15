@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,10 +48,14 @@ public class AuthService {
     @Transactional
     public void signup(SignupRequest signupRequest){
         String email = signupRequest.email();
-        Optional<User> existingUser = userRepository.findByEmail(email);
-        if(existingUser.isPresent()) {
-            throw new DuplicateException(String.format("User with the email address '%s' already exists.", email));
+        String username = signupRequest.username();
+
+        if(userRepository.findByEmail(email).isPresent()){
+            throw new DuplicateException(String.format("El correo '%s' ya está en uso.", email));
         }
+
+        if(userRepository.findByUsername(username).isPresent())
+            throw new DuplicateException(String.format("El nombre de usuario '%s' ya está en uso.", username));
 
         String hashedPassword = passwordEncoder.encode(signupRequest.password());
         User user = new User(signupRequest.username(), email, hashedPassword);
@@ -58,29 +63,38 @@ public class AuthService {
     }
 
     public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
-        boolean success;
+        String user = loginRequest.emailOrUsername();
 
         // Comprobar los intentos fallidos antes de proceder con la autenticación
-        if (!checkLoginAttempts(loginRequest.emailOrUsername())) {
+        if (!checkLoginAttempts(user)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ApiErrorResponse(HttpStatus.FORBIDDEN.value(), "Too many failed login attempts. Please try again later."));
+                    .body(new ApiErrorResponse(HttpStatus.FORBIDDEN.value(), "Muchos intentos de login. Por favor intentalo más tarde."));
         }
-
         try {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.emailOrUsername());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user);
 
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userDetails.getUsername(), loginRequest.password())
             );
             // Generamos el token si la autenticacion es exitosa
             String token = JwtHelper.generateToken(userDetails.getUsername());
-            // Registrar el intento de login exitoso
-            addLoginAttempt(loginRequest.emailOrUsername(), true);
-            return ResponseEntity.ok(new LoginResponse(userDetails.getUsername(), token));
-        } catch (BadCredentialsException e) {
 
-            // Registrar el intento de login fallido
+            // Registrar el intento de login exitoso
+            addLoginAttempt(user, true);
+            // Limpiar intentos fallidos
+            loginAttemptRepository.clearFailedAttempts(user);
+
+            return ResponseEntity.ok(new LoginResponse(userDetails.getUsername(), token));
+        }
+        catch (UsernameNotFoundException e) {
+            // Registrar intento fallido si el usuario no existe
             addLoginAttempt(loginRequest.emailOrUsername(), false);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiErrorResponse(HttpStatus.NOT_FOUND.value(), "Usuario no encontrado: " + loginRequest.emailOrUsername()));
+        }
+        catch (BadCredentialsException e) {
+            // Registrar el intento de login fallido
+            addLoginAttempt(user, false);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ApiErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Credenciales incorrectas para usuario: " + loginRequest.emailOrUsername()));
         }
@@ -97,18 +111,13 @@ public class AuthService {
 
     public boolean checkLoginAttempts(String userOrEmail) {
         List<LoginAttempts> recentAttempts = loginAttemptRepository.findRecent(userOrEmail);
+
+        // Filtrar intentos fallidos en los últimos 15 minutos
+        LocalDateTime fifteenMinutesAgo = LocalDateTime.now().minusMinutes(15);
         long failedAttempts = recentAttempts.stream()
-                .filter(attempt -> !attempt.getSuccess())  // Filtrar solo intentos fallidos
+                .filter(attempt -> !attempt.getSuccess() && attempt.getAttemptedAt().isAfter(fifteenMinutesAgo))
                 .count();
 
-        if (failedAttempts >= 5) {
-            // Comprobar si han pasado 15 minutos desde el primer intento fallido
-            LocalDateTime firstFailedAttemptTime = recentAttempts.get(0).getAttemptedAt();
-            if (Duration.between(firstFailedAttemptTime, LocalDateTime.now()).toMinutes() < 15) {
-                // Si no han pasado 15 minutos, no se permiten más intentos
-                return false;
-            }
-        }
-        return true;  // Si no hay bloqueos, permitir el intento
+        return failedAttempts < 5; // Permitir si hay menos de 5 intentos fallidos en los últimos 15 min
     }
 }
