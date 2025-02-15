@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.NotActiveException;
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +33,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> hanldeDuplicateException(DuplicateException exception) {
         ApiErrorResponse resp = new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resp);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDeniedException(AccessDeniedException exception) {
+        ApiErrorResponse resp = new ApiErrorResponse(HttpStatus.FORBIDDEN.value(), exception.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(resp);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

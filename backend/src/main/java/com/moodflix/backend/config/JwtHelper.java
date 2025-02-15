@@ -80,8 +80,10 @@ public class JwtHelper {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (SignatureException | ExpiredJwtException e) { // Invalid signature or expired token
-            throw new AccessDeniedException("Acceso denegado: " + e.getMessage());
+        } catch (SignatureException e) { // Invalid signature or expired token
+            throw new AccessDeniedException("Acceso denegado: Firma del token invalida. La validez de JWT no se puede afirmar");
+        } catch(ExpiredJwtException e) {
+            throw new AccessDeniedException("Acceso denegado: El token ha expirado");
         }
     }
 
