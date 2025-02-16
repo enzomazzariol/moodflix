@@ -41,12 +41,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                   // Configurar permisos a los endpoints
-                .authorizeHttpRequests(auth -> auth
+                // Deshabilitar temporalmente
+                /*.authorizeHttpRequests(auth -> auth
                         // public endpoints
                         .requestMatchers(HttpMethod.POST, "/moodflix/auth/signup/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/moodflix/auth/login/**").permitAll()
                         // private endpoints
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated())*/
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .authenticationManager(authenticationManager)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
