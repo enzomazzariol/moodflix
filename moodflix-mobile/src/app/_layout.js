@@ -40,7 +40,7 @@ export default function RootLayout() {
         delay: 200
       }).start(async () => {
         await SplashScreen.hideAsync();
-        router.replace('(tabs)');
+        router.replace('auth');
       });
     }
   }, [isReady]);
@@ -54,7 +54,7 @@ export default function RootLayout() {
       <StatusBar style="auto" />
       <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="auth" options={{ headerShown: false }} />
         </Stack>
       </Animated.View>
     </SafeAreaProvider>
