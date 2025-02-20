@@ -1,62 +1,41 @@
-import { Stack, router } from 'expo-router';
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+import { Stack, useRouter } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar, Animated, Easing } from 'react-native';
-import '../../global.css';
+import { StatusBar } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
+import "../../global.css";
 
-SplashScreen.preventAutoHideAsync();
-
-/* Funcion para produccion
-SplashScreen.setOptions({
-  fade: true,
-})
-*/
+SplashScreen.preventAutoHideAsync(); 
 
 export default function RootLayout() {
-  //TODO: Obtener usuario autenticado con un useEffect
-  // SI esta logeado lo redirigimos al (tabs) sino al auth (login/sign up)
-  const[isReady, setIsReady] = useState(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current; 
-  // Falta estado para autenticacion
+  const router = useRouter();
+  const [isReady, setIsReady] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      // Simulación de carga de datos para PRUEBA
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simula un delay de carga
+    const prepareApp = async () => {
+      // Simulación de carga (puedes cargar fuentes, datos, etc.)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setIsAuthenticated(true); 
       setIsReady(true);
     };
 
-    checkAuth();
-  }, [])
+    prepareApp();
+  }, []);
 
-  useEffect(() => {
+   useEffect(() => {
     if (isReady) {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1000, 
-        easing: Easing.out(Easing.quad),
-        useNativeDriver: true,
-        delay: 200
-      }).start(async () => {
-        await SplashScreen.hideAsync();
-        router.replace('(tabs)');
-      });
+      SplashScreen.hideAsync();
+      router.replace(isAuthenticated ? "/(tabs)" : "/(auth)/login");
     }
   }, [isReady]);
-
-  if(!isReady) {
-    return null;
-  }
-
   return (
     <SafeAreaProvider>
-      <StatusBar style="auto" />
-      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-        <Stack>
+        <StatusBar style="auto" />
+        <Stack screenOptions={{ headerShown: false, animation: "fade_from_bottom" }}>
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         </Stack>
-      </Animated.View>
     </SafeAreaProvider>
-  )
+  );
 }
