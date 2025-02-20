@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Stack, useRouter } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar, View, ActivityIndicator } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { StatusBar } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import "../../global.css";
 
@@ -32,13 +31,11 @@ export default function RootLayout() {
   }, [isReady]);
   return (
     <SafeAreaProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
         <StatusBar style="auto" />
         <Stack screenOptions={{ headerShown: false, animation: "fade_from_bottom" }}>
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         </Stack>
-      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }
