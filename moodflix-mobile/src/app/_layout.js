@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar, Animated, Easing } from 'react-native';
-import '../global.css';
+import '../../global.css';
 
 SplashScreen.preventAutoHideAsync();
 

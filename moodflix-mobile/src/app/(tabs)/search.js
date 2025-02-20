@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import TabsScreen from "@screens/TabsScreen";
+import TabsScreen from "../../components/screens/TabsScreen";
+import { Text } from "react-native";
 
 export default function Search() {
   return (

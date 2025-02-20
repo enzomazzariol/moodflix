@@ -4,26 +4,22 @@
     "slug": "moodflix-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/william.jpg",
+    "icon": "./assets/splash-expo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "moodflix-mobile",
+    "scheme": "Moodflix mobile",
     "splash": {
-      "image": "./assets/william.jpg",
-      "resizeMode": "cover",
-      "backgroundColor": "#000000",
-      "dark": {
-        "image": "./assets/william.jpg",
-        "backgroundColor": "#000000"
-      }
+      "image": "./assets/william.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/william.png",
+        "backgroundColor": "#000000"
       }
     },
     "web": {

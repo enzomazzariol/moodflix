@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import TabsScreen from "@screens/TabsScreen";
+import { Text } from "react-native";
+import TabsScreen from "../../components/screens/TabsScreen";
 
 export default function Home() {
   return (
