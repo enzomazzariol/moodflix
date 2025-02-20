@@ -1,23 +1,22 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import BgSVG from "../../../assets/bg-signup.svg";
+import BgSVG from "../../../assets/test-signup.svg";
 import { Link } from "expo-router";
 
 export default function Signup() {
   return (
     <SafeAreaView className="flex-1 items-center justify-center">
-          {/* Fondo SVG con posición absoluta */}
-          <View className="absolute">
-            <BgSVG  />
-          </View>
+        <View className="absolute">
+          <BgSVG  />
+        </View>
     
-          <Text className="text-xl font-bold text-white">Sign up</Text>
-          <Link href='/login' asChild>
-                  <TouchableOpacity className="p-3 rounded-full bg-stone-500 shadow-md">
-                    <Text>Ir al login</Text>
-                  </TouchableOpacity>
-                </Link>
-        </SafeAreaView>
+        <Text className="text-xl font-bold text-white">Sign up</Text>
+        <Link href='/login' asChild>
+            <TouchableOpacity className="p-3 rounded-full bg-stone-500 shadow-md">
+              <Text>Ir al login</Text>
+            </TouchableOpacity>
+        </Link>
+    </SafeAreaView>
   )
 }
 
