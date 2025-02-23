@@ -1,22 +1,49 @@
 package com.moodflix.backend.model;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
+import java.util.List;
 
 public class Movie {
 
+    @SerializedName("id")
     private int movie_id;
+
+    @SerializedName("original_title")
     private String title;
+
+    @SerializedName("overview")
     private String description;
+
+    @SerializedName("release_date")
     private Date release_date;
+
+    @SerializedName("runtime")
     private int duration;
+
+    @SerializedName("poster_path")
     private String poster_url;
+
     private String trailer_url;
-    private String genre;
+
+    @SerializedName("backdrop_path")
+    private String file_path;
+
+    @SerializedName("genres")
+    private List<Genre> genre;
+
+    @SerializedName("vote_average")
     private double rating;
+
+    private String platforms;
+
+    @SerializedName("tagline")
+    private String tagline;
     private String created_at;
 
     public Movie() {}
 
-    public Movie(int movie_id, String title, String description, Date release_date, int duration, String poster_url, String trailer_url, String genre, double rating, String created_at) {
+    public Movie(int movie_id, String title, String description, Date release_date, int duration, String poster_url, String trailer_url, String file_path, List<Genre> genre, double rating, String platforms, String tagline, String created_at) {
         this.movie_id = movie_id;
         this.title = title;
         this.description = description;
@@ -24,8 +51,11 @@ public class Movie {
         this.duration = duration;
         this.poster_url = poster_url;
         this.trailer_url = trailer_url;
+        this.file_path = file_path;
         this.genre = genre;
         this.rating = rating;
+        this.platforms = platforms;
+        this.tagline = tagline;
         this.created_at = created_at;
     }
 
@@ -85,11 +115,19 @@ public class Movie {
         this.trailer_url = trailer_url;
     }
 
-    public String getGenre() {
+    public String getFile_path() {
+        return file_path;
+    }
+
+    public void setFile_path(String file_path) {
+        this.file_path = file_path;
+    }
+
+    public List<Genre> getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(List<Genre> genre) {
         this.genre = genre;
     }
 
@@ -99,6 +137,22 @@ public class Movie {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public String getPlatforms() {
+        return platforms;
+    }
+
+    public void setPlatforms(String platforms) {
+        this.platforms = platforms;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public void setTagline(String tagline) {
+        this.tagline = tagline;
     }
 
     public String getCreated_at() {

@@ -6,10 +6,10 @@ export default function Home() {
   
   return (
     <TabsScreen>
-        <Text className="text-stone-100 text-3xl">Home</Text>
+        <Text className="text-jasper font-light text-5xl">Home</Text>
         <Link href='/(auth)/login' asChild>
-          <TouchableOpacity className="p-3 rounded-full bg-stone-500 shadow-md">
-            <Text>Ir al login</Text>
+          <TouchableOpacity className="py-3 px-8 bg-bole rounded-sm  mt-10">
+            <Text className="text-floral-white font-bold text-xl">Ir al login</Text>
           </TouchableOpacity>
         </Link>
     </TabsScreen>

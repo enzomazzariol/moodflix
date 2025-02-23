@@ -12,7 +12,7 @@ export default function Login() {
       </View>
 
       <Text className="text-xl font-bold text-white">Login</Text>
-      <Link href='/signup' asChild>
+      <Link href='/(tabs)' asChild>
         <TouchableOpacity className="p-3 rounded-full bg-stone-500 shadow-md">
           <Text>Ir al sign up</Text>
         </TouchableOpacity>
