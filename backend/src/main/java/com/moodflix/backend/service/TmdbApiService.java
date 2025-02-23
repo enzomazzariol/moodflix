@@ -25,13 +25,6 @@ public class TmdbApiService {
     }
 
     public Movie fetchMovieFromTmdb(int movie_id) {
-
-        // Verificamos que la pelicula esta en la base de datos
-        Optional<Movie> movieOptional = movieRepository.findById(movie_id);
-        if(movieOptional.isPresent()) {
-            return movieOptional.get();
-        }
-
         // Si no esta, la buscamos en la API de TMDB y la insertamos en la BD
         String jsonResponse = webClient.get()
                 .uri(uriBuilder -> uriBuilder
