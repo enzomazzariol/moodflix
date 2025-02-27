@@ -51,7 +51,21 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
+        /*
+        *
+        // QUITAR ESTA COMPROBACION MAS ADELANTE CUANDO SE ACTIVE EL FILTRO DE SECURITY
+        *
+        */
+        // Verificamos que la cabecera no venga vacía
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+        }
+
+        // Extraer el token quitando el prefijo "Bearer "
+        String token = authHeader.substring(7);
+
         return authService.logout(token);
+
     }
 }
