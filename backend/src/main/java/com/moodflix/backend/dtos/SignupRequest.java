@@ -13,7 +13,7 @@ public record SignupRequest(
         String email,
 
         @NotBlank(message = "La contraseña no puede estar vacio")
-        @Size(min = 8, max = 20, message = "La contraseña debe tener entre 6 y 20 dígitos")
+        @Size(min = 8, max = 20, message = "La contraseña debe tener entre 8 y 20 dígitos")
         String password
         ) {
 

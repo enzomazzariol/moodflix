@@ -1,7 +1,7 @@
 package com.moodflix.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moodflix.backend.exceptions.ApiErrorResponse;
+import com.moodflix.backend.exceptions.ApiResponse;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -57,13 +57,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (AccessDeniedException | java.io.IOException e) {
-            ApiErrorResponse errorResponse = new ApiErrorResponse(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+            ApiResponse errorResponse = new ApiResponse(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write(toJson(errorResponse));
         }
     }
 
-    private String toJson(ApiErrorResponse response) {
+    private String toJson(ApiResponse response) {
         try {
             return objectMapper.writeValueAsString(response);
         } catch (Exception e) {

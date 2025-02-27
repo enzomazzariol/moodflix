@@ -16,6 +16,8 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.UUID;
+
 @Component
 public class JwtHelper {
 
@@ -37,10 +39,13 @@ public class JwtHelper {
         Instant now = Instant.now();
         Instant expiration = now.plus(ACCESS_TOKEN_EXPIRATION_HOURS, ChronoUnit.HOURS);
 
+        String uuid = UUID.randomUUID().toString();
+
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiration))
+                .claim("uuid", uuid)
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -60,6 +65,10 @@ public class JwtHelper {
     // Extrer nombre de usuario del token
     public String extractUsername(String token) {
         return getTokenBody(token).getSubject();
+    }
+
+    public String extractUUID(String token) {
+        return getTokenBody(token).get("uuid", String.class);
     }
 
     // Validar token de acceso

@@ -49,4 +49,9 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Refresh token is expired or invalid");
         }
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
+        return authService.logout(token);
+    }
 }

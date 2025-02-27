@@ -1,11 +1,11 @@
 package com.moodflix.backend.exceptions;
 
-public class ApiErrorResponse {
+public class ApiResponse {
 
     private int statusCode;
     private String message;
 
-    public ApiErrorResponse(int statusCode, String message) {
+    public ApiResponse(int statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
     }

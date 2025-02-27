@@ -1,6 +1,6 @@
 package com.moodflix.backend.controller;
 
-import com.moodflix.backend.exceptions.ApiErrorResponse;
+import com.moodflix.backend.exceptions.ApiResponse;
 import com.moodflix.backend.exceptions.DuplicateException;
 import com.moodflix.backend.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.NotActiveException;
 import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,26 +17,26 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> hanldeGenericException(Exception exception){
-        ApiErrorResponse resp = new ApiErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage());
+    public ResponseEntity<ApiResponse> hanldeGenericException(Exception exception){
+        ApiResponse resp = new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp);
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleNotFoundException(NotFoundException exception) {
-        ApiErrorResponse resp = new ApiErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage());
+    public ResponseEntity<ApiResponse> handleNotFoundException(NotFoundException exception) {
+        ApiResponse resp = new ApiResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resp);
     }
 
     @ExceptionHandler(DuplicateException.class)
-    public ResponseEntity<ApiErrorResponse> hanldeDuplicateException(DuplicateException exception) {
-        ApiErrorResponse resp = new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    public ResponseEntity<ApiResponse> hanldeDuplicateException(DuplicateException exception) {
+        ApiResponse resp = new ApiResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resp);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiErrorResponse> handleAccessDeniedException(AccessDeniedException exception) {
-        ApiErrorResponse resp = new ApiErrorResponse(HttpStatus.FORBIDDEN.value(), exception.getMessage());
+    public ResponseEntity<ApiResponse> handleAccessDeniedException(AccessDeniedException exception) {
+        ApiResponse resp = new ApiResponse(HttpStatus.FORBIDDEN.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(resp);
     }
 

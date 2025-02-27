@@ -12,7 +12,7 @@ import java.security.Principal;
 public class UserController {
 
     @GetMapping("/getApp")
-    public ResponseEntity<?> getHealth(Principal principal){
-        return ResponseEntity.ok("Moodflix API is running! " + principal.getName());
+    public ResponseEntity<?> getHealth(){
+        return ResponseEntity.ok("Moodflix API is running!");
     }
 }
