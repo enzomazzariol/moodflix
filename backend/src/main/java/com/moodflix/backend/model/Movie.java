@@ -41,6 +41,8 @@ public class Movie {
     private String tagline;
     private String created_at;
 
+    private List<Emotion> emotions;
+
     public Movie() {}
 
     public Movie(int movie_id, String title, String description, Date release_date, int duration, String poster_url, String trailer_url, String file_path, List<Genre> genre, double rating, String platforms, String tagline, String created_at) {
@@ -163,6 +165,14 @@ public class Movie {
         this.created_at = created_at;
     }
 
+    public List<Emotion> getEmotions() {
+        return emotions;
+    }
+
+    public void setEmotions(List<Emotion> emotions) {
+        this.emotions = emotions;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -173,8 +183,13 @@ public class Movie {
                 ", duration=" + duration +
                 ", poster_url='" + poster_url + '\'' +
                 ", trailer_url='" + trailer_url + '\'' +
-                ", genre='" + genre + '\'' +
+                ", file_path='" + file_path + '\'' +
+                ", genre=" + genre +
                 ", rating=" + rating +
+                ", platforms='" + platforms + '\'' +
+                ", tagline='" + tagline + '\'' +
+                ", created_at='" + created_at + '\'' +
+                ", emotions=" + emotions +
                 '}';
     }
 }
