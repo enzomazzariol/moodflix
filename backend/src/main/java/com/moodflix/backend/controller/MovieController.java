@@ -1,5 +1,6 @@
 package com.moodflix.backend.controller;
 
+import com.moodflix.backend.dtos.EmotionRequest;
 import com.moodflix.backend.model.Emotion;
 import com.moodflix.backend.model.Movie;
 import com.moodflix.backend.service.MovieService;
@@ -23,7 +24,7 @@ public class MovieController {
     }
 
     @PostMapping("/{movieId}/emotions")
-    public ResponseEntity<?> addEmotionsToMovie(@PathVariable int movieId, @RequestBody List<String> emotions) {
-        return movieService.addEmotionToMovie(movieId, emotions);
+    public ResponseEntity<?> addEmotionsToMovie(@PathVariable int movieId, @RequestBody EmotionRequest emotionRequest) {
+        return movieService.addEmotionToMovie(movieId, emotionRequest.emotions());
     }
 }

@@ -1,6 +1,7 @@
 package com.moodflix.backend.service;
 
 import com.moodflix.backend.exceptions.ApiResponse;
+import com.moodflix.backend.model.Emotion;
 import com.moodflix.backend.model.Movie;
 import com.moodflix.backend.repositories.EmotionRepository;
 import com.moodflix.backend.repositories.MovieRepository;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,19 +45,35 @@ public class MovieService {
 
     /*
     * Metodo para agregar una emocion a una pelicula
+    * @param id de la pelicula
+    * @param Lista de emociones
     */
     public ResponseEntity<?> addEmotionToMovie(int movie_id, List<String> emotion_names) {
-        try{
-            for(String name : emotion_names) {
-                emotionRepository.findByName(name).ifPresent(emotion ->{
-                    movieRepository.addEmotionToMovie(movie_id, emotion.getEmotion_id());
-                });
+        List<String> notFound = new ArrayList<>();
+
+        try {
+            for (String name : emotion_names) {
+                Optional<Emotion> optionalEmotion = emotionRepository.findByName(name);
+                if (optionalEmotion.isPresent()) {
+                    movieRepository.addEmotionToMovie(movie_id, optionalEmotion.get().getEmotion_id());
+                } else {
+                    notFound.add(name); // Agregar la emoción que no se encontró
+                }
             }
-        } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+
+            if (!notFound.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse(HttpStatus.NOT_FOUND.value(), "Emociones no encontradas: " + notFound));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
         }
+
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), "Emociones insertadas correctamente a la movie: " + movie_id));
     }
+
 
     /*
     * Metodo para buscar peliculas por una emocion
