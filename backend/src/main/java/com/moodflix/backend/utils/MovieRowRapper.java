@@ -1,6 +1,9 @@
 package com.moodflix.backend.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moodflix.backend.model.Emotion;
 import com.moodflix.backend.model.Genre;
 import com.moodflix.backend.model.Movie;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,12 +22,26 @@ public class MovieRowRapper implements RowMapper<Movie> {
         String genreJson = rs.getString("genre");
 
         List<Genre> genres = null;
+        // Deserializar el array de géneros si es necesario
         if (genreJson != null) {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 genres = objectMapper.readValue(genreJson, objectMapper.getTypeFactory().constructCollectionType(List.class, Genre.class));
             } catch (Exception e) {
                 throw new SQLException("Error deserializing genres from JSON", e);
+            }
+        }
+
+        // Recuperar las emociones
+        List<Emotion> emotions = new ArrayList<>();
+        String emotionsJson = rs.getString("emotions");
+        // Deserealizar el array de emociones
+        if(emotionsJson != null) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                emotions = objectMapper.readValue(emotionsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, Emotion.class));
+            } catch (Exception e) {
+                throw new SQLException("Error deserializing emotions from JSON", e);
             }
         }
 
@@ -37,11 +54,12 @@ public class MovieRowRapper implements RowMapper<Movie> {
                 rs.getString("poster_url"),
                 rs.getString("trailer_url"),
                 rs.getString("file_path"),
-                genres,
+                genres, // Pasamos la lista de géneros deserializada
                 rs.getDouble("rating"),
                 rs.getString("platforms"),
                 rs.getString("tagline"),
-                rs.getTimestamp("created_at").toString()
+                rs.getTimestamp("created_at").toString(),
+                emotions
         );
     }
 }

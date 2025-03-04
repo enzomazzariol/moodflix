@@ -1,5 +1,6 @@
 package com.moodflix.backend.repositories;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moodflix.backend.model.Movie;
 import com.moodflix.backend.utils.MovieRowRapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -21,20 +22,15 @@ public class MovieRepository {
         duration = VALUES(duration), poster_url = VALUES(poster_url), trailer_url = VALUES(trailer_url),
         file_path = VALUES(file_path), genre = VALUES(genre), platforms = VALUES(platforms), rating = VALUES(rating), tagline = VALUES(tagline);
     """;
-
-    private static final String SELECT_ALL = "";
-    private static final String FIND_BY_ID = "SELECT * FROM movies WHERE movie_id = :movie_id";
+    private static final String SELECT_ALL = "SELECT * FROM movie_with_emotions";
+    private static final String FIND_BY_ID = "SELECT * FROM movie_with_emotions WHERE movie_id = :movie_id";
+    private static final String FIND_MOVIES_BY_EMOTION = "SELECT * FROM movie_with_emotions WHERE JSON_CONTAINS(emotions, JSON_OBJECT('name', :emotion_name))";
     private static final String INSERT_MOVIE_EMOTION = """
             INSERT INTO movie_emotions(movie_id, emotion_id)
             VALUES (:movie_id, :emotion_id)
             ON DUPLICATE KEY UPDATE movie_id = VALUES(movie_id), emotion_id = VALUES(emotion_id);
             """;
-    private static final String FIND_MOVIES_BY_EMOTION = """
-            SELECT m.* from movies m
-            JOIN movie_emotions me ON m.movie_id = me.movie_id
-            JOIN emotions e ON me.emotion_id = e.emotion_id
-            WHERE e.name = :emotion_name
-            """;
+
 
     private final JdbcClient jdbcClient;
 
@@ -80,7 +76,7 @@ public class MovieRepository {
     public List<Movie> findMoviesByEmotion(String emotion_name) {
         return jdbcClient.sql(FIND_MOVIES_BY_EMOTION)
                 .param("emotion_name", emotion_name)
-                .query(Movie.class)
+                .query(new MovieRowRapper())
                 .list();
     }
 }

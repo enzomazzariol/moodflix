@@ -1,4 +1,5 @@
 package com.moodflix.backend.model;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -45,7 +46,7 @@ public class Movie {
 
     public Movie() {}
 
-    public Movie(int movie_id, String title, String description, Date release_date, int duration, String poster_url, String trailer_url, String file_path, List<Genre> genre, double rating, String platforms, String tagline, String created_at) {
+    public Movie(int movie_id, String title, String description, Date release_date, int duration, String poster_url, String trailer_url, String file_path, List<Genre> genre, double rating, String platforms, String tagline, String created_at, List<Emotion> emotions) {
         this.movie_id = movie_id;
         this.title = title;
         this.description = description;
@@ -59,6 +60,7 @@ public class Movie {
         this.platforms = platforms;
         this.tagline = tagline;
         this.created_at = created_at;
+        this.emotions = emotions;
     }
 
     public int getMovie_id() {

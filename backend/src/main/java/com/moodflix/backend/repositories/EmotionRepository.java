@@ -11,7 +11,7 @@ import java.util.Optional;
 public class EmotionRepository {
 
     public static final String FIND_ALL = "SELECT * FROM emotions";
-    public static final String FIND_BY_NAME = "SELECT * FROM emotions WHERE name = :name";
+    public static final String FIND_BY_NAME = "SELECT * FROM emotions WHERE LOWER(name) = LOWER(:name)";
     private static final String INSERT_EMOTION = """
             INSERT INTO emotions (name, description) VALUES (:name, :description)
             ON DUPLICATE KEY UPDATE name = VALUES(name), description = VALUES(description)
