@@ -1,4 +1,4 @@
-package com.moodflix.backend.model;
+package com.moodflix.backend.model.enums;
 
 public enum NotificationType {
     MOVIE_RECOMMENDATION("movie_recommendation"),

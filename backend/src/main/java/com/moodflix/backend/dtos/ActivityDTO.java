@@ -1,6 +1,6 @@
 package com.moodflix.backend.dtos;
 
-import com.moodflix.backend.model.ActivityType;
+import com.moodflix.backend.model.enums.ActivityType;
 
 public class ActivityDTO {
 

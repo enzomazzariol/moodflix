@@ -1,5 +1,7 @@
 package com.moodflix.backend.model;
 
+import com.moodflix.backend.model.enums.ActivityType;
+
 public class Activity {
 
     private int activity_id;

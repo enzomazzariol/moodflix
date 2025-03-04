@@ -1,6 +1,6 @@
 package com.moodflix.backend.dtos;
 
-import com.moodflix.backend.model.NotificationType;
+import com.moodflix.backend.model.enums.NotificationType;
 
 public class NotificationDTO {
 

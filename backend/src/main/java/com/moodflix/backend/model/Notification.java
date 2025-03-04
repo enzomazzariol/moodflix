@@ -1,5 +1,7 @@
 package com.moodflix.backend.model;
 
+import com.moodflix.backend.model.enums.NotificationType;
+
 public class Notification {
 
     private int notification_id;

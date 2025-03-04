@@ -1,5 +1,8 @@
 package com.moodflix.backend.model;
 
+import com.moodflix.backend.model.enums.Language;
+import com.moodflix.backend.model.enums.Theme;
+
 public class UserSettings {
     private int userId;
     private Theme theme;
