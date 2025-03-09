@@ -47,9 +47,6 @@ public class TmdbApiService {
         Movie movie = gson.fromJson(jsonResponse, Movie.class);
 
         if (movie != null) {
-            // Guardamos la película primero
-            movieRepository.saveMovie(movie);
-
             // Añadimos el trailer
             fetchTrailerFromTmdb(movie);
 
@@ -123,29 +120,32 @@ public class TmdbApiService {
                     .bodyToMono(String.class)
                     .block();
 
+            // Mapeamos los datos
             PlatformResponse platformResponse = gson.fromJson(jsonResponse, PlatformResponse.class);
 
-            String platforms = "";
+            StringBuilder platformsBuilder = new StringBuilder();
 
-            if (platformResponse != null &&
-                    platformResponse.getResults() != null &&
-                    platformResponse.getResults().containsKey("ES")) {
-
+            if (platformResponse.getResults().containsKey("ES")) {
                 PlatformResult result = platformResponse.getResults().get("ES");
-
                 if (result != null && result.getFlatrate() != null && !result.getFlatrate().isEmpty()) {
-                    platforms = result.getFlatrate().stream()
+                    String platforms = result.getFlatrate().stream()
                             .map(PlatformProvider::getProvider_name)
                             .collect(Collectors.joining(", "));
+                    platformsBuilder.append(platforms);
                 }
             }
 
-            if(platforms != null) {
-                movie.setPlatforms(platforms);
-            }
+            movie.setPlatforms(platformsBuilder.toString());
+            System.out.println("Platforms found for movie " + movie.getMovie_id() + ": " + movie.getPlatforms());
 
         } catch(Exception e) {
-            System.err.println("Error fetching platforms: " + e.getMessage());
+            System.err.println("Error fetching platforms for movie " + movie.getMovie_id() + ": " + e.getMessage());
+            e.printStackTrace();
+
+            // Asegurarse de que las plataformas no queden nulas
+            if (movie.getPlatforms() == null) {
+                movie.setPlatforms("");
+            }
         }
     }
 }
