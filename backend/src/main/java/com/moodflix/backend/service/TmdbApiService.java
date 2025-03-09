@@ -5,6 +5,7 @@ import com.moodflix.backend.dtos.PlatformResponse;
 import com.moodflix.backend.dtos.PlatformResult;
 import com.moodflix.backend.dtos.TrailerResponse;
 import com.moodflix.backend.exceptions.ApiResponse;
+import com.moodflix.backend.exceptions.NotFoundException;
 import com.moodflix.backend.model.Movie;
 import com.moodflix.backend.model.PlatformProvider;
 import com.moodflix.backend.model.Trailer;
@@ -12,6 +13,7 @@ import com.moodflix.backend.repositories.MovieRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.stream.Collectors;
 
@@ -24,40 +26,55 @@ public class TmdbApiService {
     private final WebClient webClient;
     private final MovieRepository movieRepository;
     private final Gson gson;
+    private final EmotionAnalyzerService emotionAnalyzerService;
 
-    public TmdbApiService(WebClient.Builder webClientBuilder, MovieRepository movieRepository, Gson gson) {
+    public TmdbApiService(WebClient.Builder webClientBuilder, MovieRepository movieRepository, Gson gson, EmotionAnalyzerService emotionAnalyzerService) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
         this.movieRepository = movieRepository;
         this.gson = gson;
+        this.emotionAnalyzerService = emotionAnalyzerService;
     }
 
     public Movie fetchMovieFromTmdb(int movie_id) {
-        // Buscamos la Movie en la API de TMDB y la insertamos en la BD
+        try {
+            // Buscamos la Movie en la API de TMDB y la insertamos en la BD
+            String jsonResponse = webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/movie/{movie_id}")
+                            .queryParam("api_key", API_KEY)
+                            .queryParam("language", "es-ES")
+                            .build(movie_id))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-        String jsonResponse = webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/movie/{movie_id}")
-                        .queryParam("api_key", API_KEY)
-                        .queryParam("language", "es-ES")
-                        .build(movie_id))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+            Movie movie = gson.fromJson(jsonResponse, Movie.class);
 
-        Movie movie = gson.fromJson(jsonResponse, Movie.class);
+            if (movie != null) {
+                // Añadimos el trailer
+                fetchTrailerFromTmdb(movie);
 
-        if (movie != null) {
-            // Añadimos el trailer
-            fetchTrailerFromTmdb(movie);
+                // Añadimos las plataformas
+                fetchPlatformsFromTmdb(movie);
 
-            // Añadimos las plataformas
-            fetchPlatformsFromTmdb(movie);
+                // Volvemos a guardar la movie con los datos añadidos
+                movieRepository.saveMovie(movie);
 
-            // Volvemos a guardar la movie con los datos añadidos
-            movieRepository.saveMovie(movie);
+                // Asignamos las emociones a la movie
+                // SI HAY TIEMPO HAY QUE MEJORAR ESTE METODO
+                emotionAnalyzerService.analyzeAndAssignEmotions(movie);
+
+                return movie;
+            } else {
+                throw new NotFoundException("Movie with ID " + movie_id + " not found in TMDB API");
+            }
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+                throw new NotFoundException("Movie with ID " + movie_id + " not found in TMDB API");
+            } else {
+                throw new RuntimeException("Error fetching movie from TMDB: " + e.getMessage(), e);
+            }
         }
-
-        return movie;
     }
 
     public void fetchTrailerFromTmdb(Movie movie) {
