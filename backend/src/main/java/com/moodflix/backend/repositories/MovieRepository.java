@@ -32,6 +32,7 @@ public class MovieRepository {
         duration = VALUES(duration), poster_url = VALUES(poster_url), trailer_url = VALUES(trailer_url),
         file_path = VALUES(file_path), genre = VALUES(genre), platforms = VALUES(platforms), rating = VALUES(rating), tagline = VALUES(tagline);
     """;
+    // MOVIE WITH EMOTION es una vista en la bd haciendo un join
     private static final String SELECT_ALL = "SELECT * FROM movie_with_emotions";
     private static final String FIND_BY_ID = "SELECT * FROM movie_with_emotions WHERE movie_id = :movie_id";
     private static final String FIND_MOVIES_BY_EMOTION = "SELECT * FROM movie_with_emotions WHERE JSON_CONTAINS(emotions, JSON_OBJECT('name', :emotion_name))";

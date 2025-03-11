@@ -1,0 +1,97 @@
+package com.moodflix.backend.service;
+
+import com.moodflix.backend.exceptions.ApiResponse;
+import com.moodflix.backend.model.Movie;
+import com.moodflix.backend.repositories.MovieRepository;
+import com.moodflix.backend.repositories.WatchlistRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class WatchlistService {
+    private static final Logger logger = LoggerFactory.getLogger(WatchlistService.class);
+
+    @Autowired
+    private WatchlistRepository watchlistRepository;
+
+    @Autowired
+    MovieRepository movieRepository;
+
+
+    public ResponseEntity<?> getWatchlist(int userId) {
+        try {
+            List<Movie> movies = watchlistRepository.getWatchlist(userId);
+            return ResponseEntity.ok(movies);
+        } catch(DataAccessException e) {
+            logger.error("Error getting watchlist for user {}: {}", userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener la watchlist " +e.getMessage()));
+        } catch(Exception e) {
+            logger.error("Unexpected error getting watchlist for user {}: {}", userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> addToWatchlist(int userId, int movieId) {
+        try {
+            // Verificar si la pelicula ya esta en el watchlist
+            if(watchlistRepository.existsInWatchlist(userId, movieId)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "La película ya está en tu watchlist"));
+            }
+
+            watchlistRepository.addToWatchlist(userId, movieId);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(HttpStatus.OK.value(), "Película añadida correctamente a tu watchlist"));
+        } catch(DataAccessException e) {
+            logger.error("Error adding movie {} to watchlist for user {}: {}", movieId, userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al añadir la película a tu watchlist " +e.getMessage()));
+        } catch(Exception e) {
+            logger.error("Unexpected error adding movie {} to watchlist for user {}: {}", movieId, userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> isInWatchlist(int userId, int movieId) {
+        try {
+            boolean isInWatchlist = watchlistRepository.existsInWatchlist(userId, movieId);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(HttpStatus.OK.value(), "" + isInWatchlist));
+        } catch(DataAccessException e) {
+            logger.error("Error checking if movie {} is in watchlist for user {}: {}", movieId, userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al verificar la película en la watchlist " +e.getMessage()));
+        } catch(Exception e) {
+            logger.error("Unexpected error checking if movie {} is in watchlist for user {}: {}", movieId, userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> removeFromWatchlist(int userId, int movieId) {
+        try {
+            watchlistRepository.removeFromWatchlist(userId, movieId);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(HttpStatus.OK.value(), "Película eliminada de tu watchlist correctamente"));
+        } catch(DataAccessException e) {
+            logger.error("Error removing movie {} from watchlist for user {}: {}", movieId, userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al eliminar la película de tu watchlist " +e.getMessage()));
+        } catch(Exception e) {
+            logger.error("Unexpected error removing movie {} from watchlist for user {}: {}", movieId, userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+}
