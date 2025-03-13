@@ -4,12 +4,14 @@ public class UserMovies {
 
     private int user_id;
     private int movie_id;
+    private boolean watched;
 
     public UserMovies(){}
 
-    public UserMovies(int user_id, int movie_id) {
+    public UserMovies(int user_id, int movie_id, boolean watched) {
         this.user_id = user_id;
         this.movie_id = movie_id;
+        this.watched = watched;
     }
 
     public int getUser_id() {
@@ -26,5 +28,13 @@ public class UserMovies {
 
     public void setMovie_id(int movie_id) {
         this.movie_id = movie_id;
+    }
+
+    public boolean isWatched() {
+        return watched;
+    }
+
+    public void setWatched(boolean watched) {
+        this.watched = watched;
     }
 }
