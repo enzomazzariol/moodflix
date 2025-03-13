@@ -32,13 +32,6 @@ public class MovieController {
 
     @GetMapping("/emotion/{emotion_name}")
     public ResponseEntity<?> getMoviesByEmotion(@PathVariable String emotion_name) {
-        List<Movie> movies = movieService.getMoviesByEmotion(emotion_name);
-
-        if(movies.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse(HttpStatus.NOT_FOUND.value(), "No se encontraron películas con la emoción: " + emotion_name));
-        }
-
-        return ResponseEntity.ok(movies);
+        return movieService.getMoviesByEmotion(emotion_name);
     }
 }

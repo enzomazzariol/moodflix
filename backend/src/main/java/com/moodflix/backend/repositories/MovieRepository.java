@@ -33,8 +33,8 @@ public class MovieRepository {
         file_path = VALUES(file_path), genre = VALUES(genre), platforms = VALUES(platforms), rating = VALUES(rating), tagline = VALUES(tagline);
     """;
     // MOVIE WITH EMOTION es una vista en la bd haciendo un join
-    private static final String SELECT_ALL = "SELECT * FROM movie_with_emotions";
     private static final String FIND_BY_ID = "SELECT * FROM movie_with_emotions WHERE movie_id = :movie_id";
+    private static final String EXIST_BY_ID = "SELECT movie_id FROM movie_with_emotions WHERE movie_id = :movie_id";
     private static final String FIND_MOVIES_BY_EMOTION = "SELECT * FROM movie_with_emotions WHERE JSON_CONTAINS(emotions, JSON_OBJECT('name', :emotion_name))";
     private static final String INSERT_MOVIE_EMOTION = """
             INSERT INTO movie_emotions(movie_id, emotion_id)
@@ -66,8 +66,6 @@ public class MovieRepository {
                     .param("tagline", movie.getTagline() != null ? movie.getTagline() : "")
                     .update();
 
-            // Note: Since you're using ON DUPLICATE KEY UPDATE, affected might be 2 if row was updated
-            // See MySQL documentation on ROW_COUNT() function behavior with ON DUPLICATE KEY
             if (affected != 1 && affected != 2) {
                 logger.error("Failed to save movie with ID {}: Unexpected affected rows count: {}", movie.getMovie_id(), affected);
                 throw new DatabaseException("Could not add or update movie: Unexpected database response");
@@ -142,6 +140,26 @@ public class MovieRepository {
             logger.error("Unexpected error finding movies by emotion {}", emotion_name, e);
             throw new DatabaseException("Unexpected error occurred while finding movies by emotion", e);
         }
+    }
 
+    /**
+    * Verifica que una pelicula exista
+     * @param movie_id id de la pelicula a verificar
+     * @return booleano
+    * */
+    public boolean existsById(int movie_id) {
+        try {
+            return jdbcClient.sql(EXIST_BY_ID)
+                    .param("movie_id", movie_id)
+                    .query(Integer.class)
+                    .optional()
+                    .isPresent();
+        } catch (DataAccessException e) {
+            logger.error("Failed to find movie with ID {}: Database access error", movie_id, e);
+            throw new DatabaseException("Database error while finding movie", e);
+        } catch (Exception e) {
+            logger.error("Unexpected error finding movie with ID {}", movie_id, e);
+            throw new DatabaseException("Unexpected error occurred while finding movie", e);
+        }
     }
 }
