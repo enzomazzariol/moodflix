@@ -1,10 +1,14 @@
 package com.moodflix.backend.repositories;
 
+import com.moodflix.backend.dtos.HistoryUserMoviesDTO;
 import com.moodflix.backend.exceptions.DatabaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class UserMovieRepository {
@@ -12,9 +16,26 @@ public class UserMovieRepository {
     private static final Logger logger = LoggerFactory.getLogger(MovieRepository.class);
 
     // Query para insertar o actualizar el estado de watched
-    private static final String UPSERT_USER_MOVIE = "INSERT INTO user_movies (user_id, movie_id, watched) VALUES (:user_id, :movie_id, :watched) ON DUPLICATE KEY UPDATE watched = :watched";
+    private static final String UPSERT_USER_MOVIE = """
+    INSERT INTO user_movies (user_id, movie_id, watched, watched_at) 
+    VALUES (:user_id, :movie_id, :watched, CURRENT_TIMESTAMP) 
+    ON DUPLICATE KEY UPDATE 
+        watched = :watched,
+        watched_at = CASE
+            WHEN VALUES(watched) = true THEN CURRENT_TIMESTAMP
+            ELSE watched_at
+        END
+    """;
     // Query para obtener el estado watched de una película
     private static final String GET_USER_WATCHED_MOVIE = "SELECT watched FROM user_movies WHERE user_id = :user_id AND movie_id = :movie_id";
+    // Query para obtener historial de peliculas vistas del usuario
+    private static final String GET_USER_WATCHED_MOVIES = """
+            SELECT m.movie_id, m.title, m.poster_url, um.watched_at
+            FROM user_movies um
+            INNER JOIN movies m ON um.movie_id = m.movie_id
+            WHERE um.user_id = :user_id AND um.watched = true
+            ORDER BY um.watched_at DESC
+            """;
 
     private final JdbcClient jdbcClient;
 
@@ -62,6 +83,18 @@ public class UserMovieRepository {
         } catch (Exception e) {
             logger.error("Unexpected error getting movie with ID {}", movieId, e);
             throw new DatabaseException("Unexpected error occurred while getting movie", e);
+        }
+    }
+
+    public List<HistoryUserMoviesDTO> getUserWatchedMovies (int userId) {
+        try {
+            return jdbcClient.sql(GET_USER_WATCHED_MOVIES)
+                    .param("user_id", userId)
+                    .query(HistoryUserMoviesDTO.class)
+                    .list();
+        } catch(DataAccessException e) {
+            logger.error("Failed to get user watched movies for user {}", userId, e);
+            throw new DatabaseException("Could not get user watched movies: Unexpected database response");
         }
     }
 }

@@ -5,13 +5,15 @@ public class UserMovies {
     private int user_id;
     private int movie_id;
     private boolean watched;
+    private String watchedAt;
 
     public UserMovies(){}
 
-    public UserMovies(int user_id, int movie_id, boolean watched) {
+    public UserMovies(int user_id, int movie_id, boolean watched, String watchedAt) {
         this.user_id = user_id;
         this.movie_id = movie_id;
         this.watched = watched;
+        this.watchedAt = watchedAt;
     }
 
     public int getUser_id() {
@@ -36,5 +38,13 @@ public class UserMovies {
 
     public void setWatched(boolean watched) {
         this.watched = watched;
+    }
+
+    public String getWatchedAt() {
+        return watchedAt;
+    }
+
+    public void setWatchedAt(String watchedAt) {
+        this.watchedAt = watchedAt;
     }
 }
