@@ -31,7 +31,7 @@ public class MovieService {
     * Sino esta en la Base de datos, hacemos un fetch a la API de TMDB
     *
     * SI por alguna razon se hace muy tedioso trabajar con la bd o no es escalable, quitamos la comprobacion de la base de datos
-    * y dejamos solo recuperar las pelis atraves de la api
+    * y dejamos solo recuperar las pelis a traves de la api
     */
     public Movie getOrFetchMovie(int id) {
         Optional<Movie> movieOptional = movieRepository.findById(id);
