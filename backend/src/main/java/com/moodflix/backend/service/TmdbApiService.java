@@ -10,6 +10,7 @@ import com.moodflix.backend.model.Movie;
 import com.moodflix.backend.model.PlatformProvider;
 import com.moodflix.backend.model.Trailer;
 import com.moodflix.backend.repositories.MovieRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -28,6 +29,7 @@ public class TmdbApiService {
     private final Gson gson;
     private final EmotionAnalyzerService emotionAnalyzerService;
 
+    @Autowired
     public TmdbApiService(WebClient.Builder webClientBuilder, MovieRepository movieRepository, Gson gson, EmotionAnalyzerService emotionAnalyzerService) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
         this.movieRepository = movieRepository;

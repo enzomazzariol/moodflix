@@ -22,6 +22,11 @@ public class Emotion {
         this.name = name;
     }
 
+    public Emotion(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public static String convertEmotionsToJson(List<Emotion> emotions) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
