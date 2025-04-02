@@ -1,13 +1,28 @@
 package com.moodflix.backend.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.moodflix.backend.service.TmdbApiService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/moodflix")
 @CrossOrigin("*")
 public class MovieRecommendationController {
 
+    private final TmdbApiService tmdbApiService;
 
+    @Autowired
+    public MovieRecommendationController(TmdbApiService tmdbApiService) {
+        this.tmdbApiService = tmdbApiService;
+    }
+
+    @GetMapping("/movies/random")
+    public ResponseEntity<?> getRandomMovieRecommendation(@RequestParam String genre,
+                                                          @RequestParam String decade,
+                                                          @RequestParam String provider,
+                                                          @RequestParam double minRating,
+                                                          @RequestParam int maxDuration) {
+        return tmdbApiService.fetchRandomMovie(genre, decade, provider, minRating, maxDuration);
+    }
 }

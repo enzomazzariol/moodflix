@@ -3,19 +3,22 @@ package com.moodflix.backend.service;
 import com.google.gson.Gson;
 import com.moodflix.backend.dtos.PlatformResponse;
 import com.moodflix.backend.dtos.PlatformResult;
+import com.moodflix.backend.dtos.TmdbRandomMovieResponse;
 import com.moodflix.backend.dtos.TrailerResponse;
 import com.moodflix.backend.exceptions.ApiResponse;
 import com.moodflix.backend.exceptions.NotFoundException;
 import com.moodflix.backend.model.Movie;
 import com.moodflix.backend.model.PlatformProvider;
-import com.moodflix.backend.model.Trailer;
 import com.moodflix.backend.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-
+import reactor.core.publisher.Mono;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -167,4 +170,64 @@ public class TmdbApiService {
             }
         }
     }
+
+    public ResponseEntity<?> fetchRandomMovie(String genre, String decade, String provider, Double minRating, Integer maxDuration) {
+        try {
+            // Asignar valores por defecto si son nulos o vacíos
+            String genreFinal = (genre == null || genre.isEmpty()) ? "" : genre;
+            String decadeFinal = (decade == null || decade.isEmpty()) ? "1980" : decade;
+            String providerFinal = (provider == null || provider.isEmpty()) ? "" : provider;
+            double minRatingFinal = (minRating == null) ? 0.0 : minRating;
+            int maxDurationFinal = (maxDuration == null) ? 240 : maxDuration;
+
+            // Convertir la década a un rango de fechas
+            int startYear = Integer.parseInt(decadeFinal);
+            int endYear = startYear + 9;
+            String startDate = startYear + "-01-01";
+            String endDate = endYear + "-12-31";
+
+            //Construcción dinámica del URI eliminando parámetros innecesarios
+            WebClient.RequestHeadersUriSpec<?> uriSpec = webClient.get();
+            Mono<String> responseMono = uriSpec.uri(uriBuilder -> {
+                uriBuilder.path("/discover/movie")
+                        .queryParam("api_key", API_KEY)
+                        .queryParam("language", "es-ES")
+                        .queryParam("sort_by", "popularity.desc")
+                        .queryParam("release_date.gte", startDate)
+                        .queryParam("release_date.lte", endDate)
+                        .queryParam("vote_average.gte", minRatingFinal)
+                        .queryParam("with_runtime.lte", maxDurationFinal)
+                        .queryParam("watch_region", "ES");
+
+                if (!genre.isEmpty()) uriBuilder.queryParam("with_genres", genreFinal);
+                if (!provider.isEmpty()) uriBuilder.queryParam("with_watch_providers", providerFinal);
+
+                return uriBuilder.build();
+            }).retrieve().bodyToMono(String.class);
+
+            // Procesar respuesta de la API
+            String jsonResponse = responseMono.block();
+
+            // Mapear usando GSON a una lista de objetos Movie
+            TmdbRandomMovieResponse tmdbResponse = gson.fromJson(jsonResponse, TmdbRandomMovieResponse.class);
+
+            if (tmdbResponse != null && !tmdbResponse.results().isEmpty()) {
+                // recoger lista de peliculas de la API
+                List<Movie> movies = tmdbResponse.results();
+                // seleccionar una random
+                Movie randomMovie = movies.get(new Random().nextInt(movies.size()));
+                // obtener datos de la pelicula desde la API TMDB, guardarla en la bd y devolver como respuesta
+                Movie randomMovieData = fetchMovieFromTmdb(randomMovie.getMovie_id());
+                return ResponseEntity.ok(randomMovieData);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ApiResponse(HttpStatus.NOT_FOUND.value(), "No se pudieron encontrar peliculas en este momento.")
+                );
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ocurrió un error recuperando las películas, intentar de nuevo mas tarde."));
+        }
+    }
 }
+
