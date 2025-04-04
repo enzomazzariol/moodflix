@@ -1,15 +1,48 @@
-import { Tabs } from 'expo-router';
+import { Tabs } from "expo-router";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import {
+  ActivityIcon,
+  HomeIcon,
+  SearchIcon,
+  StarIcon,
+  UserIcon,
+} from "../../components/ui/icons";
+import { colors } from "../../utils/colors";
+import { fonts } from "../../utils/fonts";
 
 export default function TabsLayout() {
-
- //TODO: mejorar barra de navegacion cuando tenga los estilos
+  //TODO: mejorar barra de navegacion cuando tenga los estilos
 
   return (
-    <Tabs>
-        <Tabs.Screen
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: colors.richBlue,
+          borderTopWidth: 0,
+          height: hp("10%"),
+        },
+        tabBarActiveTintColor: colors.jasper,
+        tabBarInactiveTintColor: colors.timberwolf,
+        tabBarShowLabel: false,
+        tabBarItemStyle: {
+          paddingVertical: hp("1.5%"),
+        },
+
+        headerTintColor: colors.floralWhite,
+        headerTitleStyle: {
+          fontFamily: fonts.outfitSemiBold,
+          fontSize: 28,
+        },
+        headerStyle: {
+          backgroundColor: colors.richBlue,
+        },
+      }}
+    >
+      <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Moodflix",
+          tabBarIcon: ({ color, size }) => <HomeIcon size={22} color={color} />,
         }}
       />
 
@@ -17,6 +50,9 @@ export default function TabsLayout() {
         name="search"
         options={{
           title: "Search",
+          tabBarIcon: ({ color, size }) => (
+            <SearchIcon size={22} color={color} />
+          ),
         }}
       />
 
@@ -24,6 +60,7 @@ export default function TabsLayout() {
         name="randomizer"
         options={{
           title: "Randomizer",
+          tabBarIcon: ({ color, size }) => <StarIcon size={22} color={color} />,
         }}
       />
 
@@ -31,6 +68,9 @@ export default function TabsLayout() {
         name="activity"
         options={{
           title: "Activity",
+          tabBarIcon: ({ color, size }) => (
+            <ActivityIcon size={22} color={color} />
+          ),
         }}
       />
 
@@ -38,8 +78,9 @@ export default function TabsLayout() {
         name="profile"
         options={{
           title: "Profile",
+          tabBarIcon: ({ color, size }) => <UserIcon size={22} color={color} />,
         }}
       />
     </Tabs>
-  )
+  );
 }
