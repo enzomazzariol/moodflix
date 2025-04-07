@@ -20,3 +20,7 @@ export const ActivityIcon = ({ size, color }) => {
 export const UserIcon = ({ size, color }) => {
   return <FontAwesome6 name="user-large" size={size} color={color} />;
 };
+
+export const CheckBoxIcon = ({ size, color }) => {
+  return <Octicons name="check" size={size} color={color} />;
+}

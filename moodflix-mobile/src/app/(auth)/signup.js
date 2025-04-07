@@ -6,7 +6,7 @@ export default function Signup() {
     console.log(values);
   };
   return (
-    <AuthScreen>
+    <AuthScreen isLogin={false}>
       <SignupForm onSubmit={onSubmit} />
     </AuthScreen>
   );

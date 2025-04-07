@@ -11,8 +11,6 @@ import { colors } from "../../utils/colors";
 import { fonts } from "../../utils/fonts";
 
 export default function TabsLayout() {
-  //TODO: mejorar barra de navegacion cuando tenga los estilos
-
   return (
     <Tabs
       screenOptions={{
@@ -49,7 +47,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="search"
         options={{
-          title: "Search",
+          title: "Busqueda",
           tabBarIcon: ({ color, size }) => (
             <SearchIcon size={22} color={color} />
           ),
@@ -67,7 +65,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="activity"
         options={{
-          title: "Activity",
+          title: "Actividad",
           tabBarIcon: ({ color, size }) => (
             <ActivityIcon size={22} color={color} />
           ),
@@ -77,7 +75,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: "Perfil",
           tabBarIcon: ({ color, size }) => <UserIcon size={22} color={color} />,
         }}
       />

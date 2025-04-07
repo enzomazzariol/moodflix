@@ -1,7 +1,10 @@
 import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, View } from "react-native";
-import BgSVG from "../../../assets/test-login.svg"; // Background de la pantalla
+import BgSVGLogin from "../../../assets/test-login.svg"; // Fondo de login
+import BgSVGSignUp from "../../../assets/test-signup.svg"; // Fondo de signup
 
-export default function AuthScreen({ children }) {
+export default function AuthScreen({ children, isLogin }) {
+
+  const BgSVG = isLogin ? BgSVGLogin : BgSVGSignUp;
 
   return (
     <View className="flex-1">

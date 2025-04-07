@@ -7,7 +7,7 @@ export default function Login() {
   };
 
   return (
-    <AuthScreen>
+    <AuthScreen isLogin={true}>
       <LoginForm onSubmit={onSubmit} />
     </AuthScreen>
   );

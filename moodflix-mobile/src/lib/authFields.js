@@ -1,8 +1,8 @@
 export const loginFields = [
   {
-    name: "email",
-    label: "Correo electrónico",
-    placeholder: "example@gmail.com",
+    name: "emailOrUsername",
+    label: "Email o nombre de usuario",
+    placeholder: "enzomazzariol",
     secureTextEntry: false,
     keyboardType: "email-address",
   },
@@ -17,7 +17,7 @@ export const loginFields = [
 
 export const signupFields = [
   {
-    name: "name",
+    name: "username",
     label: "Nombre",
     placeholder: "Nombre",
     secureTextEntry: false,

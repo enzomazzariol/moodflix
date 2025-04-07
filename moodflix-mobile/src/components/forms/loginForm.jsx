@@ -25,6 +25,7 @@ export default function LoginForm({ onSubmit }) {
         buttonText="Login"
         accountText="Don't have an account? Sign up"
         accountRoute="/signup"
+        isLogin={true}
       />
     </View>
   );

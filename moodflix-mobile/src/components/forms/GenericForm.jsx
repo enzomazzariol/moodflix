@@ -3,13 +3,15 @@ import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
+import { CheckBoxIcon } from "../ui/icons";
 
 export default function GenericForm({
   fields,
   onSubmit,
   buttonText,
   accountText,
-  accountRoute
+  accountRoute,
+  isLogin,
 }) {
   const router = useRouter();
   const [formData, setFormData] = useState({});
@@ -46,21 +48,65 @@ export default function GenericForm({
         );
       })}
 
+      {isLogin ? (
+        <View className="flex-row justify-between items-center mb-6">
+          <TouchableOpacity
+            className="flex-row items-center"
+            activeOpacity={0.9}
+            onPress={() =>
+              setFormData({ ...formData, rememberMe: !formData.rememberMe })
+            }
+          >
+            <View
+              className={`w-5 h-5 mr-2 rounded border items-center justify-center`}
+              style={{
+                borderColor: colors.floralWhite,
+                borderWidth: 1,
+                backgroundColor: formData.rememberMe
+                  ? colors.floralWhite
+                  : "transparent",
+              }}
+            >
+              {formData.rememberMe && (
+                <CheckBoxIcon size={14} color={colors.black} />
+              )}
+            </View>
+            <Text className="text-lg font-outfitBold text-floralWhite">
+              Recordarme
+            </Text>
+          </TouchableOpacity>
+
+          <Link href={accountRoute} asChild replace>
+            <TouchableOpacity activeOpacity={0.9}>
+              <Text className="text-lg font-outfitBold text-floralWhite">
+                Olvide mi contraseña?
+              </Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
+      ) : (
+        ""
+      )}
+
       <TouchableOpacity
-      activeOpacity={0.9}
+        activeOpacity={0.9}
         className="p-3 rounded-lg bg-richBlue mb-4"
         onPress={handleSubmit}
       >
-        <Text className="text-lg font-outfitBold text-white text-center"
-        activeOpacity={1}>
+        <Text
+          className="text-lg font-outfitBold text-white text-center"
+          activeOpacity={1}
+        >
           {buttonText}
         </Text>
       </TouchableOpacity>
 
-      <Link href={accountRoute} asChild>
-        <Text className="text-lg font-outfitBold text-floralWhite text-center underline">
-          {accountText}
-        </Text>
+      <Link href={accountRoute} asChild replace>
+        <TouchableOpacity activeOpacity={0.9}>
+          <Text className="text-lg font-outfitBold text-floralWhite text-center underline">
+            {accountText}
+          </Text>
+        </TouchableOpacity>
       </Link>
     </View>
   );
