@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 import { SelectArrowIcon } from "../ui/icons";
 
@@ -13,8 +13,10 @@ export default function SelectInput({ label, options, onChange, placeholder, val
 
       <RNPickerSelect
         onValueChange={(val) => onChange(val)}
-        value={value  ?? "todos"}
+        value={value ?? "todos"}
         items={options}
+        doneText="Hecho"
+        touchableWrapperProps={{ focusable: true }}
         key={options.value}
         placeholder={{ label: placeholder, value: "todos" }}
         useNativeAndroidPickerStyle={false}
@@ -23,7 +25,8 @@ export default function SelectInput({ label, options, onChange, placeholder, val
           inputIOS: {
             fontSize: 18,
             fontFamily: "Outfit-Regular",
-            paddingVertical: 12,
+            width: wp("70%"),
+            height: hp("5%"),
             paddingHorizontal: 10,
             backgroundColor: colors.jasper,
             borderRadius: 8,
@@ -32,7 +35,8 @@ export default function SelectInput({ label, options, onChange, placeholder, val
           inputAndroid: {
             fontSize: 16,
             fontFamily: "Outfit-Regular",
-            paddingVertical: 8,
+            width: wp("70%"),
+            height: hp("5%"),
             paddingHorizontal: 10,
             backgroundColor: "#ffffff",
             borderRadius: 8,

@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
-import { CheckBoxIcon } from "../ui/icons";
 import SubmitBtn from "../commoms/SubmitBtn";
+import { CheckBoxIcon } from "../ui/icons";
 
 export default function GenericForm({
   fields,
@@ -89,7 +89,11 @@ export default function GenericForm({
         ""
       )}
 
-      <SubmitBtn handleSubmit={handleSubmit} text={buttonText} />
+      <SubmitBtn
+        handleSubmit={handleSubmit}
+        text={buttonText}
+        bgColor={"richBlue"}
+      />
 
       <Link href={accountRoute} asChild replace>
         <TouchableOpacity activeOpacity={0.9}>
