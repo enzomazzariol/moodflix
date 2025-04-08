@@ -1,3 +1,4 @@
+import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Octicons from "@expo/vector-icons/Octicons";
 
@@ -24,3 +25,7 @@ export const UserIcon = ({ size, color }) => {
 export const CheckBoxIcon = ({ size, color }) => {
   return <Octicons name="check" size={size} color={color} />;
 }
+
+export const SelectArrowIcon = ({ size, color }) => {
+  return <Feather name="chevron-down" size={size} color={color} />;
+};

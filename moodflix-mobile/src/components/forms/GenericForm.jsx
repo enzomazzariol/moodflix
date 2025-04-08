@@ -4,6 +4,7 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 import { CheckBoxIcon } from "../ui/icons";
+import SubmitBtn from "../commoms/SubmitBtn";
 
 export default function GenericForm({
   fields,
@@ -88,18 +89,7 @@ export default function GenericForm({
         ""
       )}
 
-      <TouchableOpacity
-        activeOpacity={0.9}
-        className="p-3 rounded-lg bg-richBlue mb-4"
-        onPress={handleSubmit}
-      >
-        <Text
-          className="text-lg font-outfitBold text-white text-center"
-          activeOpacity={1}
-        >
-          {buttonText}
-        </Text>
-      </TouchableOpacity>
+      <SubmitBtn handleSubmit={handleSubmit} text={buttonText} />
 
       <Link href={accountRoute} asChild replace>
         <TouchableOpacity activeOpacity={0.9}>

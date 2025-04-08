@@ -10,4 +10,5 @@ export const colors = {
   pigmentGreen: "#0A993C",
   coral: "#FF794D",
   prussianBlue: "#212D40",
+  raisinBlack: "#19212E",
 };
