@@ -1,7 +1,8 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Text } from "react-native";
 import RandomizerSlider from "../../components/commoms/Slider";
 import SubmitBtn from "../../components/commoms/SubmitBtn";
+import { Title } from "../../components/commoms/Title";
 import SelectInput from "../../components/randomizer/SelectInput";
 import TabsScreen from "../../components/screens/TabsScreen";
 import {
@@ -12,18 +13,17 @@ import {
 
 export default function Randomizer() {
   const [randomizerData, setRandomizerData] = useState({});
+  const router = useRouter();
 
-  const handleSubmit = () => {
-    console.log("Randomizer data:", randomizerData);
-    // Aquí puedes agregar la lógica para manejar el envío de datos
-    // Por ejemplo, hacer una llamada a la API o navegar a otra pantalla
+  const goToMovie = (id) => {
+    router.push(`/randomizerMovie/${id}`);
   };
 
   return (
     <TabsScreen>
-      <Text className="text-3xl p-5 font-outfitBlack text-coral">
-        Encuentra una película basada en
-      </Text>
+      <Title className="text-3xl p-5 font-outfitBold text-floralWhite">
+        Encuentra una pelicula basada en
+      </Title>
 
       <SelectInput
         label="Género"
@@ -71,10 +71,11 @@ export default function Randomizer() {
 
       <SubmitBtn
         text="Randomizar"
-        textColor="black"
+        textColor="text-floralWhite"
+        bgColor={"bg-prussianBlue"}
         width="70%"
         height="5%"
-        handleSubmit={handleSubmit}
+        handleSubmit={() => goToMovie(278)}
       />
     </TabsScreen>
   );

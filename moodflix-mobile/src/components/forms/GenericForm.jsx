@@ -92,7 +92,8 @@ export default function GenericForm({
       <SubmitBtn
         handleSubmit={handleSubmit}
         text={buttonText}
-        bgColor={"richBlue"}
+        bgColor="bg-richBlue"
+        textColor="text-floralWhite"
       />
 
       <Link href={accountRoute} asChild replace>
