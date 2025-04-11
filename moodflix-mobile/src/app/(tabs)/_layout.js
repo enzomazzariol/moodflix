@@ -30,6 +30,7 @@ export default function TabsLayout() {
         headerTitleStyle: {
           fontFamily: fonts.outfitSemiBold,
           fontSize: 28,
+          paddingBottom: hp("1%"),
         },
         headerStyle: {
           backgroundColor: colors.richBlue,

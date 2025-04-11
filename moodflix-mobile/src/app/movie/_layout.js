@@ -1,11 +1,14 @@
 import { Stack, useRouter } from "expo-router";
 import { Pressable } from "react-native";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import {
+  heightPercentageToDP,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import { BackArrowIcon } from "../../components/ui/icons";
 import { colors } from "../../utils/colors";
 import { fonts } from "../../utils/fonts";
 
-export default function RandomizerMovieLayout() {
+export default function MovieLayout() {
   const router = useRouter();
   return (
     <Stack
@@ -13,7 +16,7 @@ export default function RandomizerMovieLayout() {
         headerShown: true,
         headerStyle: {
           backgroundColor: colors.raisinBlack,
-          height: hp("10%"),
+          height: heightPercentageToDP("10%"),
           borderBottomWidth: 1,
           borderBottomColor: colors.jasper,
         },
@@ -33,8 +36,7 @@ export default function RandomizerMovieLayout() {
       <Stack.Screen
         name="[id]"
         options={{
-          title: "Randomizer Movie",
-          presentation: "modal",
+          title: "Movie page",
         }}
       />
     </Stack>

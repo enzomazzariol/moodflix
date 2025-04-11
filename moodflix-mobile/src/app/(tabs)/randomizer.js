@@ -70,13 +70,14 @@ export default function Randomizer() {
       />
 
       <SubmitBtn
-        text="Randomizar"
         textColor="text-floralWhite"
         bgColor={"bg-prussianBlue"}
         width="70%"
         height="5%"
         handleSubmit={() => goToMovie(278)}
-      />
+      >
+        Randomizar
+      </SubmitBtn>
     </TabsScreen>
   );
 }

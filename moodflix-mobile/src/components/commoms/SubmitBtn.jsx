@@ -1,7 +1,7 @@
 import { Text, TouchableOpacity } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 
-export default function SubmitBtn({ handleSubmit, text, bgColor, textColor, width, height }) {
+export default function SubmitBtn({ handleSubmit, children, bgColor, textColor, width, height }) {
 
   return (
     <TouchableOpacity
@@ -17,7 +17,7 @@ export default function SubmitBtn({ handleSubmit, text, bgColor, textColor, widt
         className={`text-xl font-outfitBold text-center ${textColor || "text-white"}`}
         activeOpacity={1}
       >
-        {text}
+        {children}
       </Text>
     </TouchableOpacity>
   );

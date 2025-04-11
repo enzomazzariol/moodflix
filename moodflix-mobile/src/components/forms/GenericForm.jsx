@@ -91,10 +91,11 @@ export default function GenericForm({
 
       <SubmitBtn
         handleSubmit={handleSubmit}
-        text={buttonText}
         bgColor="bg-richBlue"
         textColor="text-floralWhite"
-      />
+      >
+        {buttonText}
+      </SubmitBtn>
 
       <Link href={accountRoute} asChild replace>
         <TouchableOpacity activeOpacity={0.9}>
