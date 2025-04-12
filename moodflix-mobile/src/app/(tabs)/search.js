@@ -1,10 +1,10 @@
-import TabsScreen from "../../components/screens/TabsScreen";
 import { Text } from "react-native";
+import SearchScreen from "../../components/screens/SearchScreen";
 
 export default function Search() {
   return (
-    <TabsScreen>
+    <SearchScreen>
       <Text className="text-stone-100 text-3xl">Search</Text>
-    </TabsScreen>
-  )
+    </SearchScreen>
+  );
 }

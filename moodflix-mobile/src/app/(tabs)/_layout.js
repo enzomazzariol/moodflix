@@ -1,5 +1,7 @@
 import { Tabs } from "expo-router";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import CustomProfileHeader from "../../components/profile/CustomProfileHeader";
+import CustomHeaderSearchBar from "../../components/search/CustomSearchBar";
 import {
   ActivityIcon,
   HomeIcon,
@@ -29,7 +31,7 @@ export default function TabsLayout() {
         headerTintColor: colors.floralWhite,
         headerTitleStyle: {
           fontFamily: fonts.outfitSemiBold,
-          fontSize: 28,
+          fontSize: 24,
           paddingBottom: hp("1%"),
         },
         headerStyle: {
@@ -48,7 +50,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="search"
         options={{
-          title: "Busqueda",
+          header: () => <CustomHeaderSearchBar />,
           tabBarIcon: ({ color, size }) => (
             <SearchIcon size={22} color={color} />
           ),
@@ -76,7 +78,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Perfil",
+          header: () => <CustomProfileHeader />,
           tabBarIcon: ({ color, size }) => <UserIcon size={22} color={color} />,
         }}
       />

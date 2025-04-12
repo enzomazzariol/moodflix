@@ -16,7 +16,7 @@ export default function MovieLayout() {
         },
         headerTitleStyle: {
           fontFamily: fonts.outfitSemiBold,
-          fontSize: 22,
+          fontSize: 20,
           paddingBottom: hp("1%"),
           color: colors.floralWhite,
         },

@@ -1,5 +1,9 @@
 export const GenreOptions = [
   {
+    label: "Todos",
+    value: "todos",
+  },
+  {
     label: "Acción",
     value: "28",
   },

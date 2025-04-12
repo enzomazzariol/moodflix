@@ -1,5 +1,5 @@
 import { Stack, useRouter } from "expo-router";
-import { Pressable } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { BackArrowIcon } from "../../components/ui/icons";
 import { colors } from "../../utils/colors";
@@ -11,6 +11,7 @@ export default function RandomizerMovieLayout() {
     <Stack
       screenOptions={{
         headerShown: true,
+        headerBackButtonDisplayMode: "minimal",
         headerStyle: {
           backgroundColor: colors.raisinBlack,
           height: hp("10%"),
@@ -19,14 +20,14 @@ export default function RandomizerMovieLayout() {
         },
         headerTitleStyle: {
           fontFamily: fonts.outfitSemiBold,
-          fontSize: 22,
+          fontSize: 20,
           paddingBottom: hp("1%"),
           color: colors.floralWhite,
         },
         headerLeft: () => (
-          <Pressable onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.back()} activeOpacity={0.7}>
             <BackArrowIcon size={26} color={colors.floralWhite} />
-          </Pressable>
+          </TouchableOpacity>
         ),
       }}
     >

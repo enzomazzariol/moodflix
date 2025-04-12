@@ -27,7 +27,7 @@ export default function Randomizer() {
 
       <SelectInput
         label="Género"
-        placeholder="todos"
+        placeholder={GenreOptions[0].label}
         value={randomizerData.genre}
         onChange={(val) => setRandomizerData({ ...randomizerData, genre: val })}
         options={GenreOptions}
