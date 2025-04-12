@@ -1,9 +1,6 @@
 import { Stack, useRouter } from "expo-router";
 import { Pressable } from "react-native";
-import {
-  heightPercentageToDP,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { BackArrowIcon } from "../../components/ui/icons";
 import { colors } from "../../utils/colors";
 import { fonts } from "../../utils/fonts";
@@ -16,9 +13,6 @@ export default function MovieLayout() {
         headerShown: true,
         headerStyle: {
           backgroundColor: colors.raisinBlack,
-          height: heightPercentageToDP("10%"),
-          borderBottomWidth: 1,
-          borderBottomColor: colors.jasper,
         },
         headerTitleStyle: {
           fontFamily: fonts.outfitSemiBold,

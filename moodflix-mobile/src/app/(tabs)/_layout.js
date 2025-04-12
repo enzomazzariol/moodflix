@@ -15,12 +15,12 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: colors.richBlue,
+          backgroundColor: colors.raisinBlack,
           borderTopWidth: 0,
           height: hp("10%"),
         },
         tabBarActiveTintColor: colors.jasper,
-        tabBarInactiveTintColor: colors.timberwolf,
+        tabBarInactiveTintColor: colors.floralWhite,
         tabBarShowLabel: false,
         tabBarItemStyle: {
           paddingVertical: hp("1.5%"),
@@ -33,7 +33,7 @@ export default function TabsLayout() {
           paddingBottom: hp("1%"),
         },
         headerStyle: {
-          backgroundColor: colors.richBlue,
+          backgroundColor: colors.raisinBlack,
         },
       }}
     >

@@ -71,7 +71,7 @@ export default function Randomizer() {
 
       <SubmitBtn
         textColor="text-floralWhite"
-        bgColor={"bg-prussianBlue"}
+        bgColor="bg-raisinBlack"
         width="70%"
         height="5%"
         handleSubmit={() => goToMovie(278)}
