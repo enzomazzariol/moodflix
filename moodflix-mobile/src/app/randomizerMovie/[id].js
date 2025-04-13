@@ -1,4 +1,6 @@
+import { Skeleton } from "@rneui/themed";
 import { useLocalSearchParams, useRouter } from "expo-router/build/hooks";
+import { useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import {
   heightPercentageToDP as hp,
@@ -13,6 +15,8 @@ export default function RandomizerMovie() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const pathPoster = `https://image.tmdb.org/t/p/original${movieDataMock.poster_path}`;
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleBackNavigation = () => {
     router.back();
@@ -36,12 +40,27 @@ export default function RandomizerMovie() {
           {movieDataMock.original_title}
         </Text>
 
-        <Pressable onPress={() => goToMoviePage()}>
-          <Image
-            source={{ uri: pathPoster }}
-            style={{ width: wp("60%"), height: hp("40%") }}
-            className="rounded-md"
-          />
+        <Pressable onPress={goToMoviePage}>
+          <View style={{ width: wp("60%"), height: hp("40%") }}>
+            {isLoading && (
+              <Skeleton
+                animation="wave"
+                width="100%"
+                height="100%"
+                style={{ borderRadius: 8 }}
+              />
+            )}
+            <Image
+              source={{ uri: pathPoster }}
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: 8,
+                position: "absolute",
+              }}
+              onLoadEnd={() => setIsLoading(false)}
+            />
+          </View>
         </Pressable>
 
         <View className="flex-row gap-x-6">

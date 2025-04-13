@@ -1,9 +1,9 @@
 import {
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  View,
 } from "react-native";
 
 export default function SearchScreen({ children }) {
@@ -18,7 +18,7 @@ export default function SearchScreen({ children }) {
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
         >
-          <View className="flex-1 items-center justify-center">{children}</View>
+          <View className="flex-1">{children}</View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

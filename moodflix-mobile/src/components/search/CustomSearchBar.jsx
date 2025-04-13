@@ -1,32 +1,38 @@
 import { SearchBar } from "@rneui/themed";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { useSearchContext } from "../../context/SearchContext";
 import { colors } from "../../utils/colors";
 import { Title } from "../commoms/Title";
 
 export default function CustomHeaderSearchBar() {
-  const [text, setText] = useState("");
+  const { searchText, setSearchText, setIsFocused } = useSearchContext();
 
   const onChangeText = useCallback((value) => {
-    setText(value);
+    setSearchText(value);
   }, []);
 
   return (
-    <View className="flex-col bg-raisinBlack pt-16"
-    style={{ height: hp("17%") }}>
-      <Title className="text-center p-0 mb-2 font-outfitSemiBold" style={{ fontSize: 24 }}>
+    <View
+      className="flex-col bg-raisinBlack"
+      style={{ height: hp("16%"), paddingVertical: hp("6.5%") }}
+    >
+      <Title
+        className="text-center font-outfitSemiBold"
+        style={{ fontSize: 24, padding: 0 }}
+      >
         Buscar
       </Title>
       <SearchBar
         placeholder="Buscar películas, actores, directores..."
         onChangeText={onChangeText}
-        value={text}
+        value={searchText}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         containerStyle={styles.searchBarContainer}
         inputContainerStyle={styles.searchBarInputContainer}
-        inputStyle={{
-          color: colors.floralWhite,
-        }}
+        inputStyle={{ color: colors.floralWhite }}
         cancelButtonTitle="Cancelar"
         showCancel={true}
       />
@@ -44,6 +50,11 @@ const styles = StyleSheet.create({
   searchBarInputContainer: {
     backgroundColor: colors.richBlue,
     height: 38,
-    borderRadius: 4
+    borderRadius: 4,
+  },
+  resultsContainer: {
+    marginTop: 20,
+    gap: 16,
+    marginLeft: hp("1.2%"),
   },
 });
