@@ -50,6 +50,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="search"
         options={{
+          lazy: true,
           header: () => <CustomHeaderSearchBar />,
           tabBarIcon: ({ color, size }) => (
             <SearchIcon size={22} color={color} />

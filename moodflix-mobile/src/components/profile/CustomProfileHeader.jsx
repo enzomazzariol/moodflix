@@ -15,7 +15,7 @@ export default function CustomProfileHeader() {
       <View className="z-10 flex-1 items-center" style={{ padding: hp("5%") }}>
         <Title
           className="text-center font-outfitSemiBold text-floralWhite shadow-black"
-          style={{ fontSize: 30 }}
+          style={{ fontSize: 30, paddingVertical: hp("2%") }}
         >
           Enzo Mazzariol
         </Title>

@@ -35,6 +35,10 @@ export const BackArrowIcon = ({ size, color }) => {
   return <Ionicons name="chevron-back" size={size} color={color} />;
 }
 
+export const RightArrowIcon = ({ size, color }) => {
+  return <Ionicons name="chevron-forward" size={size} color={color} />;
+}
+
 export const RemoveItemIcon = ({ size, color }) => {
   return <Feather name="x" size={size} color={color} />;
 }
