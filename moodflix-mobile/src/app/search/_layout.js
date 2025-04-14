@@ -28,7 +28,7 @@ export default function SearchLayout() {
 
       <Stack.Screen
         name="popular"
-        options={{ title: "Popular", headerShown: true }}
+        options={{ title: "Popular", headerShown: true, animation: "fade" }}
       />
 
       <Stack.Screen

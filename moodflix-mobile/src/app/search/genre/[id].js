@@ -4,16 +4,18 @@ import { Title } from "../../../components/commoms/Title";
 import SearchScreen from "../../../components/screens/SearchScreen";
 
 export default function GenreMovies() {
-  const { id } = useLocalSearchParams();
+  const { id, name } = useLocalSearchParams();
   const navigation = useNavigation();
 
   useEffect(() => {
-    navigation.setOptions({ title: `Nombre del genero` });
+    navigation.setOptions({ title: name });
   }, []);
 
   return (
     <SearchScreen>
-      <Title>Genre page - ID: {id}</Title>
+      <Title>
+        Genre page - ID: {name} y {id}
+      </Title>
     </SearchScreen>
   );
 }

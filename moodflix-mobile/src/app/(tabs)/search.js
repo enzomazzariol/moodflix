@@ -55,6 +55,15 @@ export default function Search() {
                 <EmotionBtn onPress={() => goToEmotionSearch("felicidad")}>
                   felicidad
                 </EmotionBtn>
+                <EmotionBtn onPress={() => goToEmotionSearch("amor")}>
+                  Amor
+                </EmotionBtn>
+                <EmotionBtn onPress={() => goToEmotionSearch("tristeza")}>
+                  tristeza
+                </EmotionBtn>
+                <EmotionBtn onPress={() => goToEmotionSearch("felicidad")}>
+                  felicidad
+                </EmotionBtn>
               </View>
 
               <Title className="pb-0">Buscar por</Title>
