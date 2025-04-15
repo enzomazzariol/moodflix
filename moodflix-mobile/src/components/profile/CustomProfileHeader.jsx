@@ -14,7 +14,7 @@ export default function CustomProfileHeader() {
       />
       <View className="z-10 flex-1 items-center" style={{ padding: hp("5%") }}>
         <Title
-          className="text-center font-outfitSemiBold text-floralWhite shadow-black"
+          className="text-center font-spaceGroteskBold text-floralWhite shadow-black"
           style={{ fontSize: 30, paddingVertical: hp("2%") }}
         >
           Enzo Mazzariol
@@ -27,13 +27,13 @@ export default function CustomProfileHeader() {
         />
 
         <View className="flex-row items-center gap-x-4" style={{ marginTop: hp("2%") }}>
-          <Text className="text-lg text-floralWhite font-outfitSemiBold">
+          <Text className="text-lg text-floralWhite font-spaceGroteskRegular">
             Barcelona
           </Text>
-          <Text className="text-lg text-floralWhite font-outfitSemiBold">
+          <Text className="text-lg text-floralWhite font-spaceGroteskRegular">
             Nostalgia
           </Text>
-          <Text className="text-lg text-floralWhite font-outfitSemiBold">
+          <Text className="text-lg text-floralWhite font-spaceGroteskRegular">
             Comedia
           </Text>
         </View>

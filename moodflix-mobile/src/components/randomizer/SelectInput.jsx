@@ -7,7 +7,7 @@ import { SelectArrowIcon } from "../ui/icons";
 export default function SelectInput({ label, options, onChange, placeholder, value }) {
   return (
     <View className="mb-4" style={{ width: wp("70%") }}>
-      <Text className="text-2xl font-outfitBold text-floralWhite mb-2">
+      <Text className="text-2xl font-spaceGroteskBold text-floralWhite mb-2">
         {label}
       </Text>
 

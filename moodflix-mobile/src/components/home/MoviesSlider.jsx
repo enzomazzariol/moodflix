@@ -16,7 +16,7 @@ export default function MoviesSlider({ title, movies}) {
 
     return (
       <View style={{ paddingVertical: hp("1%") }}>
-        <Title className="text-2xl font-outfitLight">{title}</Title>
+        <Title className="font-spaceGroteskRegular" style={{ fontSize: hp("2.5%") }}>{title}</Title>
         <FlatList
           data={movies}
           keyExtractor={(item) => item.id}

@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 import RandomizerSlider from "../../components/commoms/Slider";
 import SubmitBtn from "../../components/commoms/SubmitBtn";
 import { Title } from "../../components/commoms/Title";
@@ -21,7 +22,10 @@ export default function Randomizer() {
 
   return (
     <TabsScreen>
-      <Title className="text-3xl p-5 font-outfitBold text-floralWhite">
+      <Title
+        className="text-3xl font-spaceGroteskBold text-floralWhite"
+        style={{ paddingVertical: heightPercentageToDP("3%") }}
+      >
         Encuentra una pelicula basada en
       </Title>
 

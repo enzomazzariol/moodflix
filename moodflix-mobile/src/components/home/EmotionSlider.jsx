@@ -8,7 +8,7 @@ import { Title } from "../commoms/Title";
 export default function EmotionSlider({ title, emotions}) {
     return (
       <>
-        <Title>{title}</Title>
+        <Title className="font-spaceGroteskBold">{title}</Title>
         <FlatList
           data={emotions}
           keyExtractor={(item) => item}

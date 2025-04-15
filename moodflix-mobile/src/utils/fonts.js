@@ -5,4 +5,7 @@ export const fonts = {
   outfitBlack: "Outfit-Black",
   outfitSemiBold: "Outfit-SemiBold",
   outfitThin: "Outfit-Thin",
+  spaceRegular: "SpaceGrotesk-Regular",
+  spaceBold: "SpaceGrotesk-Bold",
+  spaceLight: "SpaceGrotesk-Light",
 };

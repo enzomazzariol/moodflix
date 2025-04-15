@@ -37,7 +37,7 @@ export default function Search() {
 
   const renderHeader = () => (
     <>
-      <Title className="pb-5">Por emociones</Title>
+      <Title className="pb-5 font-spaceGroteskBold">Por emociones</Title>
       <FlatList
         data={emotionsNames}
         keyExtractor={(item) => item.name}
@@ -52,7 +52,9 @@ export default function Search() {
         }}
         ItemSeparatorComponent={RenderSectionSeparator}
       />
-      <Title style={{ marginTop: hp("3%") }}>Buscar por</Title>
+      <Title className="font-spaceGroteskBold" style={{ marginTop: hp("3%") }}>
+        Buscar por
+      </Title>
     </>
   );
 

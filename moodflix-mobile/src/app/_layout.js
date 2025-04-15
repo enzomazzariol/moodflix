@@ -23,6 +23,9 @@ export default function RootLayout() {
       "Outfit-Black": require("../../assets/fonts/Outfit-Black.ttf"),
       "Outfit-SemiBold": require("../../assets/fonts/Outfit-SemiBold.ttf"),
       "Outfit-Thin": require("../../assets/fonts/Outfit-Thin.ttf"),
+      "SpaceGrotesk-Regular": require("../../assets/fonts/SpaceGrotesk-Regular.ttf"),
+      "SpaceGrotesk-Bold": require("../../assets/fonts/SpaceGrotesk-Bold.ttf"),
+      "SpaceGrotesk-Light": require("../../assets/fonts/SpaceGrotesk-Light.ttf"),
     });
     setFontsLoaded(true);
   };
