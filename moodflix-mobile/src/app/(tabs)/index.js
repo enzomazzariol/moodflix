@@ -60,9 +60,10 @@ export default function Home() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           padding: hp("1%"),
+          paddingVertical: hp("4%"),
         }}
         ListHeaderComponent={renderHeader}
-        ItemSeparatorComponent={() => <RenderSectionSeparator />}
+        ItemSeparatorComponent={RenderSectionSeparator}
       />
     </HomeScreen>
   );

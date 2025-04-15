@@ -1,9 +1,9 @@
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native";
 
 export default function HomeScreen({ children}) {
   return (
-    <SafeAreaView className="flex-1 bg-richBlue" edges={["top"]}>
-      {children}
+    <SafeAreaView className="flex-1 bg-richBlue">
+          {children}
     </SafeAreaView>
   );
 }

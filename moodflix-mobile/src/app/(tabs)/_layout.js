@@ -42,6 +42,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          lazy: true,
           title: "Moodflix",
           tabBarIcon: ({ color, size }) => <HomeIcon size={22} color={color} />,
         }}

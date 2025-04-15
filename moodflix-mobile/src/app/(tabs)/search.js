@@ -1,12 +1,16 @@
 import { useRouter } from "expo-router";
 import { FlatList, View } from "react-native";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
 import EmotionBtn from "../../components/commoms/EmotionBtn";
 import SectionLink from "../../components/commoms/SectionLink";
 import { Title } from "../../components/commoms/Title";
 import SearchScreen from "../../components/screens/SearchScreen";
 import RecentSearchComponent from "../../components/search/recentSearchComponent";
 import { useSearchContext } from "../../context/SearchContext";
+import { emotionsNames } from "../../lib/searchData/emotionsNames";
 import { searchBrowseLinks } from "../../lib/searchData/searchBrowseLinks";
 
 export default function Search() {
@@ -28,6 +32,30 @@ export default function Search() {
       </SearchScreen>
     );
 
+  // Separador entre secciones de películas
+  const RenderSectionSeparator = () => <View style={{ height: hp("2%") }} />;
+
+  const renderHeader = () => (
+    <>
+      <Title className="pb-5">Por emociones</Title>
+      <FlatList
+        data={emotionsNames}
+        keyExtractor={(item) => item.name}
+        renderItem={({ item }) => (
+          <EmotionBtn width="28%" onPress={() => goToEmotionSearch(item.name)}>
+            {item.name}
+          </EmotionBtn>
+        )}
+        numColumns={3}
+        columnWrapperStyle={{
+          columnGap: wp("4%"),
+        }}
+        ItemSeparatorComponent={RenderSectionSeparator}
+      />
+      <Title style={{ marginTop: hp("3%") }}>Buscar por</Title>
+    </>
+  );
+
   return (
     <SearchScreen>
       <FlatList
@@ -38,39 +66,10 @@ export default function Search() {
             {item.name}
           </SectionLink>
         )}
-        ListHeaderComponent={
-          <>
-            <Title className="pb-5">Por emociones</Title>
-            <View
-              className="flex-row gap-5 flex-wrap"
-              style={{ marginBottom: hp("3%") }}
-            >
-              <EmotionBtn onPress={() => goToEmotionSearch("amor")}>
-                Amor
-              </EmotionBtn>
-              <EmotionBtn onPress={() => goToEmotionSearch("tristeza")}>
-                tristeza
-              </EmotionBtn>
-              <EmotionBtn onPress={() => goToEmotionSearch("felicidad")}>
-                felicidad
-              </EmotionBtn>
-              <EmotionBtn onPress={() => goToEmotionSearch("amor")}>
-                Amor
-              </EmotionBtn>
-              <EmotionBtn onPress={() => goToEmotionSearch("tristeza")}>
-                tristeza
-              </EmotionBtn>
-              <EmotionBtn onPress={() => goToEmotionSearch("felicidad")}>
-                felicidad
-              </EmotionBtn>
-            </View>
-
-            <Title>Buscar por</Title>
-          </>
-        }
+        ListHeaderComponent={renderHeader}
         contentContainerStyle={{
-          paddingHorizontal: hp("1%"),
-          paddingVertical: hp("2%"),
+          paddingHorizontal: hp("1.5%"),
+          paddingVertical: hp("3%"),
           gap: hp("2%"),
         }}
       />

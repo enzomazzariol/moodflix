@@ -5,7 +5,7 @@ export const emotionsNames = [
   { name: "Felicidad" },
   { name: "Ansiedad" },
   { name: "Relajación" },
-  { name: "Euforia" },
+  /*{ name: "Euforia" },
   { name: "Ira" },
   { name: "Sorpresa" },
   { name: "Romántico" },
@@ -27,5 +27,5 @@ export const emotionsNames = [
   { name: "Vulnerable" },
   { name: "Adrenaline Rush" },
   { name: "Cynicism" },
-  { name: "Shocked" },
+  { name: "Shocked" },*/
 ];

@@ -1,11 +1,19 @@
+import { useRouter } from "expo-router";
 import { FlatList, View } from "react-native";
 import {
-    heightPercentageToDP as hp
+  heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import { Title } from "../commoms/Title";
 import PosterMovie from "./PosterMovie";
 
-export default function MoviesSlider({ title, movies, onMoviePress}) {
+export default function MoviesSlider({ title, movies}) {
+
+  const router = useRouter();
+
+    const onMoviePress = (movie) => {
+      router.push(`/movie/${movie.id}`);
+    }
+
     return (
       <View style={{ paddingVertical: hp("1%") }}>
         <Title className="text-2xl font-outfitLight">{title}</Title>

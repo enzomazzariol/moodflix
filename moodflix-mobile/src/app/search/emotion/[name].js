@@ -10,7 +10,9 @@ export default function SearchEmotion() {
   const { name } = useLocalSearchParams();
 
   useEffect(() => {
-    navigation.setOptions({ title: `${name}` });
+    navigation.setOptions({
+      title: `${name}`,
+    });
   }, []);
 
   return (
