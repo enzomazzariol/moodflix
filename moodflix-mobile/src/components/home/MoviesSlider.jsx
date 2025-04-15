@@ -10,9 +10,6 @@ export default function MoviesSlider({ title, movies}) {
 
   const router = useRouter();
 
-    const onMoviePress = (movie) => {
-      router.push(`/movie/${movie.id}`);
-    }
 
     return (
       <View style={{ paddingVertical: hp("1%") }}>
@@ -24,7 +21,7 @@ export default function MoviesSlider({ title, movies}) {
             <PosterMovie
               posterPath={item.poster_path}
               title={item.title}
-              onPress={() => onMoviePress && onMoviePress(item)}
+              idMovie={item.id}
               accessibilityLabel={`Ver película: ${item.title}`}
             />
           )}

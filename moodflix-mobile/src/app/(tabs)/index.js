@@ -22,7 +22,7 @@ export default function Home() {
     },
     {
       id: "coming-soon",
-      title: "Proximamente",
+      title: "Próximamente",
       data: mocksMovies,
     },
   ];
@@ -35,8 +35,8 @@ export default function Home() {
         "felicidad",
         "alegría",
         "enojo",
-        "triunfo",
-        "temor",
+        "esperanza",
+        "miedo",
         "ansiedad",
       ]}
       title="¿Cómo te sientes hoy?"
