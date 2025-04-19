@@ -3,7 +3,7 @@ package com.moodflix.backend.model.enums;
 public enum ActivityType {
     WATCH("watch"),
     LIKE("like"),
-    COMMENT("comment");
+    REVIEW("review");
 
     private final String value;
 

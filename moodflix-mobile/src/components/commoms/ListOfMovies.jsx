@@ -18,10 +18,11 @@ export default function ListOfMovies({ movies }) {
         )}
         numColumns={4}
         contentContainerStyle={{
-          paddingVertical: hp("1.7%"),
+          paddingTop: hp("1.5%"),
+          paddingLeft: hp("0.5%"),
         }}
-       // columnWrapperStyle={{ columnGap: hp("3%") }}
-        ItemSeparatorComponent={() => <View style={{ height: hp("1.4%") }} />}
+        columnWrapperStyle={{ columnGap: hp("1%") }}
+        ItemSeparatorComponent={() => <View style={{ height: hp("1%") }} />}
       />
     );
 }

@@ -26,7 +26,7 @@ export default function MoviesSlider({ title, movies}) {
             />
           )}
           contentContainerStyle={{
-            paddingVertical: hp("1.7%"),
+            paddingVertical: hp("1%"),
             gap: hp("1%"),
           }}
           horizontal={true}
