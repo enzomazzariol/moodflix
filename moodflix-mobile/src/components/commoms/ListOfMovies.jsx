@@ -19,7 +19,7 @@ export default function ListOfMovies({ movies, contentContainerStyle }) {
         numColumns={4}
         contentContainerStyle={{
           paddingTop: hp("1.5%"),
-          paddingLeft: hp("0.5%"),
+          paddingHorizontal: hp("0.5%"),
           ...contentContainerStyle
         }}
         columnWrapperStyle={{ columnGap: hp("1%") }}

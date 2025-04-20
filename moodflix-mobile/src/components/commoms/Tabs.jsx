@@ -7,7 +7,7 @@ import {
 import { colors } from "../../utils/colors";
 
 export default function Tabs({current, onChange}) {
-  const width = wp("94%");
+  const width = wp("98%");
   const height = hp("4.9%");
   const paddingBottom = hp("1.4%");
 
@@ -33,8 +33,8 @@ export default function Tabs({current, onChange}) {
           onChange={onChange}
           dense
           containerStyle={{
-            width,
             height,
+            width,
           }}
           indicatorStyle={{
             backgroundColor: colors.jasper,

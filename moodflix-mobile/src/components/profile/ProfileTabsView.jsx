@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Tabs from "../commoms/Tabs";
 import Favoritos from "./Favoritos";
@@ -8,6 +8,7 @@ import Watchlist from "./Watchlist";
 
 export default function ProfileTabsView() {
     const [index, setIndex] = useState(0);
+    const windowHeight = Dimensions.get('window').height;
 
     const TabContent = useMemo(() => {
         switch (index) {
@@ -23,8 +24,10 @@ export default function ProfileTabsView() {
     }, [index]);
 
     return (
-      <View className="justify-center items-center" style={{paddingTop: hp("3%")}}>
-        <TabsController onChange={setIndex} current={index} />
+      <View className="flex-1">
+        <View style={{ paddingTop: hp("3%") }}>
+          <TabsController onChange={setIndex} current={index} />
+        </View>
           {TabContent}
       </View>
     );
