@@ -2,7 +2,7 @@ import { FlatList, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import PosterMovie from '../home/PosterMovie';
 
-export default function ListOfMovies({ movies }) {
+export default function ListOfMovies({ movies, contentContainerStyle }) {
     // TODO: Arreglar tamaño de poster para tener 4 columans de posters
     return (
       <FlatList
@@ -20,6 +20,7 @@ export default function ListOfMovies({ movies }) {
         contentContainerStyle={{
           paddingTop: hp("1.5%"),
           paddingLeft: hp("0.5%"),
+          ...contentContainerStyle
         }}
         columnWrapperStyle={{ columnGap: hp("1%") }}
         ItemSeparatorComponent={() => <View style={{ height: hp("1%") }} />}

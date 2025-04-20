@@ -1,13 +1,11 @@
 import { FlatList, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import EmotionSlider from "../../components/home/EmotionSlider";
 import MoviesSlider from "../../components/home/MoviesSlider";
 import HomeScreen from "../../components/screens/HomeScreen";
 import mocksMovies from "../../lib/mocks/movies.json";
 
 export default function Home() {
-  const insets = useSafeAreaInsets();
   // Configuración de las secciones de películas
   const movieSections = [
     {
