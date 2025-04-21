@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Dimensions, View } from "react-native";
+import { View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Tabs from "../commoms/Tabs";
 import Favoritos from "./Favoritos";
@@ -8,7 +8,6 @@ import Watchlist from "./Watchlist";
 
 export default function ProfileTabsView() {
     const [index, setIndex] = useState(0);
-    const windowHeight = Dimensions.get('window').height;
 
     const TabContent = useMemo(() => {
         switch (index) {

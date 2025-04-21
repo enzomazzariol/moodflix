@@ -7,7 +7,7 @@ import {
 import { colors } from "../../utils/colors";
 
 export default function Tabs({current, onChange}) {
-  const width = wp("98%");
+  const width = wp("90%");
   const height = hp("4.9%");
   const paddingBottom = hp("1.4%");
 
