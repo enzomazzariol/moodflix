@@ -1,16 +1,12 @@
-import { useRouter } from "expo-router";
 import { FlatList, View } from "react-native";
 import {
-  heightPercentageToDP as hp
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp
 } from "react-native-responsive-screen";
+import PosterMovie from "../commoms/PosterMovie";
 import { Title } from "../commoms/Title";
-import PosterMovie from "./PosterMovie";
 
 export default function MoviesSlider({ title, movies}) {
-
-  const router = useRouter();
-
-
     return (
       <View style={{ paddingVertical: hp("1%") }}>
         <Title className="font-spaceGroteskRegular" style={{ fontSize: hp("2.5%") }}>{title}</Title>
@@ -22,6 +18,8 @@ export default function MoviesSlider({ title, movies}) {
               posterPath={item.poster_path}
               title={item.title}
               idMovie={item.id}
+              posterHeight={hp("18%")}
+              posterWidth={wp("24%")}
               accessibilityLabel={`Ver película: ${item.title}`}
             />
           )}

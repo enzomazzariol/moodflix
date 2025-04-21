@@ -57,7 +57,7 @@ export default function Home() {
         renderItem={RenderMovieSection}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          padding: hp("1%"),
+          paddingLeft: hp("1.5%"),
           paddingVertical: hp("4%"),
         }}
         ListHeaderComponent={renderHeader}

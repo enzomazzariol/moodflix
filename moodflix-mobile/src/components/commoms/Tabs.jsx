@@ -7,14 +7,12 @@ import {
 import { colors } from "../../utils/colors";
 
 export default function Tabs({current, onChange}) {
-  const width = wp("90%");
+  const width = wp("94.3%");
   const height = hp("4.9%");
   const paddingBottom = hp("1.4%");
 
   return (
-    <View
-      className="justify-center items-center" style={{ paddingBottom }}
-    >
+    <View className="justify-center items-center" style={{ paddingBottom }}>
       <View
         style={{
           width,
@@ -49,6 +47,7 @@ export default function Tabs({current, onChange}) {
             marginTop: hp("0.2%"),
           }}
         >
+          <Tab.Item>Perfil</Tab.Item>
           <Tab.Item>Vistas</Tab.Item>
           <Tab.Item>Favoritos</Tab.Item>
           <Tab.Item>Watchlist</Tab.Item>

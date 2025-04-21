@@ -7,7 +7,7 @@ import {
 } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 
-export default function PosterMovie({ posterPath, title, idMovie }) {
+export default function PosterMovie({ posterPath, title, idMovie, posterWidth, posterHeight }) {
   const path = posterPath
     ? `https://image.tmdb.org/t/p/w500${posterPath}`
     : null;
@@ -18,16 +18,16 @@ export default function PosterMovie({ posterPath, title, idMovie }) {
     router.push(`/movie/${idMovie}`);
   };
 
-  const posterHeight = hp("17%");
-  const posterWidth = wp("23%");
+  const posterHeightDefault = hp("16%");
+  const posterWidthDefault = wp("22%");
 
   return (
     <Pressable onPress={goToMoviePage} className="items-center">
       <View
         className="justify-center items-center overflow-hidden bg-raisinBlack"
         style={{
-          height: posterHeight,
-          width: posterWidth,
+          height: posterHeight ?? posterHeightDefault,
+          width: posterWidth ?? posterWidthDefault,
           borderRadius: 4,
           borderWidth: 1,
           borderColor: colors.prussianBlue,
@@ -41,7 +41,8 @@ export default function PosterMovie({ posterPath, title, idMovie }) {
             onError={() => setHasError(true)}
           />
         ) : (
-          <Text className="font-spaceGroteskRegular text-floralWhite text-center"
+          <Text
+            className="font-spaceGroteskRegular text-floralWhite text-center"
             style={{ fontSize: hp("1.5%") }}
           >
             {title}
