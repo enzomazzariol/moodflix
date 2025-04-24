@@ -16,8 +16,12 @@ export default function SelectInput({ label, options, onChange, placeholder, val
         value={value ?? "todos"}
         items={options}
         doneText="Hecho"
-        touchableWrapperProps={{ focusable: true }}
         key={options.value}
+        touchableWrapperProps={{
+          activeOpacity: 1,
+          onPress: () => {}, // evita que se bloquee el toque
+          focusable: true,
+        }}
         placeholder={{ label: placeholder, value: "todos" }}
         useNativeAndroidPickerStyle={false}
         Icon={() => <SelectArrowIcon size={24} color={colors.black} />}
