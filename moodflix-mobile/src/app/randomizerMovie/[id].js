@@ -13,7 +13,8 @@ import movieDataMock from "../../lib/mocks/movieDetails.json";
 
 export default function RandomizerMovie() {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const { id, genre, year, streaming, rating, duration } =
+    useLocalSearchParams();
   const pathPoster = `https://image.tmdb.org/t/p/original${movieDataMock.poster_path}`;
 
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +26,14 @@ export default function RandomizerMovie() {
   const goToMoviePage = () => {
     router.push(`/movie/${id}`);
   };
+
+  console.log("Datos recibidos:", {
+    genre,
+    year,
+    streaming,
+    rating,
+    duration,
+  });
 
   return (
     <RandomizerMovieScreen>

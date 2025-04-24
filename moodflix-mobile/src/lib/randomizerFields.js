@@ -1,87 +1,28 @@
 export const GenreOptions = [
-  {
-    label: "Todos",
-    value: "todos",
-  },
-  {
-    label: "Acción",
-    value: "28",
-  },
-  {
-    label: "Aventura",
-    value: "12",
-  },
-  {
-    label: "Animación",
-    value: "16",
-  },
-  {
-    label: "Comedia",
-    value: "35",
-  },
-  {
-    label: "Crimen",
-    value: "80",
-  },
-  {
-    label: "Documental",
-    value: "99",
-  },
-  {
-    label: "Drama",
-    value: "18",
-  },
-  {
-    label: "Fantasía",
-    value: "14",
-  },
-  {
-    label: "Historia",
-    value: "36",
-  },
-  {
-    label: "Horror",
-    value: "27",
-  },
-  {
-    label: "Misterio",
-    value: "9648",
-  },
-  {
-    label: "Romance",
-    value: "10749",
-  },
-  {
-    label: "Ciencia Ficción",
-    value: "878",
-  },
-  {
-    label: "Terror",
-    value: "27",
-  },
-  {
-    label: "Guerra",
-    value: "10752",
-  },
-  {
-    label: "Western",
-    value: "37",
-  },
-  {
-    label: "Familia",
-    value: "10751",
-  },
-  {
-    label: "Thiller",
-    value: "53",
-  },
-  {
-    label: "Música",
-    value: "10402",
-  },
+  { label: "Todos", value: "todos" },
+  { label: "Acción", value: "28" },
+  { label: "Aventura", value: "12" },
+  { label: "Animación", value: "16" },
+  { label: "Comedia", value: "35" },
+  { label: "Crimen", value: "80" },
+  { label: "Documental", value: "99" },
+  { label: "Drama", value: "18" },
+  { label: "Fantasía", value: "14" },
+  { label: "Historia", value: "36" },
+  { label: "Horror", value: "27" },
+  { label: "Misterio", value: "9648" },
+  { label: "Romance", value: "10749" },
+  { label: "Ciencia Ficción", value: "878" },
+  { label: "Terror", value: "27" },
+  { label: "Guerra", value: "10752" },
+  { label: "Western", value: "37" },
+  { label: "Familia", value: "10751" },
+  { label: "Thiller", value: "53" },
+  { label: "Música", value: "10402" },
 ];
 
 export const DecadeOptions = [
+  { label: "Todos", value: "todos" },
   { label: "2020s", value: "2020" },
   { label: "2010s", value: "2010" },
   { label: "2000s", value: "2000" },
@@ -96,6 +37,7 @@ export const DecadeOptions = [
 ];
 
 export const StreamingServiceOptions = [
+  { label: "Todos", value: "todos" },
   { label: "Netflix", value: "netflix" },
   { label: "Amazon Prime Video", value: "amazon_prime" },
   { label: "Hulu", value: "hulu" },

@@ -13,11 +13,15 @@ import {
 } from "../../lib/randomizerFields";
 
 export default function Randomizer() {
+  // TODO: Añadir boton de resetear cuando haya cambio en los inputs
   const [randomizerData, setRandomizerData] = useState({});
   const router = useRouter();
 
   const goToMovie = (id) => {
-    router.push(`/randomizerMovie/${id}`);
+    router.push({
+      pathname: `/randomizerMovie/${id}`,
+      params: randomizerData,
+    });
   };
 
   return (
@@ -31,7 +35,7 @@ export default function Randomizer() {
 
       <SelectInput
         label="Género"
-        placeholder={GenreOptions[0].label}
+        placeholder="Todos"
         value={randomizerData.genre}
         onChange={(val) => setRandomizerData({ ...randomizerData, genre: val })}
         options={GenreOptions}
@@ -39,7 +43,7 @@ export default function Randomizer() {
 
       <SelectInput
         label="Decada"
-        placeholder="todos"
+        placeholder="Todos"
         value={randomizerData.year}
         onChange={(val) => setRandomizerData({ ...randomizerData, year: val })}
         options={DecadeOptions}
@@ -47,7 +51,7 @@ export default function Randomizer() {
 
       <SelectInput
         label="Servicio de streaming"
-        placeholder="todos"
+        placeholder="Todos"
         value={randomizerData.streaming}
         onChange={(val) =>
           setRandomizerData({ ...randomizerData, streaming: val })
