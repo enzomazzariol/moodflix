@@ -1,14 +1,25 @@
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import MockMovies from "../../lib/mocks/muchasMovies.json";
 import ListOfMovies from "../commoms/ListOfMovies";
+import EmptyMovies from "./EmptyMovies";
 
-export default function Watchlist() {
+export default function Favoritos() {
+  const movies = MockMovies || [];
+
   return (
     <>
-      <ListOfMovies
-        movies={MockMovies}
-        contentContainerStyle={{ paddingBottom: hp("6%") }}
-      />
+      {movies.length > 0 ? (
+        <ListOfMovies
+          movies={movies}
+          contentContainerStyle={{ paddingBottom: hp("6%") }}
+        />
+      ) : (
+        <EmptyMovies
+          title="Empieza a guardar películas en tu watchlist"
+          textBtn="Descubrir nuevas películas"
+          btnRoute="/search/popular"
+        />
+      )}
     </>
   );
 }

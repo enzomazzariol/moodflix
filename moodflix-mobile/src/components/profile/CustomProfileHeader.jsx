@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 import { Title } from "../commoms/Title";
 import { SettingsIcon } from "../ui/icons";
@@ -9,11 +9,12 @@ import SettingsModal from "./SettingsModal";
 export default function CustomProfileHeader() {
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [profileImageVisible, setProfileImageVisible] = useState(false);
 
   return (
     <View className="flex-col bg-raisinBlack" style={{ height: hp("28%") }}>
       <SettingsModal
-        visible={modalVisible} 
+        visible={modalVisible}
         onClose={() => setModalVisible(false)}
       />
 
@@ -34,7 +35,7 @@ export default function CustomProfileHeader() {
           </Title>
         </View>
 
-        <Pressable onPress={() => console.log("pressado")}>
+        <Pressable onPress={() => setProfileImageVisible(true)}>
           <Image
             source={require("../../../assets/william.png")}
             className="rounded-full"
@@ -42,6 +43,19 @@ export default function CustomProfileHeader() {
             style={{ width: hp("10%"), height: hp("10%") }}
           />
         </Pressable>
+
+        <Modal visible={profileImageVisible} transparent animationType="slide">
+          <TouchableOpacity
+            className="flex-1 items-center justify-center"
+            style={styles.modalContainer}
+            onPress={() => setProfileImageVisible(false)}
+          >
+            <Image
+              source={require("../../../assets/william.png")}
+              style={styles.expandedImage}
+            />
+          </TouchableOpacity>
+        </Modal>
 
         <View
           className="flex-row items-center gap-x-4"
@@ -61,3 +75,14 @@ export default function CustomProfileHeader() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    backgroundColor: "rgba(0,0,0,0.6)",
+  },
+  expandedImage: {
+    width: widthPercentageToDP("70%"),
+    height: hp("40%"),
+    resizeMode: "contain",
+  },
+});
