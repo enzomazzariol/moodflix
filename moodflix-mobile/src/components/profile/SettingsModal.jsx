@@ -1,7 +1,10 @@
-import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 import { Title } from "../commoms/Title";
+import ChangeAvatar from "./ChangeAvatar";
+import EditableRow from "./EditableRow";
 
 export default function SettingsModal({ visible, onClose}) {
     return (
@@ -16,18 +19,11 @@ export default function SettingsModal({ visible, onClose}) {
           <View className="bg-raisinBlack" style={{ height: hp("100%") }}>
             <ModalHeader title={"Configuración"} onClose={onClose} />
             <ScrollView
-              className="p-8 shadow-lg bg-raisinBlack"
+              className="shadow-lg bg-raisinBlack"
               contentContainerStyle={{ flexGrow: 1 }}
               style={{ height: hp("100%") }}
             >
-              <Pressable
-                className="bg-jasper py-3 px-6 rounded-full"
-                onPress={onClose}
-              >
-                <Text className="text-floralWhite font-spaceGroteskBold">
-                  Cerrar
-                </Text>
-              </Pressable>
+              <ModalContent />
             </ScrollView>
           </View>
         </Modal>
@@ -53,7 +49,7 @@ function ModalHeader({ title, onClose }) {
           </Text>
         </TouchableOpacity>
 
-        <Title className="">Configuración</Title>
+        <Title className="">{title}</Title>
         <TouchableOpacity activeOpacity={0.7} onPress={onClose}>
           <Text className="font-spaceGroteskBold text-lg text-jasper">
             Guardar
@@ -61,4 +57,43 @@ function ModalHeader({ title, onClose }) {
         </TouchableOpacity>
       </View>
     );
+}
+
+function ModalContent() {
+  const[userData, setUserData] = useState({});
+  return (
+    <>
+      <Title
+        className="text-2xl font-spaceGroteskBold text-floralWhite"
+        style={{ padding: hp("2%") }}
+      >
+        Editar
+      </Title>
+
+      <View className="flex-col">
+        <EditableRow label={"Nombre de usuario"} value={"Nombre de usuario"} />
+        <EditableRow label={"Email"} value={"Email"} />
+        <EditableRow label={"Contraseña"} value={"Contraseña"} />
+        <EditableRow label={"Bio"} value={"Bio"} />
+        <EditableRow label={"Ubicación"} value={"Ubicación"} />
+        <EditableRow label={"Emoción actual"} value={"Emoción actual"} />
+        <EditableRow label={"Género favorito"} value={"Género favorito"} />
+      </View>
+
+      <Title
+        className="text-2xl font-spaceGroteskBold text-floralWhite"
+        style={{ padding: hp("2%") }}
+      >
+        Avatar
+      </Title>
+      <ChangeAvatar />
+      <View style={{ paddingVertical: hp("8%") }}>
+        <EditableRow
+          label={"Cerrar sesión"}
+          btnStyles={{ borderTopWidth: 1, borderColor: colors.prussianBlue }}
+          onPress={() => console.log("Logout")}
+        />
+      </View>
+    </>
+  );
 }

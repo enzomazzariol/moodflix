@@ -74,14 +74,14 @@ export default function RandomizerMovie() {
 
         <View className="flex-row gap-x-6">
           <SubmitBtn
-            width={wp("6.5%")}
+            width={wp("7%")}
             bgColor="bg-raisinBlack"
             handleSubmit={handleBackNavigation}
           >
             Filtros
           </SubmitBtn>
           <SubmitBtn
-            width={wp("6.5%")}
+            width={wp("7%")}
             bgColor="bg-floralWhite"
             textColor="text-raisinBlack"
             handleSubmit={handleBackNavigation}

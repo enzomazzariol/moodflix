@@ -50,6 +50,7 @@ export default function CustomProfileHeader() {
             style={styles.modalContainer}
             onPress={() => setProfileImageVisible(false)}
           >
+            {/* Imagen de perfil ampliada (cambiar para que sea la imagen del usuario) */}
             <Image
               source={require("../../../assets/william.png")}
               style={styles.expandedImage}
