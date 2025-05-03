@@ -31,7 +31,7 @@ export default function ChangeAvatar({ label, value, onChangeText }) {
         className="flex-col items-center justify-between"
         style={{ paddingEnd: hp("2%") }}
       >
-        <SubmitBtn textStyles={"text-base"} width={wp("11%")} height={"4%"}>
+        <SubmitBtn textStyles={"text-base"} width={wp("9%")} height={"4.5%"}>
           Seleccionar nuevo avatar
         </SubmitBtn>
         <Pressable>

@@ -28,7 +28,7 @@ export default function GenericForm({
   };
 
   return (
-    <View style={{ width: wp("70%") }}>
+    <View style={{ width: wp("75%") }}>
       {fields.map((field) => {
         return (
           <View key={field.name} className="mb-3">
@@ -72,14 +72,15 @@ export default function GenericForm({
                 <CheckBoxIcon size={14} color={colors.black} />
               )}
             </View>
-            <Text className="text-lg font-outfitBold text-floralWhite">
+            <Text className="text-lg font-outfitBold text-floralWhite" 
+            allowFontScaling={false}>
               Recordarme
             </Text>
           </TouchableOpacity>
 
           <Link href={accountRoute} asChild replace>
             <TouchableOpacity activeOpacity={0.9}>
-              <Text className="text-lg font-outfitBold text-floralWhite">
+              <Text className="text-lg font-outfitBold text-floralWhite" allowFontScaling={false}>
                 Olvide mi contraseña?
               </Text>
             </TouchableOpacity>

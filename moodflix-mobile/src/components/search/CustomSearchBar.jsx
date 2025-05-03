@@ -35,6 +35,7 @@ export default function CustomHeaderSearchBar() {
         inputStyle={{ color: colors.floralWhite }}
         cancelButtonTitle="Cancelar"
         showCancel={true}
+        maxFontSizeMultiplier={1.3}
       />
     </View>
   );

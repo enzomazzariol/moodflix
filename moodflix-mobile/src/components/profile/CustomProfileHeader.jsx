@@ -30,6 +30,7 @@ export default function CustomProfileHeader() {
           <Title
             className="text-center font-spaceGroteskBold text-floralWhite shadow-black w-full"
             style={{ fontSize: 30, paddingVertical: hp("2%") }}
+            maxFontSizeMultiplier={1.3}
           >
             Enzo Mazzariol
           </Title>
@@ -62,13 +63,22 @@ export default function CustomProfileHeader() {
           className="flex-row items-center gap-x-4"
           style={{ marginTop: hp("2%") }}
         >
-          <Text className="text-lg text-floralWhite font-spaceGroteskRegular">
+          <Text
+            className="text-lg text-floralWhite font-spaceGroteskRegular"
+            maxFontSizeMultiplier={1.3}
+          >
             Barcelona
           </Text>
-          <Text className="text-lg text-floralWhite font-spaceGroteskRegular">
+          <Text
+            className="text-lg text-floralWhite font-spaceGroteskRegular"
+            maxFontSizeMultiplier={1.3}
+          >
             Nostalgia
           </Text>
-          <Text className="text-lg text-floralWhite font-spaceGroteskRegular">
+          <Text
+            className="text-lg text-floralWhite font-spaceGroteskRegular"
+            maxFontSizeMultiplier={1.3}
+          >
             Comedia
           </Text>
         </View>

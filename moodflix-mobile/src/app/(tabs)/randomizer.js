@@ -27,8 +27,12 @@ export default function Randomizer() {
   return (
     <TabsScreen>
       <Title
-        className="text-3xl font-spaceGroteskBold text-floralWhite"
-        style={{ paddingVertical: heightPercentageToDP("3%") }}
+        className="text-3xl font-spaceGroteskBold text-floralWhite text-center"
+        style={{
+          paddingVertical: heightPercentageToDP("3%"),
+          paddingHorizontal: heightPercentageToDP("5%"),
+        }}
+        maxFontSizeMultiplier={1.3}
       >
         Encuentra una pelicula basada en
       </Title>
@@ -81,7 +85,7 @@ export default function Randomizer() {
         textColor="text-floralWhite"
         bgColor="bg-raisinBlack"
         width="70%"
-        height="5%"
+        height="6%"
         handleSubmit={() => goToMovie(278)}
       >
         Randomizar

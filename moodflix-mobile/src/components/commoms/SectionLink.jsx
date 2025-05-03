@@ -8,11 +8,11 @@ export default function SectionLink({ children, onPress, className }) {
     return (
         <TouchableOpacity
             className={`flex-row items-center justify-between bg-jasper rounded-lg ${className}`}
-            style={{ height: hp("4%"), width: wp("92%"), padding: hp("1%") }}
+            style={{ height: hp("4%"), width: wp("92%"), paddingHorizontal: hp("1%") }}
             onPress={onPress}
             activeOpacity={0.8}
         >
-            <Text className="text-floralWhite font-outfitSemiBold text-xl">
+            <Text className="text-floralWhite font-outfitSemiBold text-base" maxFontSizeMultiplier={1.3}>
                 {children}
             </Text>
 

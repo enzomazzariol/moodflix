@@ -16,6 +16,7 @@ export default function SubmitBtn({ handleSubmit, children, bgColor, textColor, 
       <Text
         className={`text-xl font-outfitBold text-center ${textColor || "text-white"} ${textStyles}`}
         activeOpacity={1}
+        maxFontSizeMultiplier={1.3}
       >
         {children}
       </Text>
