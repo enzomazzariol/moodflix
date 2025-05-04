@@ -86,6 +86,7 @@ export default function Randomizer() {
         bgColor="bg-raisinBlack"
         width="70%"
         height="6%"
+        textStyles={"mt-1"}
         handleSubmit={() => goToMovie(278)}
       >
         Randomizar
