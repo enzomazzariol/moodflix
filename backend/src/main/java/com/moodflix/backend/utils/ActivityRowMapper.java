@@ -16,6 +16,7 @@ public class ActivityRowMapper implements RowMapper<Activity> {
         activity.setActivity_id(rs.getInt("activity_id"));
         activity.setUser_id(rs.getInt("user_id"));
         activity.setMovie_id(rs.getInt("movie_id"));
+        activity.setReview_id(rs.getInt("review_id"));
         activity.setActivity_type(ActivityType.fromValue(rs.getString("activity_type")));
         activity.setActivity_date(String.valueOf(rs.getTimestamp("activity_date").toLocalDateTime()));
 

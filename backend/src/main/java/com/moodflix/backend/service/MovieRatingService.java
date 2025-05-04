@@ -1,7 +1,10 @@
 package com.moodflix.backend.service;
 
 import com.moodflix.backend.exceptions.ApiResponse;
+import com.moodflix.backend.model.Activity;
 import com.moodflix.backend.model.MovieRating;
+import com.moodflix.backend.model.enums.ActivityType;
+import com.moodflix.backend.repositories.ActivityRepository;
 import com.moodflix.backend.repositories.MovieRatingRepository;
 import com.moodflix.backend.repositories.MovieRepository;
 import org.slf4j.Logger;
@@ -20,10 +23,12 @@ public class MovieRatingService {
 
     private final MovieRatingRepository movieRatingRepository;
     private final MovieRepository movieRepository;
+    private final ActivityRepository activityRepository;
 
-    public MovieRatingService(MovieRatingRepository movieRatingRepository, MovieRepository movieRepository) {
+    public MovieRatingService(MovieRatingRepository movieRatingRepository, MovieRepository movieRepository, ActivityRepository activityRepository) {
         this.movieRatingRepository = movieRatingRepository;
         this.movieRepository = movieRepository;
+        this.activityRepository = activityRepository;
     }
 
     /**
@@ -55,7 +60,10 @@ public class MovieRatingService {
             }
 
             boolean isUpdate = movieRatingRepository.existsRating(userId, movieId);
-            movieRatingRepository.saveOrUpdateRating(userId, movieId, rating, review);
+            int reviewId = movieRatingRepository.saveOrUpdateRating(userId, movieId, rating, review);
+            // Crear un registro de actividad
+            Activity activity = new Activity(userId, movieId, reviewId, ActivityType.REVIEW);
+            activityRepository.saveActivity(activity);
 
             String message = isUpdate ? "Review actualizada con éxito" : "Review guardada con éxito";
             logger.info("User {} {} rating for movie {} with {} stars", userId,

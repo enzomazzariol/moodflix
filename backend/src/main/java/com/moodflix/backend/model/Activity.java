@@ -7,6 +7,7 @@ public class Activity {
     private int activity_id;
     private int user_id;
     private int movie_id;
+    private int review_id;
     private ActivityType activity_type;
     private String activity_date;
 
@@ -14,10 +15,18 @@ public class Activity {
 
     }
 
-    public Activity(int activity_id, int user_id, int movie_id, ActivityType activity_type, String activity_date) {
+    public Activity(int user_id, int movie_id, int review_id, ActivityType activity_type) {
+        this.user_id = user_id;
+        this.movie_id = movie_id;
+        this.review_id = review_id;
+        this.activity_type = activity_type;
+    }
+
+    public Activity(int activity_id, int user_id, int movie_id, int review_id, ActivityType activity_type, String activity_date) {
         this.activity_id = activity_id;
         this.user_id = user_id;
         this.movie_id = movie_id;
+        this.review_id = review_id;
         this.activity_type = activity_type;
         this.activity_date = activity_date;
     }
@@ -46,6 +55,14 @@ public class Activity {
         this.movie_id = movie_id;
     }
 
+    public int getReview_id() {
+        return review_id;
+    }
+
+    public void setReview_id(int review_id) {
+        this.review_id = review_id;
+    }
+
     public ActivityType getActivity_type() {
         return activity_type;
     }
@@ -68,6 +85,7 @@ public class Activity {
                 "activity_id=" + activity_id +
                 ", user_id=" + user_id +
                 ", movie_id=" + movie_id +
+                ", review_id=" + review_id +
                 ", activity_type=" + activity_type +
                 ", activity_date='" + activity_date + '\'' +
                 '}';

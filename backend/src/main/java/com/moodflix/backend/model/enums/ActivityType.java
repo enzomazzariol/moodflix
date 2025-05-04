@@ -1,7 +1,7 @@
 package com.moodflix.backend.model.enums;
 
 public enum ActivityType {
-    WATCH("watch"),
+    WATCHLIST("watchlist"),
     LIKE("like"),
     REVIEW("review");
 

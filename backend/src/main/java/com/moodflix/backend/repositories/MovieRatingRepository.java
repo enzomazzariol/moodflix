@@ -6,7 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class MovieRatingRepository {
@@ -15,9 +18,14 @@ public class MovieRatingRepository {
 
     // QUERYS
     private static final String ADD_OR_UPDATE_RATING = """
-          INSERT INTO movie_ratings (user_id, movie_id, rating, review) VALUES
-          (:user_id, :movie_id, :rating, :review) ON DUPLICATE KEY UPDATE rating = VALUES(rating), review = VALUES(review)
-          """;
+    INSERT INTO movie_ratings (user_id, movie_id, rating, review)
+    VALUES (:user_id, :movie_id, :rating, :review)
+    ON DUPLICATE KEY UPDATE 
+        rating = VALUES(rating), 
+        review = VALUES(review),
+        rating_id = LAST_INSERT_ID(rating_id)
+""";
+
     private static final String GET_MOVIE_RATINGS = "SELECT * FROM movie_ratings WHERE movie_id = :movie_id";
     private static final String GET_AVERAGE_RATING = "SELECT COALESCE(AVG(rating), 0) FROM movie_ratings WHERE movie_id = :movie_id";
     private static final String DELETE_USER_REVIEW = "DELETE FROM movie_ratings WHERE user_id = :user_id AND movie_id = :movie_id";
@@ -38,7 +46,7 @@ public class MovieRatingRepository {
      * @param review Texto de la reseña
      * @throws DatabaseException Si ocurre un error en la base de datos
      */
-    public void saveOrUpdateRating(int userId, int movieId, double rating, String review) {
+    public int saveOrUpdateRating(int userId, int movieId, double rating, String review) {
         try {
             jdbcClient.sql(ADD_OR_UPDATE_RATING)
                     .param("user_id", userId)
@@ -46,7 +54,16 @@ public class MovieRatingRepository {
                     .param("rating", rating)
                     .param("review", review)
                     .update();
-            logger.info("Rating saved/updated for user {} on movie {}", userId, movieId);
+
+            // Recuperar el ID (insertado o actualizado)
+            Optional<Integer> optionalReviewId = jdbcClient.sql("SELECT LAST_INSERT_ID()")
+                    .query((ResultSet rs) -> rs.next() ? Optional.of(rs.getInt(1)) : Optional.empty());
+
+            int reviewId = optionalReviewId.orElseThrow(() ->
+                    new DatabaseException("No se pudo obtener el ID de la reseña"));
+
+            logger.info("Rating saved/updated for user {} on movie {} with review_id {}", userId, movieId, reviewId);
+            return reviewId;
         } catch (Exception e) {
             logger.error("Failed to save/update rating for user {} on movie {}", userId, movieId, e);
             throw new DatabaseException("Could not save or update movie rating");

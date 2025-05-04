@@ -18,8 +18,8 @@ public class ActivityRepository {
     private static final Logger logger = LoggerFactory.getLogger(ActivityRepository.class);
 
     private static final String INSERT_ACTIVITY = """
-            INSERT INTO activities (user_id, movie_id, activity_type)
-            VALUES (:user_id, :movie_id, :activity_type)
+            INSERT INTO activities (user_id, movie_id, review_id, activity_type)
+            VALUES (:user_id, :movie_id, :review_id, :activity_type)
             """;
     private static final String FIND_ACTIVIY_BY_USER = """
             SELECT * from activities WHERE user_id = :user_id
@@ -44,6 +44,7 @@ public class ActivityRepository {
             long affected = jdbcClient.sql(INSERT_ACTIVITY)
                     .param("user_id", activity.getUser_id())
                     .param("movie_id", activity.getMovie_id())
+                    .param("review_id", activity.getReview_id())
                     .param("activity_type", activity.getActivity_type().getValue())
                     .update();
 
