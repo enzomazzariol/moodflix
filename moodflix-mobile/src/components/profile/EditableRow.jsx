@@ -3,7 +3,7 @@ import { Text, TextInput, TouchableOpacity } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 
-export default function EditableRow({ label, value, onChangeText, onPress, btnStyles }) {
+export default function EditableRow({ label, value, onChangeText, onPress, btnStyles, textClassName }) {
   const [isPressed, setIsPressed] = useState(false);
   return (
     <TouchableOpacity
@@ -21,7 +21,7 @@ export default function EditableRow({ label, value, onChangeText, onPress, btnSt
         }]}
     >
       <Text
-        className="text-xl font-outfitSemiBold text-jasper"
+        className={`text-xl font-outfitSemiBold text-jasper ${textClassName}`}
         style={{ paddingStart: hp("2%"), paddingVertical: hp("1.4%") }}
       >
         {label}

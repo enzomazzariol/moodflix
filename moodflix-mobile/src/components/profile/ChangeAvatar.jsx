@@ -18,7 +18,7 @@ export default function ChangeAvatar({ label, value, onChangeText }) {
         borderTopWidth: 1,
         borderColor: colors.prussianBlue,
         paddingLeft: hp("2%"),
-        paddingVertical: hp("1%"),
+        paddingVertical: hp("1.5%"),
       }}
     >
       <Image
@@ -31,7 +31,7 @@ export default function ChangeAvatar({ label, value, onChangeText }) {
         className="flex-col items-center justify-between"
         style={{ paddingEnd: hp("2%") }}
       >
-        <SubmitBtn textStyles={"text-base"} width={wp("9%")} height={"4.5%"}>
+        <SubmitBtn textStyles={"text-base"} width={wp("12.2%")} height={"4.5%"}>
           Seleccionar nuevo avatar
         </SubmitBtn>
         <Pressable>

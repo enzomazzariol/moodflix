@@ -91,6 +91,7 @@ function ModalContent() {
         <EditableRow
           label={"Cerrar sesión"}
           btnStyles={{ borderTopWidth: 1, borderColor: colors.prussianBlue }}
+          textClassName={"text-red-600"}
           onPress={() => console.log("Logout")}
         />
       </View>
