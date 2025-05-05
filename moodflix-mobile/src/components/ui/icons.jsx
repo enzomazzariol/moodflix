@@ -32,7 +32,7 @@ export const SelectArrowIcon = ({ size, color }) => {
 };
 
 export const BackArrowIcon = ({ size, color }) => {
-  return <Ionicons name="chevron-back" size={size} color={color} />;
+  return <Ionicons name="arrow-back" size={24} color="#fff" />;
 }
 
 export const RightArrowIcon = ({ size, color }) => {

@@ -15,7 +15,10 @@ export default function PosterMovie({ posterPath, title, idMovie, posterWidth, p
   const [hasError, setHasError] = useState(false);
 
   const goToMoviePage = () => {
-    router.push(`/movie/${idMovie}`);
+    router.push({
+      pathname: "/movie/[idMovie]",
+      params: { idMovie, title },
+    });
   };
 
   const posterHeightDefault = hp("16%");

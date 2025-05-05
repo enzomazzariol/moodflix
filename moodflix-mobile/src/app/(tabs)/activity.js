@@ -9,6 +9,13 @@ import { activities } from "../../lib/mocks/Activity"; // Mock de actividades
 
 export default function Activity() {
   const router = useRouter();
+
+  const goToMoviePage = (idMovie, title) => {
+    router.push({
+      pathname: "/movie/[idMovie]",
+      params: { idMovie, title },
+    });
+  };
   return (
     <ActivityScreen>
       <View
@@ -20,7 +27,9 @@ export default function Activity() {
             key={index}
             activity={activity}
             onPressUser={() => router.push(`/profile/${index + 1}`)}
-            onPressMovie={() => router.push(`/movie/${activity.movie.id}`)}
+            onPressMovie={() =>
+              goToMoviePage(activity.movie.id, activity.movie.title)
+            }
           />
         ))}
       </View>
