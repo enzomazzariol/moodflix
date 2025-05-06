@@ -46,3 +46,7 @@ export const RemoveItemIcon = ({ size, color }) => {
 export const SettingsIcon = ({ size, color }) => {
   return <Ionicons name="settings-outline" size={size} color={color} />;
 };
+
+export const MoreIcon = ({ size, color }) => {
+  return <Feather name="more-horizontal" size={size} color={color} />;
+};
