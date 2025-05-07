@@ -18,6 +18,7 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { Title } from "../../components/commoms/Title";
+import MovieTabsView from "../../components/moviePage/MovieTabsView";
 import PosterMovieDownload from "../../components/moviePage/PosterMovieDownload";
 import WhereToWatch from "../../components/moviePage/WhereToWatch";
 import MovieScreen from "../../components/screens/MovieScreen";
@@ -253,6 +254,7 @@ export default function Movie() {
             <WhereToWatch streamingProviders={streamingProviders.results} />
           </View>
         </View>
+        <MovieTabsView />
       </Animated.ScrollView>
 
       {/* Botón de retroceso flotante sobre la imagen */}

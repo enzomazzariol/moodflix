@@ -37,6 +37,6 @@ export default function ProfileTabsView() {
 
 function TabsController({ current, onChange }) {
     return (
-        <Tabs current={current} onChange={onChange} />
+        <Tabs current={current} onChange={onChange} items={['Perfil', 'Vistas', 'Favoritos', 'Watchlist']} />
     );
 }

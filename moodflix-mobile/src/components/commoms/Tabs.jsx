@@ -6,9 +6,9 @@ import {
 } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 
-export default function Tabs({current, onChange}) {
-  const width = wp("94.3%");
-  const height = hp("4.9%");
+export default function Tabs({current, onChange, items, tabsWidth, tabsHeight, titleColor, indicatorColor}) {
+  const width = tabsWidth ?? wp("94.3%");
+  const height = tabsHeight ?? hp("4.9%");
   const paddingBottom = hp("1.4%");
 
   return (
@@ -35,22 +35,21 @@ export default function Tabs({current, onChange}) {
             width,
           }}
           indicatorStyle={{
-            backgroundColor: colors.jasper,
+            backgroundColor: indicatorColor ?? colors.jasper,
             height: 3,
             borderRadius: 2,
             marginBottom: 1,
           }}
           titleStyle={{
-            color: colors.jasper,
+            color: titleColor ?? colors.jasper,
             fontFamily: "SpaceGrotesk-Regular",
             fontSize: hp("1.8%"),
             marginTop: hp("0.2%"),
           }}
         >
-          <Tab.Item>Perfil</Tab.Item>
-          <Tab.Item>Vistas</Tab.Item>
-          <Tab.Item>Favoritos</Tab.Item>
-          <Tab.Item>Watchlist</Tab.Item>
+          {items.map((item, index) => (
+            <Tab.Item key={index}>{item}</Tab.Item>
+          ))}
         </Tab>
       </View>
     </View>
