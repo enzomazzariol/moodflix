@@ -7,6 +7,7 @@ import {
   Animated,
   Dimensions,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,25 +19,38 @@ import {
 } from "react-native-responsive-screen";
 import { Title } from "../../components/commoms/Title";
 import PosterMovieDownload from "../../components/moviePage/PosterMovieDownload";
+import WhereToWatch from "../../components/moviePage/WhereToWatch";
 import MovieScreen from "../../components/screens/MovieScreen";
-import { BackArrowIcon, MoreIcon } from "../../components/ui/icons";
+import {
+  BackArrowIcon,
+  MoreIcon,
+  PlusIcon,
+  TrailerIcon,
+  WatchlistIcon,
+} from "../../components/ui/icons";
+import castMovie from "../../lib/mocks/castMovie.json";
 import movieDetails from "../../lib/mocks/movieDetails.json";
+import streamingProviders from "../../lib/mocks/streamingProviders.json";
 import { colors } from "../../utils/colors";
 
 const { width } = Dimensions.get("window");
-const HEADER_IMAGE_HEIGHT = Dimensions.get("window").height / 2.5; // Altura de la imagen del header
+const HEADER_IMAGE_HEIGHT = Dimensions.get("window").height / 2.7; // Altura de la imagen del header
 const HEADER_MIN_HEIGHT = hp("12%"); // Altura mínima del header (10% de la pantalla)
-const OVERSCROLL_DISTANCE = 130; // Distancia de overscroll para el efecto de rebote
+const OVERSCROLL_DISTANCE = 140; // Distancia de overscroll para el efecto de rebote
 
 export default function Movie() {
   const { id, title } = useLocalSearchParams();
   const navigation = useNavigation();
+  const [isInWatchlist, setIsInWatchlist] = useState(false);
+  const [isInFavorites, setIsInFavorites] = useState(false);
   const [movie, setMovie] = useState({
     id: id || 0,
     title: title || "Película",
     image:
       "https://image.tmdb.org/t/p/original/5C3RriLKkIAQtQMx85JLtu4rVI2.jpg",
   });
+
+  const director = castMovie.crew.find((person) => person.job === "Director");
 
   const scrollY = new Animated.Value(0);
 
@@ -69,6 +83,10 @@ export default function Movie() {
 
   const goBack = () => {
     navigation.goBack();
+  };
+
+  const showAlert = () => {
+    Alert.alert("Menu abierto para compartir peli");
   };
 
   return (
@@ -127,46 +145,131 @@ export default function Movie() {
             end={{ x: 0, y: 1 }}
           />
         </Animated.View>
+        <View className="flex-col" style={{ paddingHorizontal: wp("5%") }}>
+          {/* Contenido de la pantalla */}
+          <View className="flex-1 flex-row" style={{ paddingBottom: hp("3%") }}>
+            {/* Contenedor de la imagen del poster en la izquierda */}
+            <View className="self-start" style={{}}>
+              <PosterMovieDownload
+                posterHeight={hp("22%")}
+                posterWidth={wp("30%")}
+                posterPath={movieDetails.poster_path}
+                title={movieDetails.title}
+                idMovie={movieDetails.id}
+              />
+            </View>
 
-        {/* Contenido de la pantalla */}
-        <View className="flex-1 flex-col">
-          <Title className="font-spaceGroteskRegular">{movie.title}</Title>
-          <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-            {movieDetails.overview}
-          </Text>
-          <PosterMovieDownload
-            posterHeight={hp("22%")}
-            posterWidth={wp("30%")}
-            posterPath={movieDetails.poster_path}
-            title={movieDetails.title}
-            idMovie={movieDetails.id}
-          />
-          <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-            {movieDetails.release_date}
-          </Text>
-          <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-            {movieDetails.tagline}
-          </Text>
-          <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-            {movieDetails.runtime} min
-          </Text>
-          <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-            {movieDetails.revenue} USD
-          </Text>
-          <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-            {movieDetails.genres.map((genre) => genre.name).join(", ")}
-          </Text>
+            {/* Contenedor de la información de la película a la derecha */}
+            <View
+              className="flex-col"
+              style={{
+                marginLeft: wp("5%"),
+                rowGap: wp("2%"),
+                width: wp("60%"),
+              }}
+            >
+              <Title className="font-spaceGroteskRegular text-slate-100">
+                {movie.title}
+              </Title>
+
+              <View>
+                <Text className="text-floralWhite text-lg font-spaceGroteskRegular">
+                  Dirigido por:
+                </Text>
+                <Text className="text-slate-400 font-outfitBold text-lg">
+                  {director?.name ?? "Desconocido"}
+                </Text>
+              </View>
+
+              <View
+                className="flex-row items-center"
+                style={{ columnGap: wp("3%") }}
+              >
+                <Text className="text-slate-400 text-base font-spaceGroteskRegular">
+                  {movieDetails.release_date.slice(0, 4)}
+                </Text>
+
+                <Text className="text-floralWhite text-base font-spaceGroteskRegular">
+                  {movieDetails.runtime} min
+                </Text>
+              </View>
+
+              <Text className="text-floralWhite text-base font-spaceGroteskBold">
+                {movieDetails.vote_average.toFixed(1)}$
+              </Text>
+
+              <View
+                className="flex-row items-center"
+                style={{ columnGap: wp("3%") }}
+              >
+                <TouchableOpacity
+                  className="bg-prussianBlue flex-row items-center justify-between px-4"
+                  style={{ height: hp("3%"), borderRadius: 9 }}
+                >
+                  <TrailerIcon size={16} color={colors.floralWhite} />
+                  <Text className="text-floralWhite text-lg font-outfitRegular ms-1">
+                    TRAILER
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  className="bg-prussianBlue flex-row items-center justify-center rounded-full"
+                  style={{ width: hp("4%"), height: hp("4%") }}
+                >
+                  <PlusIcon size={18} color={colors.floralWhite} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  className="bg-prussianBlue flex-row items-center justify-center rounded-full"
+                  style={{ width: hp("4%"), height: hp("4%") }}
+                >
+                  <WatchlistIcon size={18} color={colors.floralWhite} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          <View className="flex-col" style={{ rowGap: hp("2%") }}>
+            <View className="flex-row " style={{ columnGap: wp("3%") }}>
+              {movieDetails.genres.map((genre) => (
+                <Pressable
+                  key={genre.id}
+                  className="bg-prussianBlue rounded-full px-4 py-2"
+                >
+                  <Text className="text-floralWhite text-lg font-outfitRegular">
+                    {genre.name}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+            <Text className="text-floralWhite text-base font-spaceGroteskRegular">
+              {movieDetails.tagline.toUpperCase()}
+            </Text>
+
+            <Text className="text-floralWhite text-base font-spaceGroteskRegular shadow-lg">
+              {movieDetails.overview}
+            </Text>
+
+            <WhereToWatch streamingProviders={streamingProviders.results} />
+          </View>
         </View>
       </Animated.ScrollView>
 
       {/* Botón de retroceso flotante sobre la imagen */}
-      <TouchableOpacity style={styles.floatingBackButton} onPress={goBack}>
+      <TouchableOpacity
+        style={styles.floatingBackButton}
+        onPress={goBack}
+        activeOpacity={0.7}
+        className="rounded-full"
+      >
         <BackArrowIcon size={24} color="#fff" />
       </TouchableOpacity>
 
       <TouchableOpacity
         onPress={() => Alert.alert("Menu abierto para compartir peli")}
         style={styles.floatingMoreButton}
+        activeOpacity={0.7}
+        className="rounded-full"
       >
         <MoreIcon size={24} color={colors.floralWhite} />
       </TouchableOpacity>
@@ -189,6 +292,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     zIndex: 99,
     paddingTop: Platform.OS === "ios" ? 40 : 0,
+    borderBottomWidth: hp("0.2%"),
+    borderBottomColor: colors.prussianBlue,
   },
   headerImage: {
     width: width,
@@ -230,7 +335,6 @@ const styles = StyleSheet.create({
     right: 20,
     zIndex: 10,
     padding: 10,
-    borderRadius: 20,
     backgroundColor: "rgba(0, 0, 0, 0.3)",
   },
   scrollContainer: {

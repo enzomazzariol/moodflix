@@ -1,6 +1,7 @@
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Octicons from "@expo/vector-icons/Octicons";
 
 export const HomeIcon = ({ size, color }) => {
@@ -50,3 +51,15 @@ export const SettingsIcon = ({ size, color }) => {
 export const MoreIcon = ({ size, color }) => {
   return <Feather name="more-horizontal" size={size} color={color} />;
 };
+
+export const TrailerIcon = ({ size, color }) => {
+  return <Ionicons name="play" size={size} color={color} />;
+};
+
+export const PlusIcon = ({ size, color }) => {
+  return <FontAwesome6 name="plus" size={size} color={color} />;
+};
+
+export const WatchlistIcon = ({ size, color }) => {
+  return <MaterialIcons name="bookmark-add" size={size} color={color} />;
+}
