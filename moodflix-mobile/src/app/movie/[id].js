@@ -18,6 +18,7 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { Title } from "../../components/commoms/Title";
+import MovieModal from "../../components/moviePage/MovieModal";
 import MovieTabsView from "../../components/moviePage/MovieTabsView";
 import PosterMovieDownload from "../../components/moviePage/PosterMovieDownload";
 import WhereToWatch from "../../components/moviePage/WhereToWatch";
@@ -25,9 +26,7 @@ import MovieScreen from "../../components/screens/MovieScreen";
 import {
   BackArrowIcon,
   MoreIcon,
-  PlusIcon,
   TrailerIcon,
-  WatchlistIcon,
 } from "../../components/ui/icons";
 import castMovie from "../../lib/mocks/castMovie.json";
 import movieDetails from "../../lib/mocks/movieDetails.json";
@@ -41,6 +40,7 @@ const OVERSCROLL_DISTANCE = 140; // Distancia de overscroll para el efecto de re
 
 export default function Movie() {
   const { id, title } = useLocalSearchParams();
+  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [isInFavorites, setIsInFavorites] = useState(false);
@@ -90,6 +90,10 @@ export default function Movie() {
     Alert.alert("Menu abierto para compartir peli");
   };
 
+  const showModal = () => {
+    setModalVisible(true);
+  };
+
   return (
     <MovieScreen>
       {/* Header normal que aparece al hacer scroll */}
@@ -105,13 +109,17 @@ export default function Movie() {
         >
           {movie.title}
         </Title>
-        <TouchableOpacity
-          onPress={() => Alert.alert("Menu abierto para compartir peli")}
-          style={styles.backButton}
-        >
+        <TouchableOpacity onPress={showModal} style={styles.backButton}>
           <MoreIcon size={24} color={colors.floralWhite} />
         </TouchableOpacity>
       </Animated.View>
+
+      {/* Modal que aparece al hacer clic en el botón de tres puntos */}
+      <MovieModal
+        visible={modalVisible}
+        closeModal={() => setModalVisible(false)}
+        movie={movie}
+      />
 
       {/* El contenedor con la imagen dentro del ScrollView */}
       <Animated.ScrollView
@@ -148,7 +156,7 @@ export default function Movie() {
         </Animated.View>
         <View className="flex-col" style={{ paddingHorizontal: wp("5%") }}>
           {/* Contenido de la pantalla */}
-          <View className="flex-1 flex-row" style={{ paddingBottom: hp("3%") }}>
+          <View className="flex-1 flex-row" style={{ paddingBottom: hp("0%") }}>
             {/* Contenedor de la imagen del poster en la izquierda */}
             <View className="self-start" style={{}}>
               <PosterMovieDownload
@@ -194,44 +202,27 @@ export default function Movie() {
                   {movieDetails.runtime} min
                 </Text>
               </View>
-
               <Text className="text-floralWhite text-base font-spaceGroteskBold">
                 {movieDetails.vote_average.toFixed(1)}$
               </Text>
-
-              <View
-                className="flex-row items-center"
-                style={{ columnGap: wp("3%") }}
+              <TouchableOpacity
+                className="bg-prussianBlue flex-row items-center justify-between px-4"
+                style={{ height: hp("3%"), width: wp("25%"), borderRadius: 9 }}
               >
-                <TouchableOpacity
-                  className="bg-prussianBlue flex-row items-center justify-between px-4"
-                  style={{ height: hp("3%"), borderRadius: 9 }}
-                >
-                  <TrailerIcon size={16} color={colors.floralWhite} />
-                  <Text className="text-floralWhite text-lg font-outfitRegular ms-1">
-                    TRAILER
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  className="bg-prussianBlue flex-row items-center justify-center rounded-full"
-                  style={{ width: hp("4%"), height: hp("4%") }}
-                >
-                  <PlusIcon size={18} color={colors.floralWhite} />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  className="bg-prussianBlue flex-row items-center justify-center rounded-full"
-                  style={{ width: hp("4%"), height: hp("4%") }}
-                >
-                  <WatchlistIcon size={18} color={colors.floralWhite} />
-                </TouchableOpacity>
-              </View>
+                <TrailerIcon size={16} color={colors.floralWhite} />
+                <Text className="text-floralWhite text-lg font-outfitRegular ms-1">
+                  TRAILER
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
 
+          {/* Contenedor de los géneros y la sinopsis */}
           <View className="flex-col" style={{ rowGap: hp("2%") }}>
-            <View className="flex-row " style={{ columnGap: wp("3%") }}>
+            <View
+              className="flex-row "
+              style={{ columnGap: wp("3%"), paddingTop: hp("2%") }}
+            >
               {movieDetails.genres.map((genre) => (
                 <Pressable
                   key={genre.id}
@@ -268,7 +259,7 @@ export default function Movie() {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => Alert.alert("Menu abierto para compartir peli")}
+        onPress={showModal}
         style={styles.floatingMoreButton}
         activeOpacity={0.7}
         className="rounded-full"

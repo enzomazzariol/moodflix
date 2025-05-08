@@ -1,7 +1,7 @@
 import Feather from "@expo/vector-icons/Feather";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Octicons from "@expo/vector-icons/Octicons";
 
 export const HomeIcon = ({ size, color }) => {
@@ -60,6 +60,26 @@ export const PlusIcon = ({ size, color }) => {
   return <FontAwesome6 name="plus" size={size} color={color} />;
 };
 
-export const WatchlistIcon = ({ size, color }) => {
-  return <MaterialIcons name="bookmark-add" size={size} color={color} />;
-}
+export const EyeIconOutline = ({ size, color }) => {
+  return <Ionicons name="eye-outline" size={size} color={color} />;
+};
+
+export const EyeIconFill = ({ size, color }) => {
+  return <Ionicons name="eye" size={size} color={color} />;
+};
+
+export const HeartOutlineIcon = ({ size, color }) => {
+  return <Octicons name="heart" size={size} color={color} />;
+};
+
+export const HeartFillIcon = ({ size, color }) => {
+  return <Octicons name="heart-fill" size={size} color={color} />;
+};
+
+export const WatchlistFillIcon = ({ size, color }) => {
+  return <FontAwesome name="bookmark" size={size} color={color} />;
+};
+
+export const WatchlistOutlineIcon = ({ size, color }) => {
+  return <FontAwesome name="bookmark-o" size={size} color={color} />;
+};
