@@ -19,7 +19,7 @@ export default function ReviewSummaryCard({ averageRating, totalReviews, movie }
         </Text>
         <TouchableOpacity
           className="bg-richBlue rounded-e-xl rounded-s-xl"
-          style={{ padding: hp("0.8%"), paddingHorizontal: hp("1.2%") }}
+          style={{ padding: hp("0.8%"), paddingHorizontal: hp("2%") }}
           onPress={handleNavigation}
         >
           <Text className="text-jasper text-base font-outfitRegular">

@@ -1,5 +1,6 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Modal, Pressable, ScrollView, View } from "react-native";
+import { Linking, Modal, Pressable, ScrollView, Text, View } from "react-native";
 import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
@@ -15,6 +16,7 @@ import {
     WatchlistFillIcon,
     WatchlistOutlineIcon,
 } from "../ui/icons";
+import LinkRow from "./LinkRow";
 
 export default function MovieModal({ movie, visible, closeModal }) {
   return (
@@ -31,7 +33,7 @@ export default function MovieModal({ movie, visible, closeModal }) {
       >
         <Pressable
           className="bg-raisinBlack rounded-t-2xl overflow-hidden"
-          style={{ height: hp("65%") }}
+          style={{ height: hp("55%") }}
           onPress={(e) => {
             // This prevents the parent Pressable's onPress from being triggered
             e.stopPropagation();
@@ -41,7 +43,7 @@ export default function MovieModal({ movie, visible, closeModal }) {
           <ScrollView
             contentContainerStyle={{ paddingBottom: hp("2%"), flexGrow: 1 }}
           >
-            <ModalContent />
+            <ModalContent closeModal={closeModal} />
           </ScrollView>
         </Pressable>
       </Pressable>
@@ -66,10 +68,43 @@ function ModalHeader({ title, onClose }) {
   );
 }
 
-export function ModalContent() {
+export function ModalContent({ closeModal }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isViewed, setIsViewed] = useState(false);
   const [isInWatchlist, setIsInWatchlist] = useState(false);
+  const router = useRouter();
+
+  const handleLinkNavigation = (link) => {
+    if (link.url.startsWith("http")) {
+      Linking.openURL(link.url);
+    } else {
+      closeModal(); // Cierra el modal si quieres antes de navegar
+      router.push(link.url);
+    }
+  }
+
+  const links = [
+    {
+      title: "Ver trailer en Youtube",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    },
+    {
+      title: "Hacer reseña",
+      url: "/movie/review",
+    },
+    {
+      title: "Ver en IMDB",
+      url: "https://www.imdb.com/title/tt0111161/",
+    },
+    {
+      title: "Ver en Rotten Tomatoes",
+      url: "https://www.rottentomatoes.com/m/the_godfather/",
+    },
+    {
+      title: "Compartir",
+      url: "",
+    },
+  ];
 
   return (
     <View style={{ flex: 1 }}>
@@ -111,13 +146,27 @@ export function ModalContent() {
         />
       </View>
 
-      <View style={{ padding: hp("2%") }}>
-        <Title className="text-xl text-white">Hacer reseña</Title>
-
-        {/* Contenido adicional para demostrar scroll */}
-        <View style={{ height: hp("50%"), marginTop: hp("2%") }}>
-          
-          
+      {/* Contenido adicional para demostrar scroll */}
+      <View style={{}}>
+        {links.map((link, index) => (
+          <LinkRow
+            key={index}
+            title={link.title}
+            onPress={() => handleLinkNavigation(link)}
+          />
+        ))}
+        <View style={{ paddingVertical: hp("2%") }}>
+          <Pressable
+            className="items-center"
+            style={{
+              paddingVertical: hp("1%"),
+            }}
+            onPress={closeModal}
+          >
+            <Text className="text-jasper text-2xl font-outfitRegular">
+              Salir
+            </Text>
+          </Pressable>
         </View>
       </View>
     </View>
