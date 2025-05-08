@@ -1,7 +1,6 @@
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-
 export default function MovieScreen({ children }) {
   const insets = useSafeAreaInsets();
   return (

@@ -33,6 +33,8 @@ export default function MovieLayout() {
           title: "Movie page",
         }}
       />
+
+      <Stack.Screen name="review" options={{ title: "Reseñas" }} />
     </Stack>
   );
 }

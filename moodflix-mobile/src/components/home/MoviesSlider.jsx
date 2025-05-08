@@ -6,10 +6,10 @@ import {
 import PosterMovie from "../commoms/PosterMovie";
 import { Title } from "../commoms/Title";
 
-export default function MoviesSlider({ title, movies, posterHeight, posterWidth }) {
+export default function MoviesSlider({ title, movies, posterHeight, posterWidth, flatlistStyles, titleStyles }) {
     return (
       <View style={{ paddingVertical: hp("1%") }}>
-        <Title className="font-spaceGroteskRegular" style={{ fontSize: hp("2.5%") }}>{title}</Title>
+        <Title className={`font-spaceGroteskRegular`} style={{ ...titleStyles, fontSize: hp("2.5%") }}>{title}</Title>
         <FlatList
           data={movies}
           keyExtractor={(item) => item.id}
@@ -24,6 +24,7 @@ export default function MoviesSlider({ title, movies, posterHeight, posterWidth 
             />
           )}
           contentContainerStyle={{
+            ...flatlistStyles,
             paddingVertical: hp("1%"),
             gap: hp("1%"),
           }}

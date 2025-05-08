@@ -16,6 +16,8 @@ export default function Activity() {
       params: { idMovie, title },
     });
   };
+
+  // AÑADIR BOTON PARA FILTRAR POR TIPO DE ACTIVIDAD
   return (
     <ActivityScreen>
       <View

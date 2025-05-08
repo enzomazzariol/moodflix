@@ -18,9 +18,11 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { Title } from "../../components/commoms/Title";
+import MoviesSlider from "../../components/home/MoviesSlider";
 import MovieModal from "../../components/moviePage/MovieModal";
 import MovieTabsView from "../../components/moviePage/MovieTabsView";
 import PosterMovieDownload from "../../components/moviePage/PosterMovieDownload";
+import ReviewSummaryCard from "../../components/moviePage/ReviewSummaryCard";
 import WhereToWatch from "../../components/moviePage/WhereToWatch";
 import MovieScreen from "../../components/screens/MovieScreen";
 import {
@@ -30,6 +32,7 @@ import {
 } from "../../components/ui/icons";
 import castMovie from "../../lib/mocks/castMovie.json";
 import movieDetails from "../../lib/mocks/movieDetails.json";
+import mockMovies from "../../lib/mocks/movies.json";
 import streamingProviders from "../../lib/mocks/streamingProviders.json";
 import { colors } from "../../utils/colors";
 
@@ -243,9 +246,24 @@ export default function Movie() {
             </Text>
 
             <WhereToWatch streamingProviders={streamingProviders.results} />
+
+            <ReviewSummaryCard
+              averageRating={"4.5"}
+              totalReviews={movieDetails.vote_count}
+              movie={movieDetails}
+            />
           </View>
         </View>
         <MovieTabsView />
+
+        <View className="flex-col">
+          <MoviesSlider
+            movies={mockMovies}
+            title={"Películas similares"}
+            flatlistStyles={{ paddingHorizontal: wp("5%") }}
+            titleStyles={{ paddingLeft: wp("5%") }}
+          />
+        </View>
       </Animated.ScrollView>
 
       {/* Botón de retroceso flotante sobre la imagen */}
