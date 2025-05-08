@@ -169,7 +169,7 @@ export default function Movie() {
                 width: wp("60%"),
               }}
             >
-              <Title className="font-spaceGroteskRegular text-slate-100">
+              <Title className="font-spaceGroteskBold text-slate-100">
                 {movie.title}
               </Title>
 
@@ -342,5 +342,6 @@ const styles = StyleSheet.create({
   scrollContainer: {
     paddingTop: HEADER_IMAGE_HEIGHT,
     minHeight: Dimensions.get("window").height,
+    paddingBottom: hp("10%"),
   },
 });

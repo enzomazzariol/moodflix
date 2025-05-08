@@ -1,4 +1,5 @@
-import { Image, ScrollView, Text, View } from "react-native";
+import { useState } from "react";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
@@ -8,6 +9,8 @@ import { Title } from "../commoms/Title";
 import { RightArrowIcon } from "../ui/icons";
 
 export default function PeopleList({ people, isCasting = true }) {
+    const [pressedIndex, setPressedIndex] = useState(false);
+
   if (!people || people.length === 0) {
     return (
       <View
@@ -32,13 +35,18 @@ export default function PeopleList({ people, isCasting = true }) {
         className="flex-1 items-center border-t-slate-500"
         style={{ borderTopWidth: 1 }}
       >
-        {people.slice(0, 10).map((person, index) => (
-          <View
+        {people.slice(0, 15).map((person, index) => (
+          <TouchableOpacity
+          activeOpacity={1}
+            onPressIn={() => setPressedIndex(index)}
+            onPressOut={() => setPressedIndex(false)}
             key={index}
-            className="bg-richBlue"
+            className=""
             style={{
-              width: wp("90%"),
+              backgroundColor: pressedIndex === index ? colors.prussianBlue : "transparent",
+              width: wp("100%"),
               paddingVertical: hp("0.9%"),
+              paddingHorizontal: wp("5%"),
               borderBottomColor: colors.prussianBlue,
               borderBottomWidth: 1,
             }}
@@ -78,7 +86,7 @@ export default function PeopleList({ people, isCasting = true }) {
                 <RightArrowIcon size={20} color="#cbd5e1" />
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     </ScrollView>

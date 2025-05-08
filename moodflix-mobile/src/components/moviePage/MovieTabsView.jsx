@@ -17,14 +17,12 @@ export default function MovieTabsView() {
                 return <PeopleList people={castMovie.crew} isCasting={false} />;
             case 2:
                 return <MovieDetailsList />;
-            default:
-                return <PeopleList />;
         }
     }, [index]);
 
     return (
       <View className="flex-1">
-        <View style={{ paddingTop: hp("3%") }} className="bg-s">
+        <View style={{ paddingTop: hp("3%") }}>
           <TabsController onChange={setIndex} current={index} />
         </View>
           {TabContent}
