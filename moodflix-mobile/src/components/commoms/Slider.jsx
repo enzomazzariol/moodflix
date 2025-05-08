@@ -28,7 +28,9 @@ export default function RandomizerSlider({ label, minValue, maxValue, suffix, on
         maximumTrackTintColor={colors.jasper}
         thumbTintColor={colors.floralWhite}
         value={value}
-        onValueChange={handleValueChange}
+        step={1}
+        onValueChange={(val) => setValue(val)}
+        onSlidingComplete={(val) => onChange && onChange(Math.round(val))}
       />
     </View>
   );

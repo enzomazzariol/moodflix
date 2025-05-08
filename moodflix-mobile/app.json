@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "moodflix-mobile",
-    "slug": "moodflix-mobile",
+    "name": "Moodflix",
+    "slug": "Moodflix",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/splash-expo.png",
