@@ -69,6 +69,7 @@ function ModalContent() {
       >
         Editar
       </Title>
+      <ChangeAvatar />
 
       <View className="flex-col">
         <EditableRow label={"Nombre de usuario"} value={"Nombre de usuario"} />
@@ -79,14 +80,6 @@ function ModalContent() {
         <EditableRow label={"Emoción actual"} value={"Emoción actual"} />
         <EditableRow label={"Género favorito"} value={"Género favorito"} />
       </View>
-
-      <Title
-        className="text-2xl font-spaceGroteskBold text-floralWhite"
-        style={{ padding: hp("2%") }}
-      >
-        Avatar
-      </Title>
-      <ChangeAvatar />
       <View style={{ paddingVertical: hp("8%") }}>
         <EditableRow
           label={"Cerrar sesión"}

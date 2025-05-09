@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Modal, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 import { Title } from "../commoms/Title";
 import { SettingsIcon } from "../ui/icons";
+import ProfileInfoRow from "./ProfileInfoRow";
 import SettingsModal from "./SettingsModal";
 
 export default function CustomProfileHeader() {
@@ -12,7 +13,7 @@ export default function CustomProfileHeader() {
   const [profileImageVisible, setProfileImageVisible] = useState(false);
 
   return (
-    <View className="flex-col bg-raisinBlack" style={{ height: hp("28%") }}>
+    <View className="flex-col bg-raisinBlack" style={{ height: hp("29%") }}>
       <SettingsModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -59,29 +60,11 @@ export default function CustomProfileHeader() {
           </TouchableOpacity>
         </Modal>
 
-        <View
-          className="flex-row items-center gap-x-4"
-          style={{ marginTop: hp("2%") }}
-        >
-          <Text
-            className="text-lg text-floralWhite font-spaceGroteskRegular"
-            maxFontSizeMultiplier={1.3}
-          >
-            Barcelona
-          </Text>
-          <Text
-            className="text-lg text-floralWhite font-spaceGroteskRegular"
-            maxFontSizeMultiplier={1.3}
-          >
-            Nostalgia
-          </Text>
-          <Text
-            className="text-lg text-floralWhite font-spaceGroteskRegular"
-            maxFontSizeMultiplier={1.3}
-          >
-            Comedia
-          </Text>
-        </View>
+       <ProfileInfoRow
+         location="Barcelona"
+         emotion="Nostalgia"
+         genre="Comedia"
+       />
       </View>
     </View>
   );

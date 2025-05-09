@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
-    paddingHorizontal: 12,
+    paddingHorizontal: hp("1.8%"),
   },
   searchBarInputContainer: {
     backgroundColor: colors.richBlue,
-    height: 38,
-    borderRadius: 4,
+    height: hp("4.2%"),
+    borderRadius: 6,
   },
   resultsContainer: {
     marginTop: 20,
