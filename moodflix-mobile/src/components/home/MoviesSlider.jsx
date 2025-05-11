@@ -6,6 +6,8 @@ import {
 import PosterMovie from "../commoms/PosterMovie";
 import { Title } from "../commoms/Title";
 
+// Slider de películas que renderiza una lista de posters
+// Props: title de la pelicula, lista de películas, altura y anchura de los posters, estilos de título y lista
 export default function MoviesSlider({ title, movies, posterHeight, posterWidth, flatlistStyles, titleStyles }) {
     return (
       <View style={{ paddingVertical: hp("1%") }}>

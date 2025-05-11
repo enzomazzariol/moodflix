@@ -1,6 +1,9 @@
+import { useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import { FlatList, Pressable, View } from "react-native";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import ReviewCard from "../../components/moviePage/ReviewCard";
+import NewReviewModal from "../../components/review/NewReviewModal";
 import MovieScreen from "../../components/screens/MovieScreen";
 import { PlusIcon } from "../../components/ui/icons";
 import { colors } from "../../utils/colors";
@@ -46,6 +49,19 @@ const mockReviews = [
 export default function Review({ movie }) {
   // const { id } = movie;
   // Aquí iría la llamada a la API para obtener reseñas por película
+  const { openModal } = useLocalSearchParams();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  // Abre el modal de reseña si se ha pasado el parámetro openModal
+  useEffect(() => {
+    if (openModal === "true") {
+      const timeout = setTimeout(() => {
+        setModalVisible(true);
+      }, 1200);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [openModal]);
 
   return (
     <MovieScreen>
@@ -57,7 +73,7 @@ export default function Review({ movie }) {
         />
 
         <Pressable
-          onPress={() => console.log("Add review")}
+          onPress={() => setModalVisible(true)}
           className="rounded-full bg-jasper items-center justify-center"
           style={{
             position: "absolute",
@@ -75,6 +91,11 @@ export default function Review({ movie }) {
           <PlusIcon size={28} color={colors.floralWhite} />
         </Pressable>
       </View>
+
+      <NewReviewModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </MovieScreen>
   );
 }

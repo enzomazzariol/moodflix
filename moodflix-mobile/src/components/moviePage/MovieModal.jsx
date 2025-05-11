@@ -2,19 +2,19 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Linking, Modal, Pressable, ScrollView, Text, View } from "react-native";
 import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 import { Title } from "../commoms/Title";
 import { ToggleIconButton } from "../commoms/ToggleIconButton";
 import {
-    EyeIconFill,
-    EyeIconOutline,
-    HeartFillIcon,
-    HeartOutlineIcon,
-    WatchlistFillIcon,
-    WatchlistOutlineIcon,
+  EyeIconFill,
+  EyeIconOutline,
+  HeartFillIcon,
+  HeartOutlineIcon,
+  WatchlistFillIcon,
+  WatchlistOutlineIcon,
 } from "../ui/icons";
 import LinkRow from "./LinkRow";
 
@@ -79,7 +79,7 @@ export function ModalContent({ closeModal }) {
       Linking.openURL(link.url);
     } else {
       closeModal(); // Cierra el modal si quieres antes de navegar
-      router.push(link.url);
+      router.push(`${link.url}?openModal=true`);
     }
   }
 
