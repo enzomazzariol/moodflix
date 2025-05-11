@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Image, Modal, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
+import ProfilePicture from "../commoms/ProfilePicture";
 import { Title } from "../commoms/Title";
 import { SettingsIcon } from "../ui/icons";
 import ProfileInfoRow from "./ProfileInfoRow";
@@ -37,14 +38,10 @@ export default function CustomProfileHeader() {
           </Title>
         </View>
 
-        <Pressable onPress={() => setProfileImageVisible(true)}>
-          <Image
-            source={require("../../../assets/william.png")}
-            className="rounded-full"
-            resizeMode="cover"
-            style={{ width: hp("10%"), height: hp("10%") }}
-          />
-        </Pressable>
+        <ProfilePicture 
+          onPress={() => setProfileImageVisible(true)}
+          url={require("../../../assets/william.png")}
+        />
 
         <Modal visible={profileImageVisible} transparent animationType="slide">
           <TouchableOpacity

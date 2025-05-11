@@ -17,6 +17,13 @@ export default function Activity() {
     });
   };
 
+  const goToUserProfile = (id, username) => {
+    router.push({
+      pathname: "/userProfile/[id]",
+      params: { id, username },
+    });
+  };
+
   // AÑADIR BOTON PARA FILTRAR POR TIPO DE ACTIVIDAD
   return (
     <ActivityScreen>
@@ -28,7 +35,9 @@ export default function Activity() {
           <ActivityCard
             key={index}
             activity={activity}
-            onPressUser={() => router.push(`/profile/${index + 1}`)}
+            onPressUser={() =>
+              goToUserProfile(activity.user.id, activity.user.name)
+            }
             onPressMovie={() =>
               goToMoviePage(activity.movie.id, activity.movie.title)
             }

@@ -3,7 +3,6 @@ import { View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Tabs from "../commoms/Tabs";
 import Favoritos from "./Favoritos";
-import PerfilView from "./PerfilView";
 import Vistas from "./Vistas";
 import Watchlist from "./Watchlist";
 
@@ -13,15 +12,13 @@ export default function ProfileTabsView() {
     const TabContent = useMemo(() => {
         switch (index) {
             case 0:
-                return <PerfilView />;
+                return <Favoritos />;
             case 1:
                 return <Vistas />;
             case 2:
-                return <Favoritos />;
-            case 3:
                 return <Watchlist />;
             default:
-                return <Vistas />;
+                return <Favoritos />;
         }
     }, [index]);
 
@@ -37,6 +34,6 @@ export default function ProfileTabsView() {
 
 function TabsController({ current, onChange }) {
     return (
-        <Tabs current={current} onChange={onChange} items={['Perfil', 'Vistas', 'Favoritos', 'Watchlist']} />
+        <Tabs current={current} onChange={onChange} items={['Favoritos', 'Vistas', 'Watchlist']} />
     );
 }

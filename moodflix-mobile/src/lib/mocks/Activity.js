@@ -2,6 +2,7 @@ export const activities = [
   {
     type: "like",
     user: {
+      id: "1",
       name: "Enzo Mazzariol",
       avatar: "https://picsum.photos/id/1/200/300",
     },
@@ -11,6 +12,7 @@ export const activities = [
   {
     type: "watchlist",
     user: {
+      id: "2",
       name: "Jackson Esponja",
       avatar: "https://picsum.photos/id/10/200/300",
     },
@@ -20,6 +22,7 @@ export const activities = [
   {
     type: "review",
     user: {
+      id: "3",
       name: "Roberto Hernandez",
       avatar: "https://picsum.photos/id/11/200/300",
     },
@@ -37,6 +40,7 @@ export const activities = [
   {
     type: "watchlist",
     user: {
+      id: "4",
       name: "Jackson Esponja",
       avatar: "https://picsum.photos/id/10/200/300",
     },
