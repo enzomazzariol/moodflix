@@ -24,7 +24,7 @@ export default function CustomProfileHeader() {
         <View className="flex-row w-full relative items-center">
           <Pressable
             onPress={() => setModalVisible(true)}
-            className="absolute -left-6"
+            className="absolute -right-6"
           >
             <SettingsIcon size={26} color={colors.floralWhite} />
           </Pressable>
