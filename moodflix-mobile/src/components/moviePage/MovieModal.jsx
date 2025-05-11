@@ -43,7 +43,7 @@ export default function MovieModal({ movie, visible, closeModal }) {
           <ScrollView
             contentContainerStyle={{ paddingBottom: hp("2%"), flexGrow: 1 }}
           >
-            <ModalContent closeModal={closeModal} />
+            <ModalContent closeModal={closeModal} movie={movie} />
           </ScrollView>
         </Pressable>
       </Pressable>
@@ -68,7 +68,7 @@ function ModalHeader({ title, onClose }) {
   );
 }
 
-export function ModalContent({ closeModal }) {
+export function ModalContent({ closeModal, movie }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isViewed, setIsViewed] = useState(false);
   const [isInWatchlist, setIsInWatchlist] = useState(false);
@@ -79,7 +79,13 @@ export function ModalContent({ closeModal }) {
       Linking.openURL(link.url);
     } else {
       closeModal(); // Cierra el modal si quieres antes de navegar
-      router.push(`${link.url}?openModal=true`);
+      router.push({
+        pathname: link.url,
+        params: { 
+          movieId: movie.id,
+          openModal: "true"
+         },
+      })
     }
   }
 

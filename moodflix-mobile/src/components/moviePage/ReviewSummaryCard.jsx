@@ -8,7 +8,10 @@ export default function ReviewSummaryCard({ averageRating, totalReviews, movie }
   const route = useRouter();
 
   const handleNavigation = () => {
-    route.push("/movie/review");
+    route.push({
+      pathname: "/movie/review",
+      params: { movieId: movie.id },
+    })
   };
 
   return (

@@ -46,10 +46,10 @@ const mockReviews = [
   },
 ];
 
-export default function Review({ movie }) {
+export default function Review() {
   // const { id } = movie;
   // Aquí iría la llamada a la API para obtener reseñas por película
-  const { openModal } = useLocalSearchParams();
+  const { openModal, movieId } = useLocalSearchParams();
   const [modalVisible, setModalVisible] = useState(false);
 
   // Abre el modal de reseña si se ha pasado el parámetro openModal
@@ -95,6 +95,7 @@ export default function Review({ movie }) {
       <NewReviewModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
+        movieId={movieId}
       />
     </MovieScreen>
   );
