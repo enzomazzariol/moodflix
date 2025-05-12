@@ -35,10 +35,7 @@ export default function RootLayout() {
     const prepareApp = async () => {
       try {
         // Cargar fuentes
-        await Font.loadAsync({
-          "Outfit-Regular": require("../../assets/fonts/Outfit-Regular.ttf"),
-          // ...todas las demás fuentes
-        });
+        await loadFonts();
 
         await new Promise((resolve) => setTimeout(resolve, 1000));
 

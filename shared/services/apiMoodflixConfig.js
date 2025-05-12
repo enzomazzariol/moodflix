@@ -3,7 +3,7 @@ import axios from "axios";
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "";
 const API_URL = `${BASE_URL}/moodflix`;
 
-const API_CLIENT_CONFIG = axios.create({
+const MOODFLIX_API_CONFIG = axios.create({
   baseURL: API_URL,
   timeout: 10000,
   headers: {
@@ -13,7 +13,7 @@ const API_CLIENT_CONFIG = axios.create({
 });
 
 // Manejo de errores globales (opcional)
-API_CLIENT_CONFIG.interceptors.response.use(
+MOODFLIX_API_CONFIG.interceptors.response.use(
   (response) => response,
   (error) => {
     // Manejo de errores de la respuesta
@@ -31,4 +31,4 @@ API_CLIENT_CONFIG.interceptors.response.use(
   }
 );
 
-export default API_CLIENT_CONFIG;
+export default MOODFLIX_API_CONFIG;

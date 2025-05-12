@@ -28,6 +28,7 @@ const slides = [
   },
 ];
 
+// Libreria de On boarding https://github.com/Jacse/react-native-app-intro-slider
 export default function OnboardingScreen() {
   const router = useRouter();
 

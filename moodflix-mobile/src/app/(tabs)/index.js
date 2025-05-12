@@ -1,5 +1,6 @@
 import { FlatList, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { usePopularMovies } from "../../../../shared/hooks/usePopularMovies";
 import EmotionSlider from "../../components/home/EmotionSlider";
 import MoviesSlider from "../../components/home/MoviesSlider";
 import HomeScreen from "../../components/screens/HomeScreen";
@@ -7,11 +8,12 @@ import mocksMovies from "../../lib/mocks/movies.json";
 
 export default function Home() {
   // Configuración de las secciones de películas
+  const { movies: popularMovies } = usePopularMovies();
   const movieSections = [
     {
       id: "popular-week",
       title: "Populares esta semana",
-      data: mocksMovies,
+      data: popularMovies,
     },
     {
       id: "popular-friends",
@@ -30,9 +32,9 @@ export default function Home() {
       emotions={[
         "amor",
         "tristeza",
-        "felicidad",
-        "alegría",
-        "enojo",
+        "feliz",
+        "alegre",
+        "enojado",
         "esperanza",
         "miedo",
         "ansiedad",
@@ -43,7 +45,12 @@ export default function Home() {
 
   // Renderizar cada sección de películas
   const RenderMovieSection = ({ item }) => (
-    <MoviesSlider movies={item.data} title={item.title} />
+    <MoviesSlider
+      movies={item.data}
+      title={item.title}
+      flatlistStyles={{ paddingHorizontal: hp("1.5%") }}
+      titleStyles={{ paddingLeft: hp("1.5%") }}
+    />
   );
 
   // Separador entre secciones de películas
@@ -57,7 +64,6 @@ export default function Home() {
         renderItem={RenderMovieSection}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingLeft: hp("1.5%"),
           paddingVertical: hp("4%"),
         }}
         ListHeaderComponent={renderHeader}
