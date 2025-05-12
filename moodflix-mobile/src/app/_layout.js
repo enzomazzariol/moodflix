@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
 import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -32,11 +33,31 @@ export default function RootLayout() {
 
   useEffect(() => {
     const prepareApp = async () => {
-      // Simulación de carga (puedes cargar fuentes, datos, etc.)
-      loadFonts();
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setIsAuthenticated(true);
-      setIsReady(true);
+      try {
+        // Cargar fuentes
+        await Font.loadAsync({
+          "Outfit-Regular": require("../../assets/fonts/Outfit-Regular.ttf"),
+          // ...todas las demás fuentes
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        // Ver si ya hizo onboarding
+        const hasSeenOnboarding = await AsyncStorage.getItem(
+          "hasSeenOnboarding"
+        );
+
+        // Ahora sí, cambiar de pantalla
+        if (!hasSeenOnboarding) {
+          router.replace("/(onboarding)/onboarding");
+        } else {
+          router.replace("/(auth)/login"); // o "/(tabs)" si ya está logueado
+        }
+      } catch (error) {
+        console.error("Error cargando la app", error);
+      } finally {
+        setIsReady(true); // Siempre se ejecuta
+      }
     };
 
     prepareApp();
@@ -45,9 +66,9 @@ export default function RootLayout() {
   useEffect(() => {
     if (isReady) {
       SplashScreen.hideAsync();
-      router.replace(isAuthenticated ? "/(tabs)" : "/(auth)/login");
     }
   }, [isReady]);
+
   return (
     <SafeAreaProvider>
       <SearchProvider>
@@ -60,6 +81,7 @@ export default function RootLayout() {
         >
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
         </Stack>
       </SearchProvider>
     </SafeAreaProvider>

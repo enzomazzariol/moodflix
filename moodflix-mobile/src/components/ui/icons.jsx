@@ -3,7 +3,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Octicons from "@expo/vector-icons/Octicons";
-import { Film, MapPin, Pencil, Smile } from "lucide-react-native";
+import { Film, MapPin, MonitorPlay, Pencil, Smile } from "lucide-react-native";
 
 export const HomeIcon = ({ size, color }) => {
     return <Octicons name="home" size={size} color={color} />;
@@ -99,4 +99,8 @@ export const FilmIcon = ({ size, color }) => {
 
 export const EditIcon = ({ size, color }) => {
   return <Pencil  size={size} color={color} />;
+}
+
+export const MovieIcon = ({ size, color }) => {
+  return <MonitorPlay size={size} color={color} />;
 }
