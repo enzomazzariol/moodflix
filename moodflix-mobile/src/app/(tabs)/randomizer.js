@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { heightPercentageToDP } from "react-native-responsive-screen";
+import { useMoodflix } from "../../../../shared/hooks/useMoodflix";
 import RandomizerSlider from "../../components/commoms/Slider";
 import SubmitBtn from "../../components/commoms/SubmitBtn";
 import { Title } from "../../components/commoms/Title";
@@ -14,13 +15,29 @@ import {
 
 export default function Randomizer() {
   // TODO: Añadir boton de resetear cuando haya cambio en los inputs
-  const [randomizerData, setRandomizerData] = useState({});
+  const [randomizerData, setRandomizerData] = useState({
+    genre: null,
+    decade: null,
+    streaming: null,
+    rating: 1,
+    duration: 60,
+  });
   const router = useRouter();
 
-  const goToMovie = (id) => {
+  const { getRandomMovie } = useMoodflix();
+
+  const handleSubmit = async () => {
+    const movies = await getRandomMovie(randomizerData);
+
+    if (movies && movies.length > 0) {
+      goToRandomMovie(movies);
+    }
+  };
+
+  const goToRandomMovie = (movies) => {
     router.push({
-      pathname: `/randomizerMovie/${id}`,
-      params: randomizerData,
+      pathname: `/randomizerMovie`,
+      params: { movies: JSON.stringify(movies), randomizerData },
     });
   };
 
@@ -48,8 +65,10 @@ export default function Randomizer() {
       <SelectInput
         label="Decada"
         placeholder="Todos"
-        value={randomizerData.year}
-        onChange={(val) => setRandomizerData({ ...randomizerData, year: val })}
+        value={randomizerData.decade}
+        onChange={(val) =>
+          setRandomizerData({ ...randomizerData, decade: val })
+        }
         options={DecadeOptions}
       />
 
@@ -67,6 +86,7 @@ export default function Randomizer() {
         minValue={1}
         maxValue={100}
         suffix="/100"
+        value={randomizerData.rating}
         onChange={(val) =>
           setRandomizerData({ ...randomizerData, rating: val })
         }
@@ -75,6 +95,7 @@ export default function Randomizer() {
         label="Duración máxima"
         minValue={60}
         maxValue={240}
+        value={randomizerData.duration}
         suffix="min"
         onChange={(val) =>
           setRandomizerData({ ...randomizerData, duration: val })
@@ -87,7 +108,7 @@ export default function Randomizer() {
         width="70%"
         height="6%"
         textStyles={"mt-1"}
-        handleSubmit={() => goToMovie(278)}
+        handleSubmit={handleSubmit}
       >
         Randomizar
       </SubmitBtn>

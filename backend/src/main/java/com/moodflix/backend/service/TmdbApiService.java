@@ -215,10 +215,10 @@ public class TmdbApiService {
                 // recoger lista de peliculas de la API
                 List<Movie> movies = tmdbResponse.results();
                 // seleccionar una random
-                Movie randomMovie = movies.get(new Random().nextInt(movies.size()));
+               // Movie randomMovie = movies.get(new Random().nextInt(movies.size()));
                 // obtener datos de la pelicula desde la API TMDB, guardarla en la bd y devolver como respuesta
-                Movie randomMovieData = fetchMovieFromTmdb(randomMovie.getMovie_id());
-                return ResponseEntity.ok(randomMovieData);
+               // Movie randomMovieData = fetchMovieFromTmdb(randomMovie.getMovie_id());
+                return ResponseEntity.ok(movies);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ApiResponse(HttpStatus.NOT_FOUND.value(), "No se pudieron encontrar peliculas en este momento.")

@@ -9,13 +9,14 @@ import {
 import SubmitBtn from "../../components/commoms/SubmitBtn";
 import { Title } from "../../components/commoms/Title";
 import RandomizerMovieScreen from "../../components/screens/RandomizerMovieScreen";
-import movieDataMock from "../../lib/mocks/movieDetails.json";
 
 export default function RandomizerMovie() {
   const router = useRouter();
-  const { id, genre, year, streaming, rating, duration } =
-    useLocalSearchParams();
-  const pathPoster = `https://image.tmdb.org/t/p/original${movieDataMock.poster_path}`;
+  const { movies = [], randomizerData } = useLocalSearchParams();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const parsedMovies = JSON.parse(movies);
+  const movie = parsedMovies[currentIndex] || {}; // Obtener el objeto del movie actual
+  const pathPoster = `https://image.tmdb.org/t/p/original`;
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -23,17 +24,15 @@ export default function RandomizerMovie() {
     router.back();
   };
 
-  const goToMoviePage = () => {
+  const goToMoviePage = (id) => {
     router.push(`/movie/${id}`);
   };
 
-  console.log("Datos recibidos:", {
-    genre,
-    year,
-    streaming,
-    rating,
-    duration,
-  });
+  const goToNextMovie = () => {
+    if (currentIndex < movies.length - 1) {
+      setCurrentIndex(currentIndex + 1); // Pasar a la siguiente película
+    }
+  };
 
   return (
     <RandomizerMovieScreen>
@@ -46,10 +45,10 @@ export default function RandomizerMovie() {
         </Title>
 
         <Text className="text-2xl font-outfitBold text-jasper">
-          {movieDataMock.original_title}
+          {movie.title}
         </Text>
 
-        <Pressable onPress={goToMoviePage}>
+        <Pressable onPress={() => goToMoviePage(movie.movie_id)}>
           <View style={{ width: wp("60%"), height: hp("40%") }}>
             {isLoading && (
               <Skeleton
@@ -60,7 +59,7 @@ export default function RandomizerMovie() {
               />
             )}
             <Image
-              source={{ uri: pathPoster }}
+              source={{ uri: `${pathPoster}${movie.poster_url}` }}
               style={{
                 width: "100%",
                 height: "100%",
@@ -84,7 +83,7 @@ export default function RandomizerMovie() {
             width={wp("7%")}
             bgColor="bg-floralWhite"
             textColor="text-raisinBlack"
-            handleSubmit={handleBackNavigation}
+            handleSubmit={goToNextMovie}
           >
             Randomizar
           </SubmitBtn>

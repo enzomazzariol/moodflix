@@ -1,5 +1,4 @@
 import Slider from "@react-native-community/slider";
-import { useState } from "react";
 import { Text, View } from "react-native";
 import {
   heightPercentageToDP as hp,
@@ -7,8 +6,8 @@ import {
 } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 
-export default function RandomizerSlider({ label, minValue, maxValue, suffix, onChange }) {
-  const [value, setValue] = useState(minValue);
+export default function RandomizerSlider({ label, minValue, maxValue, suffix, onChange, value }) {
+  //const [value, setValue] = useState(minValue);
 
    const handleValueChange = (val) => {
      setValue(val);
@@ -29,7 +28,7 @@ export default function RandomizerSlider({ label, minValue, maxValue, suffix, on
         thumbTintColor={colors.floralWhite}
         value={value}
         step={1}
-        onValueChange={(val) => setValue(val)}
+        onValueChange={onChange}
         onSlidingComplete={(val) => onChange && onChange(Math.round(val))}
       />
     </View>

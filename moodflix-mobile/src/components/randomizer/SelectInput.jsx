@@ -25,7 +25,7 @@ export default function SelectInput({
         data={options}
         defaultValue={value}
         onSelect={(selectedItem) => onChange(selectedItem.value)}
-        defaultValueByIndex={0}
+        defaultValueByIndex={value}
         renderButton={(selectedItem) => (
           <View style={styles.dropdownButtonStyle}>
             <Text style={styles.dropdownButtonTxtStyle}>

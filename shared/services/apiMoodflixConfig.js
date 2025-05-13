@@ -1,14 +1,15 @@
 import axios from "axios";
 
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "";
-const API_URL = `${BASE_URL}/moodflix`;
+// Crear una variable de entorno para la API Key
+const API_KEY = process.env.MOODFLIX_API_CONFIG ?? "";
+const BASE_URL = "http://192.168.0.19:8080/moodflix";
 
 const MOODFLIX_API_CONFIG = axios.create({
-  baseURL: API_URL,
+  baseURL: BASE_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${process.env.EXPO_PUBLIC_API_KEY}`,
+    Authorization: `Bearer ${API_KEY}`,
   },
 });
 

@@ -32,7 +32,7 @@ export default function RandomizerMovieLayout() {
       }}
     >
       <Stack.Screen
-        name="[id]"
+        name="randomizerMovie"
         options={{
           title: "Randomizer Movie",
           presentation: "modal",

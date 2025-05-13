@@ -18,9 +18,9 @@ public class MovieRecommendationController {
     }
 
     @GetMapping("/movies/random")
-    public ResponseEntity<?> getRandomMovieRecommendation(@RequestParam String genre,
-                                                          @RequestParam String decade,
-                                                          @RequestParam String provider,
+    public ResponseEntity<?> getRandomMovieRecommendation(@RequestParam(required = false, defaultValue = "") String genre,
+                                                          @RequestParam(required = false, defaultValue = "") String decade,
+                                                          @RequestParam(required = false, defaultValue = "") String provider,
                                                           @RequestParam double minRating,
                                                           @RequestParam int maxDuration) {
         return tmdbApiService.fetchRandomMovie(genre, decade, provider, minRating, maxDuration);
