@@ -12,6 +12,7 @@ export function useMoviesByCategory({
     getPopularMovies,
     getUpcomingMovies,
     getNowPlayingMovies,
+    getTopRatedMovies,
     isLoading,
     error,
   } = useTMDB();
@@ -33,6 +34,9 @@ export function useMoviesByCategory({
             break;
           case "now_playing":
             data = await getNowPlayingMovies(language, page, region);
+            break;
+          case "top_rated":
+            data = await getTopRatedMovies(language, page);
             break;
           default:
             console.warn("Categoría no reconocida:", category);

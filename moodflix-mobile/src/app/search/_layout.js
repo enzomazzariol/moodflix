@@ -24,16 +24,19 @@ export default function SearchLayout() {
         ),
       }}
     >
-      <Stack.Screen name="new" options={{ title: "New", headerShown: true }} />
+      <Stack.Screen
+        name="new"
+        options={{ title: "Estrenos", headerShown: true }}
+      />
 
       <Stack.Screen
         name="popular"
-        options={{ title: "Popular", headerShown: true, animation: "fade" }}
+        options={{ title: "Popular", headerShown: true }}
       />
 
       <Stack.Screen
         name="rating"
-        options={{ title: "Rating", headerShown: true }}
+        options={{ title: "Mejor puntaje", headerShown: true }}
       />
 
       <Stack.Screen

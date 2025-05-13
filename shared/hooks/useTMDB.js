@@ -55,10 +55,27 @@ export function useTMDB() {
     return data;
   };
 
+  const getTopRatedMovies = async (
+    language = "ES-es",
+    page = 1,
+    region = "ES"
+  ) => {
+    const data = await sendRequest({
+      url: "/movie/top_rated",
+      params: {
+        language,
+        page,
+        region,
+      },
+    });
+    return data;
+  };
+
   return {
     getPopularMovies,
     getUpcomingMovies,
     getNowPlayingMovies,
+    getTopRatedMovies,
     isLoading,
     data,
     error,
