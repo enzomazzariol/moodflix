@@ -6,7 +6,7 @@ export function useTMDB() {
   const { sendRequest, isLoading, data, error } =
     useApiRequest(TMDB_API_CLIENT);
 
-  const getPopularMovies = async (language = "ES-es", page = 1) => {
+  const getPopularMovies = async (language = "es-ES", page = 1) => {
     const data = await sendRequest({
       url: "/movie/popular",
       method: "GET",
@@ -20,7 +20,7 @@ export function useTMDB() {
   };
 
   const getUpcomingMovies = async (
-    language = "ES-es",
+    language = "es-ES",
     page = 1,
     region = "ES"
   ) => {
@@ -38,7 +38,7 @@ export function useTMDB() {
   };
 
   const getNowPlayingMovies = async (
-    language = "ES-es",
+    language = "es-ES",
     page = 1,
     region = "ES"
   ) => {
@@ -56,15 +56,35 @@ export function useTMDB() {
   };
 
   const getTopRatedMovies = async (
-    language = "ES-es",
+    language = "es-ES",
     page = 1,
     region = "ES"
   ) => {
     const data = await sendRequest({
       url: "/movie/top_rated",
+      method: "GET",
       params: {
         language,
         page,
+        region,
+      },
+    });
+    return data;
+  };
+
+  const getMoviesByGenre = async (
+    genreId,
+    page = 1,
+    language = "es-ES",
+    region = "ES"
+  ) => {
+    const data = await sendRequest({
+      url: "/discover/movie",
+      method: "GET",
+      params: {
+        with_genres: genreId,
+        page,
+        language,
         region,
       },
     });
@@ -76,6 +96,7 @@ export function useTMDB() {
     getUpcomingMovies,
     getNowPlayingMovies,
     getTopRatedMovies,
+    getMoviesByGenre,
     isLoading,
     data,
     error,
