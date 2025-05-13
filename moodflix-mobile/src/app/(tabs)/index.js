@@ -1,17 +1,24 @@
 import { FlatList, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { useNowPlayingMovies } from "../../../../shared/hooks/useNowPlayingMovies";
-import { usePopularMovies } from "../../../../shared/hooks/usePopularMovies";
-import { useUpcomingMovies } from "../../../../shared/hooks/useUpcomingMovies";
+import { useMoviesByCategory } from "../../../../shared/hooks/useMoviesByCategory";
 import EmotionSlider from "../../components/home/EmotionSlider";
 import MoviesSlider from "../../components/home/MoviesSlider";
 import HomeScreen from "../../components/screens/HomeScreen";
 
 export default function Home() {
   // Configuración de las secciones de películas
-  const { movies: popularMovies } = usePopularMovies();
-  const { movies: upcomingMovies } = useUpcomingMovies();
-  const { movies: nowPlayingMovies } = useNowPlayingMovies();
+  const { movies: popularMovies } = useMoviesByCategory({
+    category: "popular",
+    page: 1,
+  });
+  const { movies: upcomingMovies } = useMoviesByCategory({
+    category: "upcoming",
+    page: 1,
+  });
+  const { movies: nowPlayingMovies } = useMoviesByCategory({
+    category: "now_playing",
+    page: 1,
+  });
   const movieSections = [
     {
       id: "popular-week",

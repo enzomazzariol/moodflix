@@ -1,5 +1,5 @@
-import { Link, useRouter } from "expo-router";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
+import { FlatList, View } from "react-native";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -75,15 +75,6 @@ export default function Search() {
           gap: hp("2%"),
         }}
       />
-
-      {/* Provisional  */}
-      <Link href="/(auth)/login" asChild replace>
-        <TouchableOpacity className="py-3 px-8 bg-bole rounded-sm  mt-10">
-          <Text className="text-floral-white font-bold text-xl font-outfitSemiBold">
-            Ir al login
-          </Text>
-        </TouchableOpacity>
-      </Link>
     </SearchScreen>
   );
 }
