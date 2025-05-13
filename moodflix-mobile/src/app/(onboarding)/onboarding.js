@@ -67,8 +67,8 @@ export default function OnboardingScreen() {
           top: hp("0%"),
         }}
       >
-        <Title className="text-5xl">{item.title}</Title>
-        <Text className="text-floralWhite text-xl font-outfitRegular">
+        <Title className="text-5xl font-spaceGroteskBold">{item.title}</Title>
+        <Text className="text-floralWhite text-xl font-spaceGroteskRegular">
           {item.text}
         </Text>
       </View>
@@ -82,10 +82,27 @@ export default function OnboardingScreen() {
       onDone={onDone}
       showSkipButton
       onSkip={onDone}
-      skipLabel="Saltar"
-      doneLabel="Finalizar"
-      nextLabel="Siguiente"
+      renderNextButton={() => <GenericButton>Siguiente</GenericButton>}
+      renderDoneButton={() => <GenericButton>Finalizar</GenericButton>}
+      renderSkipButton={() => (
+        <GenericButton isSkip={true}>Saltar</GenericButton>
+      )}
       dotStyle={{ backgroundColor: "rgba(255, 255, 255, 0.5)" }}
     />
+  );
+}
+
+function GenericButton({ children, isSkip = false }) {
+  return (
+    <Text
+      className="text-xl font-spaceGroteskBold text-floralWhite"
+      style={{
+        paddingTop: hp("1.4%"),
+        paddingRight: hp("1%"),
+        paddingLeft: isSkip ? hp("1") : 0,
+      }}
+    >
+      {children}
+    </Text>
   );
 }

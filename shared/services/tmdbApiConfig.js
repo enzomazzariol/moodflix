@@ -16,7 +16,6 @@ const TMDB_API_CLIENT = axios.create({
 // Añadir la API Key como parámetro global para todas las solicitudes
 TMDB_API_CLIENT.interceptors.request.use(
   (config) => {
-    console.log("TMDB API KEY: ", API_KEY);
     if (API_KEY) {
       config.params = config.params || {};
       config.params["api_key"] = API_KEY;

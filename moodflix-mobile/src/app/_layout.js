@@ -8,6 +8,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../../global.css";
 import { SearchProvider } from "../context/SearchContext";
 
+// web de la librería del async storage https://react-native-async-storage.github.io/async-storage/
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {

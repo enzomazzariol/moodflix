@@ -19,5 +19,48 @@ export function useTMDB() {
     return data;
   };
 
-  return { getPopularMovies, isLoading, data, error };
+  const getUpcomingMovies = async (
+    language = "ES-es",
+    page = 1,
+    region = "ES"
+  ) => {
+    const data = await sendRequest({
+      url: "/movie/upcoming",
+      method: "GET",
+      params: {
+        language,
+        page,
+        region,
+      },
+    });
+
+    return data;
+  };
+
+  const getNowPlayingMovies = async (
+    language = "ES-es",
+    page = 1,
+    region = "ES"
+  ) => {
+    const data = await sendRequest({
+      url: "/movie/now_playing",
+      method: "GET",
+      params: {
+        language,
+        page,
+        region,
+      },
+    });
+
+    return data;
+  };
+
+  return {
+    getPopularMovies,
+    getUpcomingMovies,
+    getNowPlayingMovies,
+    isLoading,
+    data,
+    error,
+  };
 }
