@@ -1,4 +1,4 @@
-package com.moodflix.backend.config;
+package com.moodflix.backend.service.auth;
 
 import com.moodflix.backend.exceptions.NotFoundException;
 import com.moodflix.backend.model.User;

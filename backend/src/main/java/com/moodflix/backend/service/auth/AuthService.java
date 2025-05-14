@@ -1,7 +1,6 @@
 package com.moodflix.backend.service.auth;
 
 import com.moodflix.backend.config.JwtHelper;
-import com.moodflix.backend.config.UserDetailsServiceImpl;
 import com.moodflix.backend.dtos.*;
 import com.moodflix.backend.exceptions.*;
 import com.moodflix.backend.model.*;

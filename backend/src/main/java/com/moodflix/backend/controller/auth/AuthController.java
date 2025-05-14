@@ -1,7 +1,6 @@
 package com.moodflix.backend.controller.auth;
 
 import com.moodflix.backend.config.JwtHelper;
-import com.moodflix.backend.config.UserDetailsServiceImpl;
 import com.moodflix.backend.dtos.LoginRequest;
 import com.moodflix.backend.dtos.LoginResponse;
 import com.moodflix.backend.dtos.SignupRequest;

@@ -2,6 +2,7 @@ package com.moodflix.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moodflix.backend.exceptions.ApiResponse;
+import com.moodflix.backend.service.auth.UserDetailsServiceImpl;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -57,8 +58,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (AccessDeniedException | java.io.IOException e) {
-            ApiResponse errorResponse = new ApiResponse(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            ApiResponse errorResponse = new ApiResponse(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(toJson(errorResponse));
         }
     }

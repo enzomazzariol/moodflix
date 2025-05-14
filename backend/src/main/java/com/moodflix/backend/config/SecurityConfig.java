@@ -1,5 +1,7 @@
 package com.moodflix.backend.config;
 
+import com.moodflix.backend.service.auth.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,11 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -23,10 +22,13 @@ public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthFilter jwtAuthFilter;
+    private final CustomAuthEntryPoint customAuthEntryPoint;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthFilter jwtAuthFilter) {
+    @Autowired
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthFilter jwtAuthFilter, CustomAuthEntryPoint customAuthEntryPoint) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthFilter = jwtAuthFilter;
+        this.customAuthEntryPoint = customAuthEntryPoint;
     }
 
     @Bean
@@ -40,15 +42,15 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                  // Configurar permisos a los endpoints
-                // Deshabilitar temporalmente
-                /*.authorizeHttpRequests(auth -> auth
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthEntryPoint))
+                .authorizeHttpRequests(auth -> auth
                         // public endpoints
                         .requestMatchers(HttpMethod.POST, "/moodflix/auth/signup/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/moodflix/auth/login/**").permitAll()
                         // private endpoints
-                        .anyRequest().authenticated())*/
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                        .anyRequest().authenticated()
+                )
                 .authenticationManager(authenticationManager)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
