@@ -1,15 +1,13 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Animated,
   Dimensions,
   Linking,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -22,56 +20,41 @@ import {
 import { useMovie } from "../../../../shared/hooks/useMovie";
 import { Title } from "../../components/commoms/Title";
 import MoviesSlider from "../../components/home/MoviesSlider";
+import MovieDetails from "../../components/moviePage/MovieDetails";
+import MovieGenresAndOverview from "../../components/moviePage/MovieGenresAndOverview";
 import MovieModal from "../../components/moviePage/MovieModal";
 import MovieTabsView from "../../components/moviePage/MovieTabsView";
-import PosterMovieDownload from "../../components/moviePage/PosterMovieDownload";
-import ReviewSummaryCard from "../../components/moviePage/ReviewSummaryCard";
-import WhereToWatch from "../../components/moviePage/WhereToWatch";
 import MovieScreen from "../../components/screens/MovieScreen";
-import {
-  BackArrowIcon,
-  MoreIcon,
-  TrailerIcon,
-} from "../../components/ui/icons";
+import { BackArrowIcon, MoreIcon } from "../../components/ui/icons";
 import castMovie from "../../lib/mocks/castMovie.json";
 import mockMovies from "../../lib/mocks/movies.json";
 import streamingProviders from "../../lib/mocks/streamingProviders.json";
 import { colors } from "../../utils/colors";
 
 const { width } = Dimensions.get("window");
-const HEADER_IMAGE_HEIGHT = Dimensions.get("window").height / 2.7; // Altura de la imagen del header
-const HEADER_MIN_HEIGHT = hp("12%"); // Altura mínima del header (10% de la pantalla)
-const OVERSCROLL_DISTANCE = 140; // Distancia de overscroll para el efecto de rebote
+const HEADER_IMAGE_HEIGHT = Dimensions.get("window").height / 2.7;
+const HEADER_MIN_HEIGHT = hp("12%");
+const OVERSCROLL_DISTANCE = 140;
 
-// Verificar si las pelis tiene descripcion, generos, tagline etc - si no lo tienen no se muestra en la UI y evitar huecos en la pantalla
 export default function Movie() {
-  const { id, title } = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
   const { movie: movieDetails, isLoading, error } = useMovie(id);
-  console.log("movie", movieDetails);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
-  //const [isInWatchlist, setIsInWatchlist] = useState(false);
-  //const [isInFavorites, setIsInFavorites] = useState(false);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
-  const director = castMovie.crew.find((person) => person.job === "Director");
-
-  const scrollY = new Animated.Value(0);
-
-  // Interpolación para la opacidad del header (para que desaparezca al hacer scroll)
   const headerOpacity = scrollY.interpolate({
     inputRange: [hp("33%"), hp("38%")],
     outputRange: [0, 1],
     extrapolate: "clamp",
   });
 
-  // Interpolación para el escalado de la imagen (para que se vea más grande al hacer pull)
   const imageScale = scrollY.interpolate({
     inputRange: [-OVERSCROLL_DISTANCE, 0],
     outputRange: [1.5, 1],
     extrapolate: "clamp",
   });
 
-  // Interpolación para la posición Y de la imagen (para que cubra todo al hacer pull)
   const imageTranslateY = scrollY.interpolate({
     inputRange: [-OVERSCROLL_DISTANCE, 0],
     outputRange: [-OVERSCROLL_DISTANCE / 3, 0],
@@ -79,24 +62,25 @@ export default function Movie() {
   });
 
   useEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
+    navigation.setOptions({ headerShown: false });
   }, []);
 
-  const goBack = () => {
-    navigation.goBack();
+  const backdroptUrl = movieDetails?.file_path
+    ? "https://image.tmdb.org/t/p/original" + movieDetails?.file_path
+    : undefined;
+
+  const goBack = () => navigation.goBack();
+
+  const showModal = () => setModalVisible(true);
+
+  const goToTrailer = (url) => {
+    if (url) {
+      Linking.openURL(url).catch((err) =>
+        console.error("Error al abrir el trailer:", err)
+      );
+    }
   };
 
-  const showAlert = () => {
-    Alert.alert("Menu abierto para compartir peli");
-  };
-
-  const showModal = () => {
-    setModalVisible(true);
-  };
-
-  // Puedes mostrar un loader mientras se carga
   if (isLoading) {
     return (
       <MovieScreen>
@@ -122,21 +106,8 @@ export default function Movie() {
     );
   }
 
-  const backdroptUrl = movieDetails?.file_path
-    ? "https://image.tmdb.org/t/p/original" + movieDetails?.file_path
-    : undefined;
-
-  const goToTrailer = (url) => {
-    if (url) {
-      Linking.openURL(url).catch((err) =>
-        console.error("Error al abrir el trailer:", err)
-      );
-    }
-  };
-
   return (
     <MovieScreen>
-      {/* Header normal que aparece al hacer scroll */}
       <Animated.View style={[styles.header, { opacity: headerOpacity }]}>
         <TouchableOpacity onPress={goBack} style={styles.backButton}>
           <BackArrowIcon size={24} color={colors.floralWhite} />
@@ -154,14 +125,12 @@ export default function Movie() {
         </TouchableOpacity>
       </Animated.View>
 
-      {/* Modal que aparece al hacer clic en el botón de tres puntos */}
       <MovieModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
         movie={movieDetails}
       />
 
-      {/* El contenedor con la imagen dentro del ScrollView */}
       <Animated.ScrollView
         scrollEventThrottle={16}
         onScroll={Animated.event(
@@ -171,7 +140,6 @@ export default function Movie() {
         contentContainerStyle={styles.scrollContainer}
         bounces={true}
       >
-        {/* Imagen dentro del scroll y animada */}
         <Animated.View
           style={[
             styles.headerImageContainer,
@@ -194,110 +162,19 @@ export default function Movie() {
             end={{ x: 0, y: 1 }}
           />
         </Animated.View>
+
         <View className="flex-col" style={{ paddingHorizontal: wp("5%") }}>
-          {/* Contenido de la pantalla */}
-          <View className="flex-1 flex-row" style={{ paddingBottom: hp("0%") }}>
-            {/* Contenedor de la imagen del poster en la izquierda */}
-            <View className="self-start" style={{}}>
-              <PosterMovieDownload
-                posterHeight={hp("22%")}
-                posterWidth={wp("30%")}
-                posterPath={movieDetails?.poster_url}
-                title={movieDetails?.title}
-                idMovie={movieDetails?.movie_id}
-              />
-            </View>
-
-            {/* Contenedor de la información de la película a la derecha */}
-            <View
-              className="flex-col"
-              style={{
-                marginLeft: wp("5%"),
-                rowGap: wp("2%"),
-                width: wp("60%"),
-              }}
-            >
-              <Title className="font-spaceGroteskBold text-slate-100">
-                {movieDetails?.title}
-              </Title>
-
-              <View>
-                <Text className="text-floralWhite text-lg font-spaceGroteskRegular">
-                  Dirigido por:
-                </Text>
-                <Text className="text-slate-400 font-outfitBold text-lg">
-                  {director?.name ?? "Desconocido"}
-                </Text>
-              </View>
-
-              <View
-                className="flex-row items-center"
-                style={{ columnGap: wp("3%") }}
-              >
-                <Text className="text-slate-400 text-base font-spaceGroteskRegular">
-                  {movieDetails?.release_date.slice(0, 4)}
-                </Text>
-
-                <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-                  {movieDetails?.duration} min
-                </Text>
-              </View>
-              <Text className="text-floralWhite text-base font-spaceGroteskBold">
-                {movieDetails?.rating?.toFixed(1)}$
-              </Text>
-              <TouchableOpacity
-                className="bg-prussianBlue flex-row items-center justify-between px-4"
-                style={{ height: hp("3%"), width: wp("25%"), borderRadius: 9 }}
-                onPress={() => goToTrailer(movieDetails?.trailer_url)}
-              >
-                <TrailerIcon size={16} color={colors.floralWhite} />
-                <Text className="text-floralWhite text-lg font-outfitRegular ms-1">
-                  TRAILER
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Contenedor de los géneros y la sinopsis */}
-          <View className="flex-col" style={{ rowGap: hp("2%") }}>
-            <View
-              className="flex-row flex-wrap"
-              style={{
-                columnGap: wp("3%"),
-                paddingTop: hp("2%"),
-                rowGap: wp("4%"),
-              }}
-            >
-              {movieDetails?.genre?.map((genre) => (
-                <Pressable
-                  key={genre.id ?? genre.name}
-                  className="bg-prussianBlue rounded-full px-4 py-2"
-                >
-                  <Text className="text-floralWhite text-lg font-outfitRegular">
-                    {genre.name}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-            {movieDetails?.tagline ? (
-              <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-                {movieDetails.tagline.toUpperCase()}
-              </Text>
-            ) : null}
-
-            <Text className="text-floralWhite text-base font-spaceGroteskRegular shadow-lg">
-              {movieDetails?.description}
-            </Text>
-
-            <WhereToWatch streamingProviders={streamingProviders.results} />
-
-            <ReviewSummaryCard
-              averageRating={"4.5"}
-              totalReviews={movieDetails?.vote_count}
-              movie={movieDetails}
-            />
-          </View>
+          <MovieDetails
+            movie={movieDetails}
+            director={castMovie.crew.find((p) => p.job === "Director")}
+            goToTrailer={goToTrailer}
+          />
+          <MovieGenresAndOverview
+            movie={movieDetails}
+            streamingProviders={streamingProviders.results}
+          />
         </View>
+
         <MovieTabsView />
 
         <View className="flex-col">
@@ -310,7 +187,6 @@ export default function Movie() {
         </View>
       </Animated.ScrollView>
 
-      {/* Botón de retroceso flotante sobre la imagen */}
       <TouchableOpacity
         style={styles.floatingBackButton}
         onPress={goBack}

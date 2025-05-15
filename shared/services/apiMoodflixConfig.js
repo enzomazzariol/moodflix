@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 // Crear una variable de entorno para la API Key
-const BASE_URL = "http://10.4.6.14:8080/moodflix"; // CAMBIAR IP SEGUN WIFI
+const BASE_URL = "http://192.168.0.19:8080/moodflix"; // CAMBIAR IP SEGUN WIFI
 
 const MOODFLIX_API_CONFIG = axios.create({
   baseURL: BASE_URL,
