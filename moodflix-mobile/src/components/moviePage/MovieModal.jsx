@@ -39,7 +39,7 @@ export default function MovieModal({ movie, visible, closeModal }) {
             e.stopPropagation();
           }}
         >
-          <ModalHeader title={movie.title} onClose={closeModal} />
+          <ModalHeader title={movie?.title} onClose={closeModal} />
           <ScrollView
             contentContainerStyle={{ paddingBottom: hp("2%"), flexGrow: 1 }}
           >
@@ -82,7 +82,7 @@ export function ModalContent({ closeModal, movie }) {
       router.push({
         pathname: link.url,
         params: { 
-          movieId: movie.id,
+          movieId: movie?.id,
           openModal: "true"
          },
       })

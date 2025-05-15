@@ -6,6 +6,7 @@ import {
   Alert,
   Animated,
   Dimensions,
+  Linking,
   Platform,
   Pressable,
   StyleSheet,
@@ -17,6 +18,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import { useMovie } from "../../../../shared/hooks/useMovie";
 import { Title } from "../../components/commoms/Title";
 import MoviesSlider from "../../components/home/MoviesSlider";
 import MovieModal from "../../components/moviePage/MovieModal";
@@ -31,7 +33,6 @@ import {
   TrailerIcon,
 } from "../../components/ui/icons";
 import castMovie from "../../lib/mocks/castMovie.json";
-import movieDetails from "../../lib/mocks/movieDetails.json";
 import mockMovies from "../../lib/mocks/movies.json";
 import streamingProviders from "../../lib/mocks/streamingProviders.json";
 import { colors } from "../../utils/colors";
@@ -43,16 +44,12 @@ const OVERSCROLL_DISTANCE = 140; // Distancia de overscroll para el efecto de re
 
 export default function Movie() {
   const { id, title } = useLocalSearchParams();
+  const { movie: movieDetails, isLoading, error } = useMovie(id);
+  console.log("movie", movieDetails);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
-  const [isInWatchlist, setIsInWatchlist] = useState(false);
-  const [isInFavorites, setIsInFavorites] = useState(false);
-  const [movie, setMovie] = useState({
-    id: id || 0,
-    title: title || "Película",
-    image:
-      "https://image.tmdb.org/t/p/original/5C3RriLKkIAQtQMx85JLtu4rVI2.jpg",
-  });
+  //const [isInWatchlist, setIsInWatchlist] = useState(false);
+  //const [isInFavorites, setIsInFavorites] = useState(false);
 
   const director = castMovie.crew.find((person) => person.job === "Director");
 
@@ -97,6 +94,46 @@ export default function Movie() {
     setModalVisible(true);
   };
 
+  // Puedes mostrar un loader mientras se carga
+  if (isLoading) {
+    return (
+      <MovieScreen>
+        <View className="flex-1 items-center justify-center">
+          <Text style={{ color: "white", textAlign: "center", marginTop: 50 }}>
+            Cargando película...
+          </Text>
+        </View>
+      </MovieScreen>
+    );
+  }
+
+  if (error) {
+    return (
+      <MovieScreen>
+        <View className="flex-1 items-center justify-center">
+          <Text
+            className="font-outfitBold text-3xl"
+            style={{ color: "red", textAlign: "center" }}
+          >
+            Error al cargar la película.
+          </Text>
+        </View>
+      </MovieScreen>
+    );
+  }
+
+  const backdroptUrl = movieDetails?.file_path
+    ? "https://image.tmdb.org/t/p/original" + movieDetails?.file_path
+    : undefined;
+
+  const goToTrailer = (url) => {
+    if (url) {
+      Linking.openURL(url).catch((err) =>
+        console.error("Error al abrir el trailer:", err)
+      );
+    }
+  };
+
   return (
     <MovieScreen>
       {/* Header normal que aparece al hacer scroll */}
@@ -110,7 +147,7 @@ export default function Movie() {
           style={{ fontSize: hp("2.4%") }}
           adjustsFontSizeToFit={true}
         >
-          {movie.title}
+          {movieDetails?.title}
         </Title>
         <TouchableOpacity onPress={showModal} style={styles.backButton}>
           <MoreIcon size={24} color={colors.floralWhite} />
@@ -121,7 +158,7 @@ export default function Movie() {
       <MovieModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
-        movie={movie}
+        movie={movieDetails}
       />
 
       {/* El contenedor con la imagen dentro del ScrollView */}
@@ -147,7 +184,7 @@ export default function Movie() {
           ]}
         >
           <Animated.Image
-            source={{ uri: movie.image }}
+            source={{ uri: backdroptUrl }}
             style={styles.headerImage}
           />
           <LinearGradient
@@ -165,9 +202,9 @@ export default function Movie() {
               <PosterMovieDownload
                 posterHeight={hp("22%")}
                 posterWidth={wp("30%")}
-                posterPath={movieDetails.poster_path}
-                title={movieDetails.title}
-                idMovie={movieDetails.id}
+                posterPath={movieDetails?.poster_url}
+                title={movieDetails?.title}
+                idMovie={movieDetails?.movie_id}
               />
             </View>
 
@@ -181,7 +218,7 @@ export default function Movie() {
               }}
             >
               <Title className="font-spaceGroteskBold text-slate-100">
-                {movie.title}
+                {movieDetails?.title}
               </Title>
 
               <View>
@@ -198,19 +235,20 @@ export default function Movie() {
                 style={{ columnGap: wp("3%") }}
               >
                 <Text className="text-slate-400 text-base font-spaceGroteskRegular">
-                  {movieDetails.release_date.slice(0, 4)}
+                  {movieDetails?.release_date.slice(0, 4)}
                 </Text>
 
                 <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-                  {movieDetails.runtime} min
+                  {movieDetails?.duration} min
                 </Text>
               </View>
               <Text className="text-floralWhite text-base font-spaceGroteskBold">
-                {movieDetails.vote_average.toFixed(1)}$
+                {movieDetails?.rating?.toFixed(1)}$
               </Text>
               <TouchableOpacity
                 className="bg-prussianBlue flex-row items-center justify-between px-4"
                 style={{ height: hp("3%"), width: wp("25%"), borderRadius: 9 }}
+                onPress={() => goToTrailer(movieDetails?.trailer_url)}
               >
                 <TrailerIcon size={16} color={colors.floralWhite} />
                 <Text className="text-floralWhite text-lg font-outfitRegular ms-1">
@@ -226,9 +264,9 @@ export default function Movie() {
               className="flex-row "
               style={{ columnGap: wp("3%"), paddingTop: hp("2%") }}
             >
-              {movieDetails.genres.map((genre) => (
+              {movieDetails?.genre?.map((genre) => (
                 <Pressable
-                  key={genre.id}
+                  key={genre.id ?? genre.name}
                   className="bg-prussianBlue rounded-full px-4 py-2"
                 >
                   <Text className="text-floralWhite text-lg font-outfitRegular">
@@ -238,18 +276,18 @@ export default function Movie() {
               ))}
             </View>
             <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-              {movieDetails.tagline.toUpperCase()}
+              {movieDetails?.tagline.toUpperCase()}
             </Text>
 
             <Text className="text-floralWhite text-base font-spaceGroteskRegular shadow-lg">
-              {movieDetails.overview}
+              {movieDetails?.description}
             </Text>
 
             <WhereToWatch streamingProviders={streamingProviders.results} />
 
             <ReviewSummaryCard
               averageRating={"4.5"}
-              totalReviews={movieDetails.vote_count}
+              totalReviews={movieDetails?.vote_count}
               movie={movieDetails}
             />
           </View>

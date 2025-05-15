@@ -8,6 +8,15 @@ export const useMoodflix = () => {
   const { sendRequest, isLoading, data, error } =
     useApiRequest(MOODFLIX_API_CONFIG);
 
+  const getMovie = async (movieId) => {
+    const data = await sendRequest({
+      url: `/movies/${movieId}`,
+      method: "GET",
+    });
+
+    return data;
+  };
+
   const loginAuth = async (emailOrUsername, password) => {
     console.log("campos en la request", emailOrUsername, password);
     const data = await sendRequest({
@@ -60,6 +69,7 @@ export const useMoodflix = () => {
     return data;
   };
   return {
+    getMovie,
     loginAuth,
     registerAuth,
     getRandomMovie,
