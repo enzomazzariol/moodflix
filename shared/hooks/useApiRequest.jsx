@@ -16,10 +16,33 @@ export function useApiRequest(client) {
         setData(response.data);
         return response.data;
       } catch (err) {
-        const message =
-          err.response?.data?.message || err.message || "Unknown error";
-        setError(message);
-        return null;
+        let errorMessage = "Error desconocido";
+        let statusCode = null;
+
+        if (err?.response) {
+          const data = err.response.data;
+        
+          let errorMessage = "Error del servidor";
+          let statusCode = err.response.status;
+        
+          if (Array.isArray(data.errors)) {
+            // Caso de errores de validación
+            errorMessage = data.errors.map(e => e.message).join("\n");
+          } else {
+            // Caso de error simple
+            errorMessage = data?.message || "Error del servidor";
+          }
+        
+          const customError = {
+            message: errorMessage,
+            statusCode,
+            raw: err,
+          };
+
+          console.log("API Error in useApiRequest:", customError);
+          setError(customError);
+          throw customError;
+        }
       } finally {
         setIsLoading(false);
       }

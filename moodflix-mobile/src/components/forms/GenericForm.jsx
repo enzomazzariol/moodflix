@@ -1,7 +1,7 @@
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 import SubmitBtn from "../commoms/SubmitBtn";
 import { CheckBoxIcon } from "../ui/icons";
@@ -14,7 +14,6 @@ export default function GenericForm({
   accountRoute,
   isLogin,
 }) {
-  const router = useRouter();
   const [formData, setFormData] = useState({});
 
   // Manejo de los cambios en los campos del formulario
@@ -22,10 +21,13 @@ export default function GenericForm({
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = () => {
-    router.replace("/(tabs)");
-    onSubmit(formData);
-  };
+  const handleSubmit = async (formData) => {
+    if(isLogin) {
+      await onSubmit(formData.emailOrUsername, formData.password);
+    } else {
+      await onSubmit(formData);
+    }
+  }
 
   return (
     <View style={{ width: wp("75%") }}>
@@ -36,14 +38,17 @@ export default function GenericForm({
               {field.label}
             </Text>
             <TextInput
-              className="p-3 font-outfitRegular text-lg text-floralWhite bg-prussianBlue rounded-lg mb-4"
+              className="font-outfitRegular text-xl text-floralWhite bg-prussianBlue rounded-lg mb-4 text-sla"
               placeholder={field.placeholder}
-              placeholderTextColor={colors.floralWhite}
+              placeholderTextColor={"#e2e8f0"}
               onChangeText={(value) => handleChange(field.name, value)}
               value={formData[field.name]}
               keyboardType={field.keyboardType}
               secureTextEntry={field.secureTextEntry}
               maxLength={100}
+              style={{
+                padding: hp("1.3%"),
+              }}
             />
           </View>
         );
@@ -72,15 +77,20 @@ export default function GenericForm({
                 <CheckBoxIcon size={14} color={colors.black} />
               )}
             </View>
-            <Text className="text-lg font-outfitBold text-floralWhite" 
-            allowFontScaling={false}>
+            <Text
+              className="text-base font-outfitBold text-floralWhite"
+              allowFontScaling={false}
+            >
               Recordarme
             </Text>
           </TouchableOpacity>
 
           <Link href={accountRoute} asChild replace>
             <TouchableOpacity activeOpacity={0.9}>
-              <Text className="text-lg font-outfitBold text-floralWhite" allowFontScaling={false}>
+              <Text
+                className="text-base font-outfitBold text-floralWhite"
+                allowFontScaling={false}
+              >
                 Olvide mi contraseña?
               </Text>
             </TouchableOpacity>
@@ -91,7 +101,7 @@ export default function GenericForm({
       )}
 
       <SubmitBtn
-        handleSubmit={handleSubmit}
+        handleSubmit={() => handleSubmit(formData)}
         bgColor="bg-richBlue"
         textColor="text-floralWhite"
       >

@@ -4,6 +4,7 @@ import com.moodflix.backend.config.JwtHelper;
 import com.moodflix.backend.dtos.LoginRequest;
 import com.moodflix.backend.dtos.LoginResponse;
 import com.moodflix.backend.dtos.SignupRequest;
+import com.moodflix.backend.exceptions.ApiResponse;
 import com.moodflix.backend.model.User;
 import com.moodflix.backend.service.UserService;
 import com.moodflix.backend.service.auth.AuthService;
@@ -27,9 +28,11 @@ public class AuthController {
     JwtHelper jwtHelper;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@Valid @RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signupRequest) {
         authService.signup(signupRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponse(HttpStatus.CREATED.value(), "Usuario creado exitosamente")
+        );
     }
 
     @PostMapping("/login")

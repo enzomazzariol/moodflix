@@ -6,10 +6,11 @@ import SubmitBtn from "../commoms/SubmitBtn";
 import GenericForm from "./GenericForm";
 
 export default function LoginForm({ onSubmit }) {
-const resetOnboarding = async () => {
-  await AsyncStorage.removeItem("hasSeenOnboarding");
-  console.log("Onboarding reseteado ✅");
-};
+  const resetOnboarding = async () => {
+    await AsyncStorage.removeItem("hasSeenOnboarding");
+    console.log("Onboarding reseteado ✅");
+  };
+
   return (
     <View className="flex-1 items-center justify-center pb-16">
       <Image
@@ -33,7 +34,7 @@ const resetOnboarding = async () => {
         fields={loginFields}
         onSubmit={onSubmit}
         buttonText="Login"
-        accountText="Don't have an account? Sign up"
+        accountText="Aún sin una cuenta? Regístrate"
         accountRoute="/signup"
         isLogin={true}
       />

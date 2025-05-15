@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Image, Modal, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
+import { useAuth } from "../../context/AuthContext";
 import { colors } from "../../utils/colors";
 import ProfilePicture from "../commoms/ProfilePicture";
 import { Title } from "../commoms/Title";
@@ -12,6 +13,7 @@ export default function CustomProfileHeader() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [profileImageVisible, setProfileImageVisible] = useState(false);
+  const { user } = useAuth();
 
   return (
     <View className="flex-col bg-raisinBlack" style={{ height: hp("29%") }}>
@@ -34,7 +36,7 @@ export default function CustomProfileHeader() {
             style={{ fontSize: 30, paddingVertical: hp("2%") }}
             maxFontSizeMultiplier={1.3}
           >
-            Enzo Mazzariol
+            {user?.username}
           </Title>
         </View>
 

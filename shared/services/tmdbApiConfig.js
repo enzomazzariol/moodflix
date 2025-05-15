@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Crear una variable de entorno para la API Key
-const API_KEY = process.env.EXPO_TMDB_API_KEY ?? ""; // añadir api harcodeada sino funciona el .env (solo para desarrollo)
+const API_KEY =
+  process.env.EXPO_TMDB_API_KEY ?? "a611b32cd1c6f2f99992b6aa4cf54f34"; // añadir api harcodeada sino funciona el .env (solo para desarrollo)
 const BASE_URL = "https://api.themoviedb.org/3";
 
 // Crear una instancia de axios con la configuración de la API

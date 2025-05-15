@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../../global.css";
+import { AuthProvider } from "../context/AuthContext";
 import { SearchProvider } from "../context/SearchContext";
 
 // web de la librería del async storage https://react-native-async-storage.github.io/async-storage/
@@ -15,7 +16,6 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const router = useRouter();
   const [isReady, setIsReady] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   const loadFonts = async () => {
@@ -36,26 +36,27 @@ export default function RootLayout() {
   useEffect(() => {
     const prepareApp = async () => {
       try {
-        // Cargar fuentes
         await loadFonts();
 
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        // Ver si ya hizo onboarding
         const hasSeenOnboarding = await AsyncStorage.getItem(
           "hasSeenOnboarding"
         );
+        const authToken = await AsyncStorage.getItem("authToken");
+        const rememberMe = await AsyncStorage.getItem("rememberMe");
 
-        // Ahora sí, cambiar de pantalla
         if (!hasSeenOnboarding) {
           router.replace("/(onboarding)/onboarding");
+        } else if (authToken && rememberMe === "true") {
+          router.replace("/(tabs)");
         } else {
-          router.replace("/(auth)/login"); // o "/(tabs)" si ya está logueado
+          router.replace("/(auth)/login");
         }
       } catch (error) {
         console.error("Error cargando la app", error);
       } finally {
-        setIsReady(true); // Siempre se ejecuta
+        setIsReady(true);
       }
     };
 
@@ -70,19 +71,24 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <SearchProvider>
-        <StatusBar style="auto" />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            animation: "slide_from_right",
-          }}
-        >
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
-        </Stack>
-      </SearchProvider>
+      <AuthProvider>
+        <SearchProvider>
+          <StatusBar style="auto" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              animation: "slide_from_right",
+            }}
+          >
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="(onboarding)"
+              options={{ headerShown: false }}
+            />
+          </Stack>
+        </SearchProvider>
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }

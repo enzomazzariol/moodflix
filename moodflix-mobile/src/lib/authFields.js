@@ -2,14 +2,14 @@ export const loginFields = [
   {
     name: "emailOrUsername",
     label: "Email o nombre de usuario",
-    placeholder: "enzomazzariol",
+    placeholder: "ejemplo123",
     secureTextEntry: false,
     keyboardType: "email-address",
   },
   {
     name: "password",
     label: "Contraseña",
-    placeholder: "my super secret password",
+    placeholder: "micontraseñasecreta",
     secureTextEntry: true,
     keyboardType: "default",
   },

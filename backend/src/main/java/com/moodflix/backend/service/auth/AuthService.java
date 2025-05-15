@@ -57,24 +57,33 @@ public class AuthService {
      * @return ResponseEntity<?> Contiene la respuesta al intento de autenticación.
      */
     public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
-        String user = loginRequest.emailOrUsername();
+        String username = loginRequest.emailOrUsername();
         if (!isLoginAllowed(loginRequest.emailOrUsername())) {
             return forbiddenResponse("Muchos intentos de login. Por favor intentalo más tarde.");
         }
         try {
             // Recuperar usuario
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             // Autenticar el usuario
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetails.getUsername(), loginRequest.password()));
+
             // Generar token JWT y crear sesión
             String token = jwtHelper.generateToken(userDetails.getUsername());
             createSession(userDetails.getUsername(), token);
+
             // registrar intento de login
-            registerLoginAttempt(user, true);
+            registerLoginAttempt(username, true);
+
             // limpiar intentos fallidos del usuario
-            loginAttemptRepository.clearFailedAttempts(user);
-            // devolvemos el usuario y el token generado
-            return ResponseEntity.ok(new LoginResponse(userDetails.getUsername(), token));
+            loginAttemptRepository.clearFailedAttempts(username);
+
+            // Buscar usuario en la bd
+            User user = userRepository.findByEmailOrUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + userDetails.getUsername()));
+
+            UserDTO userDTO = UserDTO.from(user);
+            // devolvemos el dto del usuario y el token generado
+            return ResponseEntity.ok(new LoginResponse(userDTO, token));
         } catch (UsernameNotFoundException e) {
             registerLoginAttempt(loginRequest.emailOrUsername(), false);
             return notFoundResponse("Usuario no existe: " + loginRequest.emailOrUsername());

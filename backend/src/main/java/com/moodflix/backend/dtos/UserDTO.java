@@ -1,5 +1,7 @@
 package com.moodflix.backend.dtos;
 
+import com.moodflix.backend.model.User;
+
 public class UserDTO {
 
     private int user_id;
@@ -15,6 +17,15 @@ public class UserDTO {
         this.username = username;
         this.email = email;
         this.avatar_url = avatar_url;
+    }
+
+    public static UserDTO from(User user) {
+        return new UserDTO(
+                user.getUser_id(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getAvatar_url()
+        );
     }
 
     public int getUser_id() {
