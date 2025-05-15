@@ -28,7 +28,6 @@ import MovieScreen from "../../components/screens/MovieScreen";
 import { BackArrowIcon, MoreIcon } from "../../components/ui/icons";
 import castMovie from "../../lib/mocks/castMovie.json";
 import mockMovies from "../../lib/mocks/movies.json";
-import streamingProviders from "../../lib/mocks/streamingProviders.json";
 import { colors } from "../../utils/colors";
 
 const { width } = Dimensions.get("window");
@@ -171,7 +170,7 @@ export default function Movie() {
           />
           <MovieGenresAndOverview
             movie={movieDetails}
-            streamingProviders={streamingProviders.results}
+            streamingProviders={movieDetails?.platforms}
           />
         </View>
 

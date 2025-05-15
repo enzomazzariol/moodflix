@@ -1,8 +1,8 @@
 // components/moviePage/MovieGenresAndOverview.tsx
 import { Pressable, Text, View } from "react-native";
 import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import ReviewSummaryCard from "./ReviewSummaryCard";
 import WhereToWatch from "./WhereToWatch";
@@ -47,7 +47,7 @@ export default function MovieGenresAndOverview({
       </Text>
 
       {/* Dónde ver */}
-      <WhereToWatch streamingProviders={streamingProviders.results} />
+      <WhereToWatch streamingProviders={streamingProviders} />
 
       {/* Resumen de reviews */}
       <ReviewSummaryCard
