@@ -3,6 +3,7 @@ import { useNavigation } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Animated,
   Dimensions,
@@ -42,6 +43,7 @@ const HEADER_IMAGE_HEIGHT = Dimensions.get("window").height / 2.7; // Altura de 
 const HEADER_MIN_HEIGHT = hp("12%"); // Altura mínima del header (10% de la pantalla)
 const OVERSCROLL_DISTANCE = 140; // Distancia de overscroll para el efecto de rebote
 
+// Verificar si las pelis tiene descripcion, generos, tagline etc - si no lo tienen no se muestra en la UI y evitar huecos en la pantalla
 export default function Movie() {
   const { id, title } = useLocalSearchParams();
   const { movie: movieDetails, isLoading, error } = useMovie(id);
@@ -99,9 +101,7 @@ export default function Movie() {
     return (
       <MovieScreen>
         <View className="flex-1 items-center justify-center">
-          <Text style={{ color: "white", textAlign: "center", marginTop: 50 }}>
-            Cargando película...
-          </Text>
+          <ActivityIndicator size="large" color={colors.floralWhite} />
         </View>
       </MovieScreen>
     );
@@ -261,8 +261,12 @@ export default function Movie() {
           {/* Contenedor de los géneros y la sinopsis */}
           <View className="flex-col" style={{ rowGap: hp("2%") }}>
             <View
-              className="flex-row "
-              style={{ columnGap: wp("3%"), paddingTop: hp("2%") }}
+              className="flex-row flex-wrap"
+              style={{
+                columnGap: wp("3%"),
+                paddingTop: hp("2%"),
+                rowGap: wp("4%"),
+              }}
             >
               {movieDetails?.genre?.map((genre) => (
                 <Pressable
@@ -275,9 +279,11 @@ export default function Movie() {
                 </Pressable>
               ))}
             </View>
-            <Text className="text-floralWhite text-base font-spaceGroteskRegular">
-              {movieDetails?.tagline.toUpperCase()}
-            </Text>
+            {movieDetails?.tagline ? (
+              <Text className="text-floralWhite text-base font-spaceGroteskRegular">
+                {movieDetails.tagline.toUpperCase()}
+              </Text>
+            ) : null}
 
             <Text className="text-floralWhite text-base font-spaceGroteskRegular shadow-lg">
               {movieDetails?.description}
