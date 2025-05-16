@@ -61,22 +61,25 @@ export default function WhereToWatch({ streamingProviders }) {
 
       <View className="flex-row items-end" style={{ columnGap: wp("2%") }}>
         {providersArray.length > 0 ? (
-          providersArray.map((provider, index) => {
+          providersArray.slice(0, 5).map((provider, index) => {
             const logo = providerLogos[provider];
             return logo ? (
               <Image
-                key={index}
+                key={`${provider}-${index}`}
                 source={{ uri: logo }}
                 style={{ width: wp("10%"), height: hp("5%") }}
                 className="rounded-lg"
                 resizeMode="contain"
               />
             ) : (
-              <Text className="text-slate-300 text-sm italic">
+              <Text
+                key={`${provider}-${index}`}
+                className="text-slate-300 text-sm italic"
+              >
                 No disponible
               </Text>
             );
-          }).slice(0, 5)
+          })
         ) : (
           <Text className="text-slate-300 text-sm italic">No disponible</Text>
         )}

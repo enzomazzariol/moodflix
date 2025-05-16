@@ -48,6 +48,18 @@ export const useMoodflix = () => {
     return data;
   };
 
+  const getMovieRating = async (movieId) => {
+    const data = await sendRequest({
+      url: `/rating/${movieId}`,
+      method: "GET",
+      params: {
+        movieId,
+      },
+    });
+
+    return data;
+  };
+
   const getRandomMovie = async ({
     genre,
     decade,
@@ -73,6 +85,7 @@ export const useMoodflix = () => {
     loginAuth,
     registerAuth,
     getRandomMovie,
+    getMovieRating,
     isLoading,
     data,
     error,

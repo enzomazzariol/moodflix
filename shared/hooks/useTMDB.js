@@ -91,12 +91,49 @@ export function useTMDB() {
     return data;
   };
 
+  const getCredits = async (movieId) => {
+    const data = await sendRequest({
+      url: `/movie/${movieId}/credits`,
+      method: "GET",
+    });
+
+    return data;
+  };
+
+  const getMovieDetails = async (movieId, language = "es-ES") => {
+    const data = await sendRequest({
+      url: `/movie/${movieId}`,
+      method: "GET",
+      params: {
+        language,
+      },
+    });
+
+    return data;
+  };
+
+  const getSimilarMovies = async (movieId, language = "es-ES", page = 1) => {
+    const data = await sendRequest({
+      url: `/movie/${movieId}/similar`,
+      method: "GET",
+      params: {
+        language,
+        page,
+      },
+    });
+
+    return data;
+  };
+
   return {
     getPopularMovies,
     getUpcomingMovies,
     getNowPlayingMovies,
     getTopRatedMovies,
     getMoviesByGenre,
+    getCredits,
+    getMovieDetails,
+    getSimilarMovies,
     isLoading,
     data,
     error,

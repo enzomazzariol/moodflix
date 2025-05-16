@@ -26,8 +26,6 @@ import MovieModal from "../../components/moviePage/MovieModal";
 import MovieTabsView from "../../components/moviePage/MovieTabsView";
 import MovieScreen from "../../components/screens/MovieScreen";
 import { BackArrowIcon, MoreIcon } from "../../components/ui/icons";
-import castMovie from "../../lib/mocks/castMovie.json";
-import mockMovies from "../../lib/mocks/movies.json";
 import { colors } from "../../utils/colors";
 
 const { width } = Dimensions.get("window");
@@ -37,7 +35,13 @@ const OVERSCROLL_DISTANCE = 140;
 
 export default function Movie() {
   const { id } = useLocalSearchParams();
-  const { movie: movieDetails, isLoading, error } = useMovie(id);
+  const {
+    movie: movieDetails,
+    credits,
+    similarMovies,
+    isLoading,
+    error,
+  } = useMovie(id);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -96,7 +100,7 @@ export default function Movie() {
         <View className="flex-1 items-center justify-center">
           <Text
             className="font-outfitBold text-3xl"
-            style={{ color: "red", textAlign: "center" }}
+            style={{ color: colors.jasper, textAlign: "center" }}
           >
             Error al cargar la película.
           </Text>
@@ -165,7 +169,7 @@ export default function Movie() {
         <View className="flex-col" style={{ paddingHorizontal: wp("5%") }}>
           <MovieDetails
             movie={movieDetails}
-            director={castMovie.crew.find((p) => p.job === "Director")}
+            director={credits?.crew.find((p) => p.job === "Director")}
             goToTrailer={goToTrailer}
           />
           <MovieGenresAndOverview
@@ -174,11 +178,17 @@ export default function Movie() {
           />
         </View>
 
-        <MovieTabsView />
+        <MovieTabsView movieId={id} credits={credits} />
 
-        <View className="flex-col">
+        <View className="flex-col" style={{ paddingTop: hp("3%") }}>
           <MoviesSlider
-            movies={mockMovies}
+            movies={similarMovies?.results?.map(
+              ({ id, poster_path, title }) => ({
+                id,
+                poster_path,
+                title,
+              })
+            )}
             title={"Películas similares"}
             flatlistStyles={{ paddingHorizontal: wp("5%") }}
             titleStyles={{ paddingLeft: wp("5%") }}
@@ -270,6 +280,6 @@ const styles = StyleSheet.create({
   scrollContainer: {
     paddingTop: HEADER_IMAGE_HEIGHT,
     minHeight: Dimensions.get("window").height,
-    paddingBottom: hp("10%"),
+    paddingBottom: hp("6%"),
   },
 });

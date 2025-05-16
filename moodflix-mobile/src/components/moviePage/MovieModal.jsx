@@ -92,7 +92,7 @@ export function ModalContent({ closeModal, movie }) {
   const links = [
     {
       title: "Ver trailer en Youtube",
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      url: movie?.trailer_url,
     },
     {
       title: "Hacer reseña",

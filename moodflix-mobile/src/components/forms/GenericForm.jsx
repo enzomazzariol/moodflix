@@ -23,7 +23,7 @@ export default function GenericForm({
 
   const handleSubmit = async (formData) => {
     if(isLogin) {
-      await onSubmit(formData.emailOrUsername, formData.password);
+      await onSubmit(formData.emailOrUsername, formData.password, formData.rememberMe);
     } else {
       await onSubmit(formData);
     }

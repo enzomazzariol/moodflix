@@ -1,37 +1,50 @@
-import { useMemo, useState } from "react";
-import { View } from "react-native";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import castMovie from "../../lib/mocks/castMovie.json";
+import React, { useCallback, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
+import { colors } from "../../utils/colors";
 import Tabs from "../commoms/Tabs";
 import MovieDetailsList from "./MovieDetailsList";
 import PeopleList from "./PeopleList";
 
-export default function MovieTabsView() {
-    const [index, setIndex] = useState(0);
+export default function MovieTabsView({ movieId, credits }) {
+  const [index, setIndex] = useState(0);
 
-    const TabContent = useMemo(() => {
-        switch (index) {
-            case 0:
-                return <PeopleList people={castMovie.cast} />;
-            case 1:
-                return <PeopleList people={castMovie.crew} isCasting={false} />;
-            case 2:
-                return <MovieDetailsList />;
-        }
-    }, [index]);
+  const handleTabChange = useCallback((newIndex) => {
+    setIndex(newIndex);
+  }, []);
 
+  if (!credits) {
     return (
-      <View className="flex-1">
-        <View style={{ paddingTop: hp("3%") }}>
-          <TabsController onChange={setIndex} current={index} />
-        </View>
-          {TabContent}
+      <View style={{ paddingVertical: hp("5%") }}>
+        <ActivityIndicator size={24} color={colors.floralWhite} />
       </View>
     );
+  }
+
+  return (
+    <View
+      style={{
+        marginTop: hp("3%"),
+      }}
+    >
+      <TabsController onChange={handleTabChange} current={index} />
+      {index === 0 && <PeopleList people={credits.cast} />}
+      {index === 1 && <PeopleList people={credits.crew} isCasting={false} />}
+      {index === 2 && <MovieDetailsList movieId={movieId} />}
+    </View>
+  );
 }
 
-function TabsController({ current, onChange }) {
-    return (
-        <Tabs current={current} onChange={onChange} items={['Cast', 'Crew', 'Detalles']} tabsWidth={wp("90%")} />
-    );
-}
+const TabsController = React.memo(({ current, onChange }) => {
+  return (
+    <Tabs
+      current={current}
+      onChange={onChange}
+      items={["Cast", "Crew", "Detalles"]}
+      tabsWidth={wp("90%")}
+    />
+  );
+});
