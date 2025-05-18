@@ -44,7 +44,6 @@ export default function Movie() {
     isLoading,
     error,
   } = useMovie(id);
-  console.log("movie rating object", movieRating);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;

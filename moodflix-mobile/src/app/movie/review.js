@@ -54,7 +54,6 @@ export default function Review() {
   // Parseamos movie y movieRating si existen
   const parsedMovie = movie ? JSON.parse(movie) : null;
   const parsedMovieRating = movieRating ? JSON.parse(movieRating) : null;
-  console.log(parsedMovieRating);
 
   // Abre el modal de reseña si se ha pasado el parámetro openModal
   useEffect(() => {

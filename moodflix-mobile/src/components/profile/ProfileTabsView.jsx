@@ -1,6 +1,10 @@
 import { useMemo, useState } from "react";
-import { View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { useAuth } from "../../context/AuthContext";
+import { useUserMoviesProfile } from "../../hooks/useUserMoviesProfile";
+import { colors } from "../../utils/colors";
+import SubmitBtn from "../commoms/SubmitBtn";
 import Tabs from "../commoms/Tabs";
 import Favoritos from "./Favoritos";
 import Vistas from "./Vistas";
@@ -8,19 +12,47 @@ import Watchlist from "./Watchlist";
 
 export default function ProfileTabsView() {
     const [index, setIndex] = useState(0);
+    const { user } = useAuth();
+    const { error, isLoading, userFavorites, userWatchedMovies, userWatchlist} = useUserMoviesProfile(user?.user_id);
 
     const TabContent = useMemo(() => {
         switch (index) {
             case 0:
-                return <Favoritos />;
+                return <Favoritos movies={userFavorites} />;
             case 1:
-                return <Vistas />;
+                return <Vistas movies={userWatchedMovies} />;
             case 2:
-                return <Watchlist />;
+                return <Watchlist movies={userWatchlist} />;
             default:
-                return <Favoritos />;
+                return <Favoritos movies={userFavorites} />;
         }
     }, [index]);
+
+    if (isLoading) {
+        return (
+            <View className="flex-1 items-center justify-center">
+                <ActivityIndicator size="large" color={colors.floralWhite} />
+            </View>
+        );
+    }
+
+    if (error) {
+        return (
+            <View className="flex-1 items-center justify-center gap-y-5">
+                <Text
+                    className="font-outfitBold text-3xl"
+                    style={{ color: colors.jasper, textAlign: "center" }}
+                >
+                    Error al cargar la película.
+                </Text>
+                <SubmitBtn>
+                    <Text className="text-xl font-outfitBold text-white">
+                        Volver a intentarlo
+                    </Text>
+                </SubmitBtn>
+            </View>
+        );
+    }
 
     return (
       <View className="flex-1">

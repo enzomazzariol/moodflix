@@ -60,12 +60,6 @@ public class UserMovieService {
     public ResponseEntity<?> getUserWatchedMovies(int userId) {
         try {
             List<HistoryUserMoviesDTO> userWatchedMovies = userMovieRepository.getUserWatchedMovies(userId);
-
-            if(userWatchedMovies.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ApiResponse(HttpStatus.NOT_FOUND.value(), "No hay películas vistas en tu historial"));
-            }
-
             logger.info("Retrieved watched movies for user {}: {}", userId, userWatchedMovies);
             return ResponseEntity.ok(userWatchedMovies);
         } catch (Exception e) {

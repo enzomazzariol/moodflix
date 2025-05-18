@@ -1,14 +1,12 @@
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import MockMovies from "../../lib/mocks/muchasMovies.json";
 import ListOfMovies from "../commoms/ListOfMovies";
 import EmptyMovies from "./EmptyMovies";
 
-export default function Vistas() {
-  const movies = MockMovies || [];
+export default function Vistas({ movies}) {
 
   return (
     <>
-      {movies.length > 0 ? (
+      {movies?.length > 0 ? (
         <ListOfMovies
           movies={movies}
           contentContainerStyle={{ paddingBottom: hp("6%") }}

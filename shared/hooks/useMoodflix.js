@@ -81,12 +81,40 @@ export const useMoodflix = () => {
     });
     return data;
   };
+
+  const getUserFavorites = async (userId) => {
+    const data = await sendRequest({
+      url: `/favorites/${userId}`,
+      method: "GET",
+    });
+    return data;
+  };
+
+  const getUserWatchlist = async (userId) => {
+    const data = await sendRequest({
+      url: `/users/${userId}/watchlist`,
+      method: "GET",
+    });
+    return data;
+  };
+
+  const getUserWatchedMovies = async (userId) => {
+    const data = await sendRequest({
+      url: `/user/${userId}/watched`,
+      method: "GET",
+    });
+    return data;
+  };
+
   return {
     getMovie,
     loginAuth,
     registerAuth,
     getRandomMovie,
     getMovieRating,
+    getUserFavorites,
+    getUserWatchlist,
+    getUserWatchedMovies,
     isLoading,
     data,
     error,
