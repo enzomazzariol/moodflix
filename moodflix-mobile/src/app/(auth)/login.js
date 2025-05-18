@@ -35,9 +35,6 @@ export default function Login() {
       }
     } catch (err) {
       Alert.alert("Error", err.message || "Ocurrió un error inesperado");
-
-      // DEBUG EXTRA:
-      console.log("Error completo:", JSON.stringify(err, null, 2));
     }
   };
 

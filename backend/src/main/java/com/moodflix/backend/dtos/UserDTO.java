@@ -19,6 +19,12 @@ public class UserDTO {
         this.avatar_url = avatar_url;
     }
 
+    public UserDTO(int user_id, String username, String email) {
+        this.user_id = user_id;
+        this.username = username;
+        this.email = email;
+    }
+
     public static UserDTO from(User user) {
         return new UserDTO(
                 user.getUser_id(),

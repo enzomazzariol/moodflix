@@ -24,7 +24,7 @@ export default function Randomizer() {
   });
   const router = useRouter();
 
-  const { getRandomMovie } = useMoodflix();
+  const { getRandomMovie, error, isLoading } = useMoodflix();
 
   const handleSubmit = async () => {
     const movies = await getRandomMovie(randomizerData);
@@ -109,8 +109,9 @@ export default function Randomizer() {
         height="6%"
         textStyles={"mt-1"}
         handleSubmit={handleSubmit}
+        disabled={isLoading}
       >
-        Randomizar
+        {isLoading ? "Cargando..." : "Randomizar"}
       </SubmitBtn>
     </TabsScreen>
   );

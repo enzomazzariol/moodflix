@@ -1,10 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useAuth } from "../../moodflix-mobile/src/context/AuthContext";
 import MOODFLIX_API_CONFIG from "../services/apiMoodflixConfig";
 import { useApiRequest } from "./useApiRequest";
 
 export const useMoodflix = () => {
-  const { setUser } = useAuth();
   const { sendRequest, isLoading, data, error } =
     useApiRequest(MOODFLIX_API_CONFIG);
 
@@ -17,8 +15,15 @@ export const useMoodflix = () => {
     return data;
   };
 
+  const getUserDetails = async () => {
+    const data = await sendRequest({
+      url: "/me",
+      method: "GET",
+    });
+    return data;
+  };
+
   const loginAuth = async (emailOrUsername, password) => {
-    console.log("campos en la request", emailOrUsername, password);
     const data = await sendRequest({
       url: "/auth/login",
       method: "POST",
@@ -30,7 +35,6 @@ export const useMoodflix = () => {
     if (data.token || data.refreshToken) {
       await AsyncStorage.setItem("authToken", data.token);
       await AsyncStorage.setItem("refreshToken", data.refreshToken);
-      setUser({ ...data });
     }
 
     return data;
@@ -115,6 +119,7 @@ export const useMoodflix = () => {
     getUserFavorites,
     getUserWatchlist,
     getUserWatchedMovies,
+    getUserDetails,
     isLoading,
     data,
     error,

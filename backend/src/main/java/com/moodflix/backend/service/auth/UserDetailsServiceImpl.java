@@ -1,6 +1,7 @@
 package com.moodflix.backend.service.auth;
 
 import com.moodflix.backend.exceptions.NotFoundException;
+import com.moodflix.backend.model.CustomUserDetails;
 import com.moodflix.backend.model.User;
 import com.moodflix.backend.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,10 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String identifier) {
         return userRepository.findByEmailOrUsername(identifier)
-                .map(user ->org.springframework.security.core.userdetails.User.builder()
-                        .username(user.getUsername())
-                        .password(user.getPassword())
-                        .build())
+                .map(user -> new CustomUserDetails(user))  // Aquí envuelves tu User en CustomUserDetails
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + identifier));
     }
 }
