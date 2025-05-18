@@ -10,6 +10,7 @@ import WhereToWatch from "./WhereToWatch";
 export default function MovieGenresAndOverview({
   movie,
   streamingProviders,
+  movieRating,
 }) {
   return (
     <View className="flex-col" style={{ rowGap: hp("2%") }}>
@@ -42,18 +43,19 @@ export default function MovieGenresAndOverview({
       ) : null}
 
       {/* Descripción */}
-      <Text className="text-floralWhite text-base font-spaceGroteskRegular shadow-lg">
-        {movie?.description}
-      </Text>
+      {movie?.description ? (
+        <Text className="text-floralWhite text-base font-spaceGroteskRegular shadow-lg">
+          {movie?.description}
+        </Text>
+      ) : null}
 
       {/* Dónde ver */}
       <WhereToWatch streamingProviders={streamingProviders} />
 
       {/* Resumen de reviews */}
       <ReviewSummaryCard
-        averageRating={"4.5"}
-        totalReviews={movie?.vote_count}
         movie={movie}
+        movieRating={movieRating}
       />
     </View>
   );

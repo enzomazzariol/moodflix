@@ -69,6 +69,7 @@ public class AuthService {
 
             // Generar token JWT y crear sesión
             String token = jwtHelper.generateToken(userDetails.getUsername());
+            String refreshToken = jwtHelper.generateRefreshToken(userDetails.getUsername());
             createSession(userDetails.getUsername(), token);
 
             // registrar intento de login
@@ -83,7 +84,7 @@ public class AuthService {
 
             UserDTO userDTO = UserDTO.from(user);
             // devolvemos el dto del usuario y el token generado
-            return ResponseEntity.ok(new LoginResponse(userDTO, token));
+            return ResponseEntity.ok(new LoginResponse(userDTO, token, refreshToken));
         } catch (UsernameNotFoundException e) {
             registerLoginAttempt(loginRequest.emailOrUsername(), false);
             return notFoundResponse("Usuario no existe: " + loginRequest.emailOrUsername());

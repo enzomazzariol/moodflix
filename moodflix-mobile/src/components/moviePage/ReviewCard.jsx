@@ -1,9 +1,17 @@
 import { Rating } from "@kolking/react-native-rating";
-import { Image, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Image, Pressable, Text, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 
 export default function ReviewCard({ review }) {
+  const router = useRouter();
+  const goToUserProfile = (id, username) => {
+    router.push({
+      pathname: "/userProfile/[id]",
+      params: { id, username },
+    });
+  };
   return (
     <View
       style={{
@@ -17,15 +25,24 @@ export default function ReviewCard({ review }) {
         style={{ paddingHorizontal: hp("2%"), paddingVertical: hp("1%") }}
       >
         <View className="flex-row items-center">
-          <Image
-            source={{ uri: review.avatar }}
-            className="w-10 h-10 rounded-full mr-3"
-          />
+          <Pressable onPress={() => goToUserProfile(review?.user?.user_id, review?.user?.username)}>
+            <Image
+              source={
+                review?.user?.avatar
+                  ? { uri: review.user.avatar }
+                  : require("../../../assets/william.png")
+              }
+              className="w-12 h-12 rounded-full mr-3"
+            />
+          </Pressable>
+
           <View>
             <Text className="text-white font-semibold text-lg">
-              {review.username}
+              {review?.user?.username}
             </Text>
-            <Text className="text-slate-400 text-xs">{review.date}</Text>
+            <Text className="text-slate-400 text-xs">
+              {review?.createdAt?.slice(0, 10)}
+            </Text>
           </View>
         </View>
 
@@ -43,7 +60,7 @@ export default function ReviewCard({ review }) {
         className="text-slate-300 text-base leading-relaxed"
         style={{ paddingHorizontal: hp("2%") }}
       >
-        {review.comment}
+        {review?.review}
       </Text>
     </View>
   );

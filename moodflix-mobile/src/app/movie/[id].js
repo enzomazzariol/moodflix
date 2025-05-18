@@ -18,6 +18,7 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { useMovie } from "../../../../shared/hooks/useMovie";
+import SubmitBtn from "../../components/commoms/SubmitBtn";
 import { Title } from "../../components/commoms/Title";
 import MoviesSlider from "../../components/home/MoviesSlider";
 import MovieDetails from "../../components/moviePage/MovieDetails";
@@ -39,9 +40,11 @@ export default function Movie() {
     movie: movieDetails,
     credits,
     similarMovies,
+    movieRating,
     isLoading,
     error,
   } = useMovie(id);
+  console.log("movie rating object", movieRating);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -97,13 +100,18 @@ export default function Movie() {
   if (error) {
     return (
       <MovieScreen>
-        <View className="flex-1 items-center justify-center">
+        <View className="flex-1 items-center justify-center gap-y-5">
           <Text
             className="font-outfitBold text-3xl"
             style={{ color: colors.jasper, textAlign: "center" }}
           >
             Error al cargar la película.
           </Text>
+          <SubmitBtn>
+            <Text className="text-xl font-outfitBold text-white">
+              Volver a intentarlo
+            </Text>
+          </SubmitBtn>
         </View>
       </MovieScreen>
     );
@@ -175,6 +183,7 @@ export default function Movie() {
           <MovieGenresAndOverview
             movie={movieDetails}
             streamingProviders={movieDetails?.platforms}
+            movieRating={movieRating}
           />
         </View>
 

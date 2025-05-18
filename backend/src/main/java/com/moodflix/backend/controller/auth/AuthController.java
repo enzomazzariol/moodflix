@@ -46,9 +46,10 @@ public class AuthController {
         if(jwtHelper.validateRefreshToken(refreshToken)) {
             String username = jwtHelper.extractUsername(refreshToken);
             String newAccessToken = jwtHelper.generateToken(username);
-            return ResponseEntity.ok(newAccessToken);
+            String newRefreshToken = jwtHelper.generateRefreshToken(username);
+            return ResponseEntity.ok(new LoginResponse(null, newAccessToken, newRefreshToken));
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Refresh token is expired or invalid");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Refresh token inválido o expirado");
         }
     }
 

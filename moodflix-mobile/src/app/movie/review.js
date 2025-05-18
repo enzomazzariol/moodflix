@@ -47,10 +47,14 @@ const mockReviews = [
 ];
 
 export default function Review() {
-  // const { id } = movie;
-  // Aquí iría la llamada a la API para obtener reseñas por película
-  const { openModal, movieId } = useLocalSearchParams();
+  const { movie, movieRating, openModal } = useLocalSearchParams();
+
   const [modalVisible, setModalVisible] = useState(false);
+
+  // Parseamos movie y movieRating si existen
+  const parsedMovie = movie ? JSON.parse(movie) : null;
+  const parsedMovieRating = movieRating ? JSON.parse(movieRating) : null;
+  console.log(parsedMovieRating);
 
   // Abre el modal de reseña si se ha pasado el parámetro openModal
   useEffect(() => {
@@ -62,13 +66,13 @@ export default function Review() {
       return () => clearTimeout(timeout);
     }
   }, [openModal]);
-
+  // SI NO HAY REVIEWS, MOSTAR UN MENSAJE
   return (
     <MovieScreen>
       <View className="flex-1">
         <FlatList
-          data={mockReviews}
-          keyExtractor={(item) => item.id}
+          data={parsedMovieRating.ratings}
+          keyExtractor={(item) => item.ratingId?.toString()}
           renderItem={({ item }) => <ReviewCard review={item} />}
         />
 
@@ -95,7 +99,7 @@ export default function Review() {
       <NewReviewModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        movieId={movieId}
+        movie={parsedMovie}
       />
     </MovieScreen>
   );

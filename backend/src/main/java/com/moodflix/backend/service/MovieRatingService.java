@@ -1,5 +1,6 @@
 package com.moodflix.backend.service;
 
+import com.moodflix.backend.dtos.MovieRatingResponse;
 import com.moodflix.backend.exceptions.ApiResponse;
 import com.moodflix.backend.model.Activity;
 import com.moodflix.backend.model.MovieRating;
@@ -13,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MovieRatingService {
@@ -96,7 +99,14 @@ public class MovieRatingService {
                 );
             }
 
-            List<MovieRating> ratings = movieRatingRepository.getMovieRatings(movieId);
+            // Recuperar ratings de las peliculas y la media
+            List<MovieRatingResponse> ratings = movieRatingRepository.getMovieRatings(movieId);
+            double averageRating = movieRatingRepository.getAverageRating(movieId);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("ratings", ratings);
+            response.put("averageRating", averageRating);
+
             if(ratings.isEmpty()) {
                 logger.info("No ratings found for movie {}", movieId);
                 return ResponseEntity.status(HttpStatus.OK).body(
@@ -105,7 +115,7 @@ public class MovieRatingService {
             }
 
             logger.info("Fetched {} ratings for movie {}", ratings.size(), movieId);
-            return ResponseEntity.ok(ratings);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.error("Failed to fetch ratings for movie {}", movieId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(

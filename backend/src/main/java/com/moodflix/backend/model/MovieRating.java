@@ -7,15 +7,17 @@ public class MovieRating {
     private int movie_id;
     private double rating;
     private String review;
+    private String created_at;
 
     public MovieRating() {}
 
-    public MovieRating(int rating_id, int user_id, int movie_id, double rating, String review) {
+    public MovieRating(int rating_id, int user_id, int movie_id, double rating, String review, String created_at) {
         this.rating_id = rating_id;
         this.user_id = user_id;
         this.movie_id = movie_id;
         this.rating = rating;
         this.review = review;
+        this.created_at = created_at;
     }
 
     public int getRating_id() {
@@ -56,5 +58,13 @@ public class MovieRating {
 
     public void setReview(String review) {
         this.review = review;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 }

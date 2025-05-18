@@ -1,5 +1,6 @@
 package com.moodflix.backend.repositories;
 
+import com.moodflix.backend.dtos.MovieRatingResponse;
 import com.moodflix.backend.exceptions.DatabaseException;
 import com.moodflix.backend.model.MovieRating;
 import org.slf4j.Logger;
@@ -26,7 +27,21 @@ public class MovieRatingRepository {
         rating_id = LAST_INSERT_ID(rating_id)
 """;
 
-    private static final String GET_MOVIE_RATINGS = "SELECT * FROM movie_ratings WHERE movie_id = :movie_id";
+    private static final String GET_MOVIE_RATINGS_WITH_USER = """
+    SELECT 
+        r.rating_id,
+        r.user_id,
+        r.movie_id,
+        r.rating,
+        r.review,
+        r.created_at,
+        u.username,
+        u.avatar_url
+    FROM movie_ratings r
+    JOIN users u ON r.user_id = u.user_id
+    WHERE r.movie_id = :movie_id
+    ORDER BY r.created_at DESC
+    """;
     private static final String GET_AVERAGE_RATING = "SELECT COALESCE(AVG(rating), 0) FROM movie_ratings WHERE movie_id = :movie_id";
     private static final String DELETE_USER_REVIEW = "DELETE FROM movie_ratings WHERE user_id = :user_id AND movie_id = :movie_id";
     private static final String CHECK_RATING_EXISTS = "SELECT COUNT(*) FROM movie_ratings WHERE user_id = :user_id AND movie_id = :movie_id";
@@ -77,15 +92,28 @@ public class MovieRatingRepository {
      * @return Lista de calificaciones
      * @throws DatabaseException Si ocurre un error en la base de datos
      */
-    public List<MovieRating> getMovieRatings(int movieId) {
+    public List<MovieRatingResponse> getMovieRatings(int movieId) {
         try {
-            return jdbcClient.sql(GET_MOVIE_RATINGS)
+            return jdbcClient.sql(GET_MOVIE_RATINGS_WITH_USER)
                     .param("movie_id", movieId)
-                    .query(MovieRating.class)
-                    .list();
+                    .query((rs, rowNum) -> {
+                        MovieRatingResponse.UserSummary user = new MovieRatingResponse.UserSummary(
+                                rs.getInt("user_id"),
+                                rs.getString("username"),
+                                rs.getString("avatar_url")
+                        );
+
+                        return new MovieRatingResponse(
+                                rs.getInt("rating_id"),
+                                rs.getDouble("rating"),
+                                rs.getString("review"),
+                                rs.getTimestamp("created_at").toLocalDateTime(),
+                                user
+                        );
+                    }).list();
         } catch (Exception e) {
-            logger.error("Failed to fetch ratings for movie {}", movieId, e);
-            throw new DatabaseException("Could not retrieve movie ratings");
+            logger.error("Failed to fetch enriched ratings for movie {}", movieId, e);
+            throw new DatabaseException("Could not retrieve movie ratings with user data");
         }
     }
 

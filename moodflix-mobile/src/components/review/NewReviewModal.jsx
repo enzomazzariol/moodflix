@@ -1,27 +1,26 @@
 import { Rating } from "@kolking/react-native-rating";
 import { useState } from "react";
 import {
-    ActionSheetIOS,
-    Alert,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActionSheetIOS,
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import movie from "../../lib/mocks/movieDetails.json";
 import { colors } from "../../utils/colors";
 import { Title } from "../commoms/Title";
 import PosterMovieDownload from "../moviePage/PosterMovieDownload";
 
-export default function NewReviewModal({ visible, onClose, movieId }) {
+export default function NewReviewModal({ visible, onClose, movie }) {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
 
@@ -53,7 +52,7 @@ export default function NewReviewModal({ visible, onClose, movieId }) {
               keyboardShouldPersistTaps="handled"
             >
               <ModalContent
-                movieId={movieId}
+                movie={movie}
                 rating={rating}
                 handleRating={handleRating}
                 review={review}
@@ -98,7 +97,7 @@ function ModalHeader({ title, onClose, review, handleReview }) {
   );
 }
 
-function ModalContent({ movieId, rating, handleRating, review, handleReview }) {
+function ModalContent({ movie, rating, handleRating, review, handleReview }) {
   return (
     <>
       <View
@@ -106,8 +105,8 @@ function ModalContent({ movieId, rating, handleRating, review, handleReview }) {
         style={{ padding: hp("2%"), columnGap: hp("1%") }}
       >
         <PosterMovieDownload
-          idMovie={movie.id}
-          posterPath={movie.poster_path}
+          idMovie={movie?.id_movie}
+          posterPath={movie?.poster_url}
           title={movie.title}
           posterHeight={hp("12%")}
           posterWidth={wp("16%")}
@@ -117,10 +116,10 @@ function ModalContent({ movieId, rating, handleRating, review, handleReview }) {
             className="text-2xl text-jasper font-spaceGroteskBold"
             maxFontSizeMultiplier={1.3}
           >
-            {movie.title}
+            {movie?.title}
           </Text>
           <Text className="text-floralWhite text-lg font-spaceGroteskRegular">
-            {movie.release_date.slice(0, 4)}
+            {movie?.release_date.slice(0, 4)}
           </Text>
         </View>
       </View>

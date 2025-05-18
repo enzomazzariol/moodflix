@@ -27,8 +27,9 @@ export const useMoodflix = () => {
         password,
       },
     });
-    if (data.token) {
+    if (data.token || data.refreshToken) {
       await AsyncStorage.setItem("authToken", data.token);
+      await AsyncStorage.setItem("refreshToken", data.refreshToken);
       setUser({ ...data });
     }
 

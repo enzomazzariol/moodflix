@@ -1,16 +1,20 @@
 import { Rating } from "@kolking/react-native-rating";
 import { useRouter } from "expo-router";
+import { Plus } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 
-export default function ReviewSummaryCard({ averageRating, totalReviews, movie }) {
+export default function ReviewSummaryCard({ movie, movieRating }) {
   const route = useRouter();
+  const totalReviews = movieRating?.ratings?.length ?? 0;
+  const averageRating = movieRating?.averageRating ?? 0;
 
+  
   const handleNavigation = () => {
     route.push({
       pathname: "/movie/review",
-      params: { movieId: movie.id },
+      params: { movie: JSON.stringify(movie), movieRating: JSON.stringify(movieRating) },
     })
   };
 
@@ -20,6 +24,7 @@ export default function ReviewSummaryCard({ averageRating, totalReviews, movie }
         <Text className="text-slate-100 text-lg font-spaceGroteskBold">
           Reseñas
         </Text>
+        <View className="flex-row items-center" style={{ columnGap: hp("1%") }}>
         <TouchableOpacity
           className="bg-richBlue rounded-e-xl rounded-s-xl"
           style={{ padding: hp("0.8%"), paddingHorizontal: hp("2%") }}
@@ -29,6 +34,14 @@ export default function ReviewSummaryCard({ averageRating, totalReviews, movie }
             Ver todas
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          className="bg-richBlue rounded-e-xl rounded-s-xl"
+          style={{paddingHorizontal: hp("0.7%"), paddingVertical: hp("0.4%")}}
+          onPress={handleNavigation}
+        >
+          <Plus size={24} color={colors.jasper} />
+        </TouchableOpacity>
+        </View>
       </View>
 
       <View className="flex-row items-center justify-between">
@@ -42,21 +55,15 @@ export default function ReviewSummaryCard({ averageRating, totalReviews, movie }
             fillColor={colors.jasper}
           />
           <Text className="text-slate-400 text-lg font-bold">
-            {totalReviews > 0 ? averageRating : "N/A"} / 5
+            {totalReviews > 0 ? averageRating : "0"} / 5
           </Text>
         </View>
-        <Text className="text-slate-400">{totalReviews} reseñas</Text>
+        {totalReviews > 1 ? (
+          <Text className="text-slate-400">{totalReviews} reseñas</Text>
+        ) : (
+          <Text className="text-slate-400">{totalReviews} reseña</Text>
+        )}
       </View>
-{/* BOTON DESACTIVADO
-      <TouchableOpacity
-        onPress={() => navigation.navigate("WriteReviewScreen")}
-        className="mt-4 bg-jasper/80 rounded-xl py-2 px-4"
-      >
-        <Text className="text-white text-center font-spaceGroteskBold">
-          Escribir una reseña
-        </Text>
-      </TouchableOpacity>
-*/}
     </View>
   );
 }
