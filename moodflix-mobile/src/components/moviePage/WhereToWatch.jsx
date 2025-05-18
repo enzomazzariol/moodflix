@@ -37,6 +37,9 @@ const providerLogos = {
     "https://image.tmdb.org/t/p/w92/yFrZVSC4UnDpeIzX2svcRPgV5P5.jpg",
   "Max  Originals Amazon Channel":
     "https://image.tmdb.org/t/p/w92/2aOYyNzcLZtd1ooN6K9dWFQU9GN.jpg",
+  Filmin: "https://image.tmdb.org/t/p/w92/kO2SWXvDCHAquaUuTJBuZkTBAuU.jpg",
+  "Filmin Plus":
+    "https://image.tmdb.org/t/p/w92/ozZU2vSlyL11rFGEkq1HE0yxIJq.jpg",
 };
 
 export default function WhereToWatch({ streamingProviders }) {

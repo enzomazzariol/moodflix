@@ -190,13 +190,7 @@ export default function Movie() {
 
         <View className="flex-col" style={{ paddingTop: hp("3%") }}>
           <MoviesSlider
-            movies={similarMovies?.results?.map(
-              ({ id, poster_path, title }) => ({
-                id,
-                poster_path,
-                title,
-              })
-            )}
+            movies={similarMovies?.results}
             title={"Películas similares"}
             flatlistStyles={{ paddingHorizontal: wp("5%") }}
             titleStyles={{ paddingLeft: wp("5%") }}

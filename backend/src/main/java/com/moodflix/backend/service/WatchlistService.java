@@ -12,17 +12,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WatchlistService {
     private static final Logger logger = LoggerFactory.getLogger(WatchlistService.class);
 
-    @Autowired
-    private WatchlistRepository watchlistRepository;
+    private final WatchlistRepository watchlistRepository;
+    private final MovieRepository movieRepository;
+    private final TmdbApiService tmdbApiService;
 
     @Autowired
-    MovieRepository movieRepository;
+    public WatchlistService(WatchlistRepository watchlistRepository, MovieRepository movieRepository, TmdbApiService tmdbApiService) {
+        this.watchlistRepository = watchlistRepository;
+        this.movieRepository = movieRepository;
+        this.tmdbApiService = tmdbApiService;
+    }
 
 
     public ResponseEntity<?> getWatchlist(int userId) {
@@ -46,6 +53,12 @@ public class WatchlistService {
             if(watchlistRepository.existsInWatchlist(userId, movieId)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "La película ya está en tu watchlist"));
+            }
+
+            Optional<Movie> movie = movieRepository.findById(movieId);
+            if(movie.isEmpty()) {
+                Movie newMovie = tmdbApiService.fetchMovieFromTmdb(movieId);
+                movieRepository.saveMovie(newMovie);
             }
 
             watchlistRepository.addToWatchlist(userId, movieId);

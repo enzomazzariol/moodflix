@@ -3,7 +3,6 @@ import ListOfMovies from "../commoms/ListOfMovies";
 import EmptyMovies from "./EmptyMovies";
 
 export default function Vistas({ movies}) {
-
   return (
     <>
       {movies?.length > 0 ? (

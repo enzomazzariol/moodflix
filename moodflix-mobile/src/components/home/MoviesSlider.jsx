@@ -14,12 +14,12 @@ export default function MoviesSlider({ title, movies, posterHeight, posterWidth,
         <Title className={`font-spaceGroteskRegular`} style={{ ...titleStyles, fontSize: hp("2.5%") }}>{title}</Title>
         <FlatList
           data={movies}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id ?? item.movie_id}
           renderItem={({ item }) => (
             <PosterMovie
-              posterPath={item.poster_path}
+              posterPath={item.poster_path ?? item.poster_url}
               title={item.title}
-              idMovie={item.id}
+              idMovie={item.id ?? item.movie_id}
               posterHeight={posterHeight || hp("18%")}
               posterWidth={posterWidth || wp("24%")}
               accessibilityLabel={`Ver película: ${item.title}`}

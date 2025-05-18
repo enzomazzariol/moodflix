@@ -12,29 +12,28 @@ export function useUserMoviesProfile(userId) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const fetchUserMovies = async () => {
     if (!userId) return;
+    setIsLoading(true);
+    setError(null);
 
-    const fetchUserMovies = async () => {
-      setIsLoading(true);
-      setError(null);
+    try {
+      const [favorites, watchlist, watched] = await Promise.all([
+        getUserFavorites(userId),
+        getUserWatchlist(userId),
+        getUserWatchedMovies(userId),
+      ]);
+      setUserFavorites(favorites);
+      setUserWatchlist(watchlist);
+      setUserWatchedMovies(watched);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-      try {
-        const [favorites, watchlist, watched] = await Promise.all([
-          getUserFavorites(userId),
-          getUserWatchlist(userId),
-          getUserWatchedMovies(userId),
-        ]);
-        setUserFavorites(favorites);
-        setUserWatchlist(watchlist);
-        setUserWatchedMovies(watched);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
+  useEffect(() => {
     fetchUserMovies();
   }, [userId]);
 
@@ -44,5 +43,6 @@ export function useUserMoviesProfile(userId) {
     userWatchedMovies,
     isLoading,
     error,
+    refetchUserMovies: fetchUserMovies,
   };
 }

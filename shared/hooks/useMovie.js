@@ -21,20 +21,23 @@ export function useMovie(movieId) {
       setError(null);
 
       try {
+        // Fase 1: Obtener (o insertar si no existe) la película en tu backend
+        const movieData = await getMovie(movieId);
+        setMovie(movieData);
+
+        // Fase 2: Obtener el resto de datos
         const [
-          movieData,
           creditsData,
           movieDetailsData,
           similarMoviesData,
           movieRatingData,
         ] = await Promise.all([
-          getMovie(movieId),
           getCredits(movieId),
           getMovieDetails(movieId),
           getSimilarMovies(movieId),
           getMovieRating(movieId),
         ]);
-        setMovie(movieData);
+
         setCredits(creditsData);
         setMovieDetails(movieDetailsData);
         setSimilarMovies(similarMoviesData);

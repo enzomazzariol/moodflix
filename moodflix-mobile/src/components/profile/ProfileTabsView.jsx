@@ -26,7 +26,7 @@ export default function ProfileTabsView() {
             default:
                 return <Favoritos movies={userFavorites} />;
         }
-    }, [index]);
+    }, [index, userFavorites, userWatchedMovies, userWatchlist]);
 
     if (isLoading) {
         return (
