@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useMoodflix } from "../../../shared/hooks/useMoodflix";
 
 // Puedes pasar el userId como parámetro o usar un hook de auth si lo tienes
-export function useUserMoviesProfile(userId) {
+export function useUserMoviesProfile(userId, reloadTrigger = 0) {
   const { getUserFavorites, getUserWatchlist, getUserWatchedMovies } =
     useMoodflix();
 
@@ -27,6 +27,7 @@ export function useUserMoviesProfile(userId) {
       setUserWatchlist(watchlist);
       setUserWatchedMovies(watched);
     } catch (err) {
+      console.log("Error al obtener usuario movies:", err);
       setError(err);
     } finally {
       setIsLoading(false);
@@ -34,8 +35,9 @@ export function useUserMoviesProfile(userId) {
   };
 
   useEffect(() => {
+    if (!userId) return;
     fetchUserMovies();
-  }, [userId]);
+  }, [userId, reloadTrigger]);
 
   return {
     userFavorites,

@@ -1,10 +1,11 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { Linking, Modal, Pressable, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Linking, Modal, Pressable, ScrollView, Text, View } from "react-native";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import { useMovieStatus } from "../../../../shared/hooks/useMovieStatus";
+import { useAuth } from "../../context/AuthContext";
 import { colors } from "../../utils/colors";
 import { Title } from "../commoms/Title";
 import { ToggleIconButton } from "../commoms/ToggleIconButton";
@@ -69,16 +70,24 @@ function ModalHeader({ title, onClose }) {
 }
 
 export function ModalContent({ closeModal, movie }) {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isViewed, setIsViewed] = useState(false);
-  const [isInWatchlist, setIsInWatchlist] = useState(false);
+  const { user } = useAuth();
   const router = useRouter();
+
+  const {
+    isFavorite,
+    isViewed,
+    isInWatchlist,
+    toggleFavorite,
+    toggleViewed,
+    toggleWatchlist,
+    isLoading
+  } = useMovieStatus(user?.user_id, movie?.movie_id);
 
   const handleLinkNavigation = (link) => {
     if (link.url.startsWith("http")) {
       Linking.openURL(link.url);
     } else {
-      closeModal(); // Cierra el modal si quieres antes de navegar
+      closeModal();
       router.push({
         pathname: link.url,
         params: { 
@@ -112,6 +121,14 @@ export function ModalContent({ closeModal, movie }) {
     },
   ];
 
+  if (isLoading) {
+    return (
+      <View className="items-center justify-center flex-1">
+        <ActivityIndicator size="large" color={colors.floralWhite} />
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <View
@@ -125,7 +142,7 @@ export function ModalContent({ closeModal, movie }) {
       >
         <ToggleIconButton
           isActive={isFavorite}
-          onPress={() => setIsFavorite(!isFavorite)}
+          onPress={() => toggleFavorite(user?.user_id, movie?.movie_id)}
           ActiveIcon={HeartFillIcon}
           InactiveIcon={HeartOutlineIcon}
           label="Favoritos"
@@ -134,7 +151,7 @@ export function ModalContent({ closeModal, movie }) {
         />
         <ToggleIconButton
           isActive={isViewed}
-          onPress={() => setIsViewed(!isViewed)}
+          onPress={() => toggleViewed(user?.user_id, movie?.movie_id)}
           ActiveIcon={EyeIconFill}
           InactiveIcon={EyeIconOutline}
           label="Vista"
@@ -143,7 +160,7 @@ export function ModalContent({ closeModal, movie }) {
         />
         <ToggleIconButton
           isActive={isInWatchlist}
-          onPress={() => setIsInWatchlist(!isInWatchlist)}
+          onPress={() => toggleWatchlist(user?.user_id, movie?.movie_id)}
           ActiveIcon={WatchlistFillIcon}
           InactiveIcon={WatchlistOutlineIcon}
           label="Watchlist"

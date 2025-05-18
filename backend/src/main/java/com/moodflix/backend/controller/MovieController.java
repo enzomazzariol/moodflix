@@ -1,9 +1,14 @@
 package com.moodflix.backend.controller;
 
 import com.moodflix.backend.dtos.EmotionRequest;
+import com.moodflix.backend.dtos.MovieStatusDTO;
+import com.moodflix.backend.dtos.MovieStatusUpdateDTO;
 import com.moodflix.backend.exceptions.ApiResponse;
 import com.moodflix.backend.model.Emotion;
 import com.moodflix.backend.model.Movie;
+import com.moodflix.backend.repositories.UserFavoritesRepository;
+import com.moodflix.backend.repositories.UserMovieRepository;
+import com.moodflix.backend.repositories.WatchlistRepository;
 import com.moodflix.backend.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +24,15 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
+    @Autowired
+    private UserFavoritesRepository userFavoritesRepository;
+
+    @Autowired
+    private UserMovieRepository userMovieRepository;
+
+    @Autowired
+    private WatchlistRepository watchlistRepository;
+
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovie(@PathVariable int id) {
         Movie movie = movieService.getOrFetchMovie(id);
@@ -33,5 +47,49 @@ public class MovieController {
     @GetMapping("/emotion/{emotion_name}")
     public ResponseEntity<?> getMoviesByEmotion(@PathVariable String emotion_name) {
         return movieService.getMoviesByEmotion(emotion_name);
+    }
+
+    @GetMapping("/status/{userId}/{movieId}")
+    public ResponseEntity<MovieStatusDTO> getMovieStatus(
+            @PathVariable int userId,
+            @PathVariable int movieId){
+        boolean isFav = userFavoritesRepository.isFavorite(userId, movieId);
+        boolean isViewed = userMovieRepository.hasUserWatchedMovie(userId, movieId);
+        boolean isInWatchlist = watchlistRepository.existsInWatchlist(userId, movieId);
+
+        MovieStatusDTO status = new MovieStatusDTO(isFav, isViewed, isInWatchlist);
+        return ResponseEntity.ok(status);
+    }
+
+    @PatchMapping("/status")
+    public ResponseEntity<Void> updateMovieStatus(@RequestBody MovieStatusUpdateDTO dto) {
+        int userId = dto.userId();
+        int movieId = dto.movieId();
+
+        if (dto.favorite() != null) {
+            if (dto.favorite()) {
+                userFavoritesRepository.addFavorite(userId, movieId);
+            } else {
+                userFavoritesRepository.removeFavorite(userId, movieId);
+            }
+        }
+
+        if (dto.viewed() != null) {
+            if (dto.viewed()) {
+                userMovieRepository.setWatched(userId, movieId, true);
+            } else {
+                userMovieRepository.setWatched(userId, movieId, false);
+            }
+        }
+
+        if (dto.inWatchlist() != null) {
+            if (dto.inWatchlist()) {
+                watchlistRepository.addToWatchlist(userId, movieId);
+            } else {
+                watchlistRepository.removeFromWatchlist(userId, movieId);
+            }
+        }
+
+        return ResponseEntity.noContent().build();
     }
 }

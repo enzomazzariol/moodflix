@@ -1,14 +1,18 @@
 package com.moodflix.backend.service;
 
+import com.moodflix.backend.dtos.FavoriteMovieRequest;
+import com.moodflix.backend.dtos.MovieStatusDTO;
 import com.moodflix.backend.exceptions.ApiResponse;
 import com.moodflix.backend.model.Emotion;
 import com.moodflix.backend.model.Movie;
-import com.moodflix.backend.repositories.EmotionRepository;
-import com.moodflix.backend.repositories.MovieRepository;
+import com.moodflix.backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;

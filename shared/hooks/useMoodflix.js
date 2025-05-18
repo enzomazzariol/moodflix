@@ -86,6 +86,36 @@ export const useMoodflix = () => {
     return data;
   };
 
+  const getMovieStatus = async (userId, movieId) => {
+    const data = await sendRequest({
+      url: `/movies/status/${userId}/${movieId}`,
+      method: "GET",
+    });
+
+    return data;
+  };
+
+  const updateMovieStatus = async (
+    userId,
+    movieId,
+    favorite,
+    viewed,
+    inWatchlist
+  ) => {
+    const data = await sendRequest({
+      url: `/movies/status`,
+      method: "PATCH",
+      data: {
+        userId,
+        movieId,
+        favorite,
+        viewed,
+        inWatchlist,
+      },
+    });
+    return data;
+  };
+
   const getUserFavorites = async (userId) => {
     const data = await sendRequest({
       url: `/favorites/${userId}`,
@@ -116,10 +146,12 @@ export const useMoodflix = () => {
     registerAuth,
     getRandomMovie,
     getMovieRating,
+    getUserDetails,
+    updateMovieStatus,
+    getMovieStatus,
     getUserFavorites,
     getUserWatchlist,
     getUserWatchedMovies,
-    getUserDetails,
     isLoading,
     data,
     error,
