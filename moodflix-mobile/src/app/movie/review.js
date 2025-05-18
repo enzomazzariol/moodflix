@@ -1,50 +1,12 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, View } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import ReviewCard from "../../components/moviePage/ReviewCard";
 import NewReviewModal from "../../components/review/NewReviewModal";
 import MovieScreen from "../../components/screens/MovieScreen";
 import { PlusIcon } from "../../components/ui/icons";
 import { colors } from "../../utils/colors";
-
-const mockReviews = [
-  {
-    id: "1",
-    username: "Carlos M.",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    rating: 4.5,
-    date: "2025-04-30",
-    comment:
-      "Una película inolvidable. Las actuaciones, la dirección y el guion fueron impecables.",
-  },
-  {
-    id: "2",
-    username: "Laura G.",
-    avatar: "https://randomuser.me/api/portraits/women/45.jpg",
-    rating: 5,
-    date: "2025-04-28",
-    comment:
-      "Me hizo llorar. De mis favoritas de todos los tiempos, la recomiendo al 100%.",
-  },
-  {
-    id: "3",
-    username: "Javi R.",
-    avatar: "https://randomuser.me/api/portraits/men/65.jpg",
-    rating: 3.5,
-    date: "2025-04-25",
-    comment: "Buena, pero algo lenta en la mitad. Gran final, eso sí.",
-  },
-  {
-    id: "4",
-    username: "Ana P.",
-    avatar: "https://randomuser.me/api/portraits/women/12.jpg",
-    rating: 4,
-    date: "2025-04-22",
-    comment:
-      "Visualmente increíble. Un viaje emocional con personajes muy bien construidos.",
-  },
-];
 
 export default function Review() {
   const { movie, movieRating, openModal } = useLocalSearchParams();
@@ -65,15 +27,23 @@ export default function Review() {
       return () => clearTimeout(timeout);
     }
   }, [openModal]);
-  // SI NO HAY REVIEWS, MOSTAR UN MENSAJE
+
   return (
     <MovieScreen>
       <View className="flex-1">
-        <FlatList
-          data={parsedMovieRating.ratings}
-          keyExtractor={(item) => item.ratingId?.toString()}
-          renderItem={({ item }) => <ReviewCard review={item} />}
-        />
+        {parsedMovieRating?.ratings?.length > 0 ? (
+          <FlatList
+            data={parsedMovieRating?.ratings}
+            keyExtractor={(item) => item.ratingId?.toString()}
+            renderItem={({ item }) => <ReviewCard review={item} />}
+          />
+        ) : (
+          <View className="flex-1 items-center justify-center">
+            <Text className="font-spaceGroteskBold text-3xl text-floralWhite w-60 text-center">
+              No hay reseñas para este película.
+            </Text>
+          </View>
+        )}
 
         <Pressable
           onPress={() => setModalVisible(true)}

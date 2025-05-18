@@ -52,7 +52,7 @@ export default function MovieModal({ movie, visible, closeModal }) {
   );
 }
 
-function ModalHeader({ title, onClose }) {
+function ModalHeader({ title }) {
   return (
     <View
       className="flex-row items-center justify-center"
@@ -91,7 +91,7 @@ export function ModalContent({ closeModal, movie }) {
       router.push({
         pathname: link.url,
         params: { 
-          movieId: movie?.id,
+          movie: JSON.stringify(movie),
           openModal: "true"
          },
       })

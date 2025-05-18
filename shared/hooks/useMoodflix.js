@@ -140,6 +140,21 @@ export const useMoodflix = () => {
     return data;
   };
 
+  const rateMovie = async (userId, movieId, rating, review) => {
+    const data = await sendRequest({
+      url: `/rating`,
+      method: "POST",
+      data: {
+        userId,
+        movieId,
+        rating,
+        review,
+      },
+    });
+
+    return data;
+  };
+
   return {
     getMovie,
     loginAuth,
@@ -152,6 +167,7 @@ export const useMoodflix = () => {
     getUserFavorites,
     getUserWatchlist,
     getUserWatchedMovies,
+    rateMovie,
     isLoading,
     data,
     error,

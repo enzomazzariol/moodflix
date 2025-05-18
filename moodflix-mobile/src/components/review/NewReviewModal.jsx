@@ -16,6 +16,8 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import { useMoodflix } from "../../../../shared/hooks/useMoodflix";
+import { useAuth } from "../../context/AuthContext";
 import { colors } from "../../utils/colors";
 import { Title } from "../commoms/Title";
 import PosterMovieDownload from "../moviePage/PosterMovieDownload";
@@ -23,6 +25,9 @@ import PosterMovieDownload from "../moviePage/PosterMovieDownload";
 export default function NewReviewModal({ visible, onClose, movie }) {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
+  const { user } = useAuth();
+
+  const { rateMovie } = useMoodflix();
 
   const handleRating = (val) => {
     setRating(val);
@@ -31,6 +36,12 @@ export default function NewReviewModal({ visible, onClose, movie }) {
   const handleReview = (val) => {
     setReview(val);
   };
+
+  const handleReviewSubmit = async () => {
+    if(rating === 0 || review.length === 0) return;
+    await rateMovie(user?.user_id, movie?.movie_id, rating, review);
+    onClose();
+  }
 
   return (
     <>
@@ -42,7 +53,7 @@ export default function NewReviewModal({ visible, onClose, movie }) {
         onRequestClose={onClose}
       >
         <View className="bg-raisinBlack" style={{ height: hp("100%") }}>
-          <ModalHeader title={"Añadir reseña"} onClose={onClose} review={review} handleReview={handleReview} />
+          <ModalHeader title={"Añadir reseña"} onClose={onClose} review={review} handleReview={handleReview} handleReviewSubmit={handleReviewSubmit} />
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={{ flex: 1 }}
@@ -66,7 +77,7 @@ export default function NewReviewModal({ visible, onClose, movie }) {
   );
 }
 
-function ModalHeader({ title, onClose, review, handleReview }) {
+function ModalHeader({ title, onClose, review, handleReview, handleReviewSubmit }) {
   return (
     <View
       className="flex-row items-center justify-between"
@@ -87,7 +98,7 @@ function ModalHeader({ title, onClose, review, handleReview }) {
       <Title className="">{title}</Title>
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => console.log("Subir")}
+        onPress={handleReviewSubmit}
       >
         <Text className="font-spaceGroteskBold text-xl text-green-500">
           Subir
@@ -97,7 +108,13 @@ function ModalHeader({ title, onClose, review, handleReview }) {
   );
 }
 
-function ModalContent({ movie, rating, handleRating, review, handleReview }) {
+function ModalContent({
+  movie,
+  rating,
+  handleRating,
+  review,
+  handleReview,
+}) {
   return (
     <>
       <View
@@ -154,7 +171,7 @@ function ModalContent({ movie, rating, handleRating, review, handleReview }) {
         <View style={{ paddingHorizontal: hp("2%") }}>
           <TextInput
             multiline
-            numberOfLines={8} 
+            numberOfLines={8}
             textAlignVertical="top"
             placeholder="Escribe tu reseña"
             placeholderTextColor="#ccc"
