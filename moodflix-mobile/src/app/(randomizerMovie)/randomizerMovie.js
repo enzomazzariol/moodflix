@@ -1,24 +1,32 @@
 import { Skeleton } from "@rneui/themed";
-import { useLocalSearchParams, useRouter } from "expo-router/build/hooks";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import { useMoodflix } from "../../../../shared/hooks/useMoodflix";
 import SubmitBtn from "../../components/commoms/SubmitBtn";
 import { Title } from "../../components/commoms/Title";
 import RandomizerMovieScreen from "../../components/screens/RandomizerMovieScreen";
 
 export default function RandomizerMovie() {
   const router = useRouter();
-  const { movies = [], randomizerData } = useLocalSearchParams();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const parsedMovies = JSON.parse(movies);
-  const movie = parsedMovies[currentIndex] || {}; // Obtener el objeto del movie actual
-  const pathPoster = `https://image.tmdb.org/t/p/original`;
-
+  const {
+    movie = "{}",
+    randomizerData = "{}",
+    index = "0",
+  } = useLocalSearchParams();
+  const parsedRandomizerData = JSON.parse(randomizerData);
+  console.log("parsedRandomizerData", parsedRandomizerData);
+  const initialMovie = JSON.parse(movie);
+  const [currentIndex, setCurrentIndex] = useState(parseInt(index, 10));
+  const [currentMovie, setCurrentMovie] = useState(initialMovie);
   const [isLoading, setIsLoading] = useState(true);
+  const { getRandomMovie, isLoading: loadingRandom } = useMoodflix();
+
+  const pathPoster = `https://image.tmdb.org/t/p/original`;
 
   const handleBackNavigation = () => {
     router.back();
@@ -28,10 +36,18 @@ export default function RandomizerMovie() {
     router.push(`/movie/${id}`);
   };
 
-  const goToNextMovie = () => {
-    if (currentIndex < movies.length - 1) {
-      setCurrentIndex(currentIndex + 1); // Pasar a la siguiente película
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    const newIndex = currentIndex + 1;
+    const newMovie = await getRandomMovie({
+      ...parsedRandomizerData,
+      index: newIndex,
+    });
+    if (newMovie) {
+      setCurrentMovie(newMovie);
+      setCurrentIndex(newIndex);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -45,10 +61,10 @@ export default function RandomizerMovie() {
         </Title>
 
         <Text className="text-2xl font-outfitBold text-jasper">
-          {movie.title}
+          {currentMovie.title}
         </Text>
 
-        <Pressable onPress={() => goToMoviePage(movie.movie_id)}>
+        <Pressable onPress={() => goToMoviePage(currentMovie.movie_id)}>
           <View style={{ width: wp("60%"), height: hp("40%") }}>
             {isLoading && (
               <Skeleton
@@ -59,7 +75,7 @@ export default function RandomizerMovie() {
               />
             )}
             <Image
-              source={{ uri: `${pathPoster}${movie.poster_url}` }}
+              source={{ uri: `${pathPoster}${currentMovie.poster_url}` }}
               style={{
                 width: "100%",
                 height: "100%",
@@ -83,7 +99,7 @@ export default function RandomizerMovie() {
             width={wp("7%")}
             bgColor="bg-floralWhite"
             textColor="text-raisinBlack"
-            handleSubmit={goToNextMovie}
+            handleSubmit={handleSubmit}
           >
             Randomizar
           </SubmitBtn>

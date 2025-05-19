@@ -22,7 +22,8 @@ public class MovieRecommendationController {
                                                           @RequestParam(required = false, defaultValue = "") String decade,
                                                           @RequestParam(required = false, defaultValue = "") String provider,
                                                           @RequestParam double minRating,
-                                                          @RequestParam int maxDuration) {
-        return tmdbApiService.fetchRandomMovie(genre, decade, provider, minRating, maxDuration);
+                                                          @RequestParam int maxDuration,
+                                                          @RequestParam int index) {
+        return tmdbApiService.fetchRandomMovie(genre, decade, provider, minRating, maxDuration, index);
     }
 }

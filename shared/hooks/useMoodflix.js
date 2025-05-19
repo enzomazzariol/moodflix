@@ -71,6 +71,7 @@ export const useMoodflix = () => {
     streaming,
     rating,
     duration,
+    index,
   }) => {
     const data = await sendRequest({
       url: "/movies/random",
@@ -81,6 +82,7 @@ export const useMoodflix = () => {
         provider: streaming ?? "",
         minRating: rating,
         maxDuration: duration,
+        index: index,
       },
     });
     return data;

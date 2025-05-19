@@ -13,6 +13,7 @@ export default function GenericForm({
   accountText,
   accountRoute,
   isLogin,
+  isLoading
 }) {
   const [formData, setFormData] = useState({});
 
@@ -105,7 +106,7 @@ export default function GenericForm({
         bgColor="bg-richBlue"
         textColor="text-floralWhite"
       >
-        {buttonText}
+        {isLoading ? "Cargando..." : buttonText}
       </SubmitBtn>
 
       <Link href={accountRoute} asChild replace>

@@ -1,42 +1,42 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Image, Text, View } from "react-native";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { Text, View } from "react-native";
 import { loginFields } from "../../lib/authFields";
 import SubmitBtn from "../commoms/SubmitBtn";
 import GenericForm from "./GenericForm";
 
-export default function LoginForm({ onSubmit }) {
+export default function LoginForm({ onSubmit, isLoading }) {
   const resetOnboarding = async () => {
     await AsyncStorage.removeItem("hasSeenOnboarding");
     console.log("Onboarding reseteado ✅");
   };
 
   return (
-    <View className="flex-1 items-center justify-center pb-16">
+    <View className="flex-1 items-center justify-center pb-0">
+      {/*
       <Image
         className={`rounded-md mb-8`}
         style={{ width: hp("10%"), height: hp("10%") }}
         source={require("../../../assets/william.png")}
-      />
-
-      {/*<Title textSize="text-3xl">Logo de Moodflix</Title>*/}
+      /> */}
 
       <Text className="text-4xl font-outfitBold text-white mb-8">
-        Login to Moodflix
+        Iniciar sesión en Moodflix
       </Text>
 
-    <SubmitBtn handleSubmit={resetOnboarding} text="Reset onboarding">
-        <Text className="text-xl font-outfitBold text-white">Reset onboarding</Text>
+      <SubmitBtn handleSubmit={resetOnboarding} text="Reset onboarding">
+        <Text className="text-xl font-outfitBold text-white">
+          Reset onboarding
+        </Text>
       </SubmitBtn>
-      
 
       <GenericForm
         fields={loginFields}
         onSubmit={onSubmit}
-        buttonText="Login"
-        accountText="Aún sin una cuenta? Regístrate"
+        buttonText="Iniciar sesión"
+        accountText="¿Aún sin una cuenta? Regístrate"
         accountRoute="/signup"
         isLogin={true}
+        isLoading={isLoading}
       />
     </View>
   );

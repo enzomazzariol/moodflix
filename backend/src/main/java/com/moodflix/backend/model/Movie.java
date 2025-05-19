@@ -10,7 +10,7 @@ public class Movie {
     @SerializedName("id")
     private int movie_id;
 
-    @SerializedName("original_title")
+    @SerializedName("title")
     private String title;
 
     @SerializedName("overview")

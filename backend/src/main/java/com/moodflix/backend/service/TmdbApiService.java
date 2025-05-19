@@ -171,20 +171,27 @@ public class TmdbApiService {
         }
     }
 
-    public ResponseEntity<?> fetchRandomMovie(String genre, String decade, String provider, Double minRating, Integer maxDuration) {
+    public ResponseEntity<?> fetchRandomMovie(String genre, String decade, String provider, Double minRating, Integer maxDuration, int index) {
+        System.out.println(genre + decade + provider + minRating + maxDuration + index);
         try {
             // Asignar valores por defecto si son nulos o vacíos
-            String genreFinal = (genre == null || genre.isEmpty()) ? "" : genre;
-            String decadeFinal = (decade == null || decade.isEmpty()) ? "1980" : decade;
-            String providerFinal = (provider == null || provider.isEmpty()) ? "" : provider;
+            String genreFinal = (genre == null || genre.isEmpty()) ? null : genre;
+            String decadeFinal = (decade == null || decade.isEmpty()) ? null : decade;
+            String providerFinal = (provider == null || provider.isEmpty()) ? null : provider;
             double minRatingFinal = (minRating == null) ? 0.0 : minRating;
             int maxDurationFinal = (maxDuration == null) ? 240 : maxDuration;
 
-            // Convertir la década a un rango de fechas
-            int startYear = Integer.parseInt(decadeFinal);
-            int endYear = startYear + 9;
-            String startDate = startYear + "-01-01";
-            String endDate = endYear + "-12-31";
+            String startDate;
+            String endDate;
+            if (decadeFinal != null) {
+                int startYear = Integer.parseInt(decadeFinal);
+                int endYear = startYear + 9;
+                startDate = startYear + "-01-01";
+                endDate = endYear + "-12-31";
+            } else {
+                startDate = null;
+                endDate = null;
+            }
 
             //Construcción dinámica del URI eliminando parámetros innecesarios
             WebClient.RequestHeadersUriSpec<?> uriSpec = webClient.get();
@@ -193,14 +200,17 @@ public class TmdbApiService {
                         .queryParam("api_key", API_KEY)
                         .queryParam("language", "es-ES")
                         .queryParam("sort_by", "popularity.desc")
-                        .queryParam("release_date.gte", startDate)
-                        .queryParam("release_date.lte", endDate)
                         .queryParam("vote_average.gte", minRatingFinal)
                         .queryParam("with_runtime.lte", maxDurationFinal)
-                        .queryParam("watch_region", "ES");
+                        .queryParam("watch_region", "ES")
+                        .queryParam("with_watch_monetization_types", "flatrate,free,ads,rent,buy");
 
-                if (!genre.isEmpty()) uriBuilder.queryParam("with_genres", genreFinal);
-                if (!provider.isEmpty()) uriBuilder.queryParam("with_watch_providers", providerFinal);
+                if (startDate != null) {
+                    uriBuilder.queryParam("release_date.gte", startDate);
+                    uriBuilder.queryParam("release_date.lte", endDate);
+                }
+                if (genreFinal != null) uriBuilder.queryParam("with_genres", genreFinal);
+                if (providerFinal != null) uriBuilder.queryParam("with_watch_providers", providerFinal);
 
                 return uriBuilder.build();
             }).retrieve().bodyToMono(String.class);
@@ -211,18 +221,15 @@ public class TmdbApiService {
             // Mapear usando GSON a una lista de objetos Movie
             TmdbRandomMovieResponse tmdbResponse = gson.fromJson(jsonResponse, TmdbRandomMovieResponse.class);
 
-            if (tmdbResponse != null && !tmdbResponse.results().isEmpty()) {
-                // recoger lista de peliculas de la API
-                List<Movie> movies = tmdbResponse.results();
-                // seleccionar una random
-               // Movie randomMovie = movies.get(new Random().nextInt(movies.size()));
-                // obtener datos de la pelicula desde la API TMDB, guardarla en la bd y devolver como respuesta
-               // Movie randomMovieData = fetchMovieFromTmdb(randomMovie.getMovie_id());
-                return ResponseEntity.ok(movies);
+            List<Movie> movies = tmdbResponse.results();
+
+            if (!movies.isEmpty() && index < movies.size()) {
+                Movie selectedMovie = movies.get(index);
+                Movie movieData = fetchMovieFromTmdb(selectedMovie.getMovie_id());
+                return ResponseEntity.ok(movieData);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ApiResponse(HttpStatus.NOT_FOUND.value(), "No se pudieron encontrar peliculas en este momento.")
-                );
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse(404, "No hay más películas en la lista"));
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(

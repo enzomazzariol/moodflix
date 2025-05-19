@@ -20,24 +20,29 @@ export default function Randomizer() {
     decade: null,
     streaming: null,
     rating: 1,
-    duration: 60,
+    duration: 240,
   });
   const router = useRouter();
+  const [index, setIndex] = useState(0);
 
   const { getRandomMovie, error, isLoading } = useMoodflix();
 
   const handleSubmit = async () => {
-    const movies = await getRandomMovie(randomizerData);
-
-    if (movies && movies.length > 0) {
-      goToRandomMovie(movies);
+    const movie = await getRandomMovie({ ...randomizerData, index });
+    if (movie) {
+      goToRandomMovie(movie, index);
+      setIndex(index + 1);
     }
   };
 
-  const goToRandomMovie = (movies) => {
+  const goToRandomMovie = (movie, currentIndex) => {
     router.push({
       pathname: `/randomizerMovie`,
-      params: { movies: JSON.stringify(movies), randomizerData },
+      params: {
+        movie: JSON.stringify(movie),
+        randomizerData: JSON.stringify(randomizerData),
+        index: currentIndex.toString(),
+      },
     });
   };
 

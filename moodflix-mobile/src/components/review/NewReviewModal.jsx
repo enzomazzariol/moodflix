@@ -18,6 +18,7 @@ import {
 } from "react-native-responsive-screen";
 import { useMoodflix } from "../../../../shared/hooks/useMoodflix";
 import { useAuth } from "../../context/AuthContext";
+import { EventBus } from "../../services/eventBus";
 import { colors } from "../../utils/colors";
 import { Title } from "../commoms/Title";
 import PosterMovieDownload from "../moviePage/PosterMovieDownload";
@@ -40,6 +41,7 @@ export default function NewReviewModal({ visible, onClose, movie }) {
   const handleReviewSubmit = async () => {
     if(rating === 0 || review.length === 0) return;
     await rateMovie(user?.user_id, movie?.movie_id, rating, review);
+    EventBus.emit("reviewPosted");
     onClose();
   }
 

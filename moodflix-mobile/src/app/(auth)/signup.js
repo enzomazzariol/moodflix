@@ -36,7 +36,7 @@ export default function Signup() {
 
   return (
     <AuthScreen isLogin={false}>
-      <SignupForm onSubmit={onSubmit} />
+      <SignupForm onSubmit={onSubmit} isLoading={isLoading} />
     </AuthScreen>
   );
 }

@@ -7,7 +7,7 @@ import AuthScreen from "../../components/screens/AuthScreen";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
-  const { loginAuth } = useMoodflix();
+  const { loginAuth, isLoading } = useMoodflix();
   const router = useRouter();
   const { setUser } = useAuth();
 
@@ -40,7 +40,7 @@ export default function Login() {
 
   return (
     <AuthScreen isLogin={true}>
-      <LoginForm onSubmit={onSubmit} />
+      <LoginForm onSubmit={onSubmit} isLoading={isLoading} />
     </AuthScreen>
   );
 }

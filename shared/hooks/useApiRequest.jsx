@@ -16,9 +16,6 @@ export function useApiRequest(client) {
         setData(response.data);
         return response.data;
       } catch (err) {
-        let errorMessage = "Error desconocido";
-        let statusCode = null;
-
         if (err?.response) {
           const data = err.response.data;
         

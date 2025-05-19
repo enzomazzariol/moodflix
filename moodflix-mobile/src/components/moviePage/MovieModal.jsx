@@ -36,7 +36,7 @@ export default function MovieModal({ movie, visible, closeModal }) {
           className="bg-raisinBlack rounded-t-2xl overflow-hidden"
           style={{ height: hp("55%") }}
           onPress={(e) => {
-            // This prevents the parent Pressable's onPress from being triggered
+            // Evitar que se cierre el modal al hacer click en otro elemento
             e.stopPropagation();
           }}
         >
