@@ -1,26 +1,26 @@
 import { Rating } from "@kolking/react-native-rating";
 import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
+import { formatRelativeDate } from "../../utils/dateUtils";
 import PosterMovie from "../commoms/PosterMovie";
 
 export default function ActivityCard({ activity, onPressUser, onPressMovie }) {
-  const { type, user, movie, message, rating, createdAt } = activity;
 
   const renderContent = () => {
-    // Contenido específico según el tipo de actividad
-    switch (type) {
+    switch (activity?.activityType) {
       case "like":
         return (
           <Text
             className="text-floralWhite text-base font-outfitRegular text-wrap"
             style={{ width: wp("70%") }}
           >
-            <Text className="font-outfitBold">{user.name} </Text>
-            le ha gustado <Text className="font-outfitBold">{movie.title}</Text>
+            <Text className="font-outfitBold">{activity?.user?.username} </Text>
+            le ha gustado{" "}
+            <Text className="font-outfitBold">{activity?.movie?.title}</Text>
           </Text>
         );
 
@@ -30,8 +30,9 @@ export default function ActivityCard({ activity, onPressUser, onPressMovie }) {
             className="text-floralWhite text-base font-outfitRegular text-wrap"
             style={{ width: wp("70%") }}
           >
-            <Text className="font-outfitBold">{user.name} </Text>
-            ha guardado <Text className="font-outfitBold">{movie.title} </Text>
+            <Text className="font-outfitBold">{activity?.user?.username} </Text>
+            ha guardado{" "}
+            <Text className="font-outfitBold">{activity?.movie?.title} </Text>
             en su lista de favoritos
           </Text>
         );
@@ -43,15 +44,17 @@ export default function ActivityCard({ activity, onPressUser, onPressMovie }) {
               className="text-floralWhite text-base font-outfitRegular text-wrap"
               style={{ width: wp("50%") }}
             >
-              <Text className="font-outfitBold">{user.name} </Text>
-              {type === "watch" ? "vió" : "reseñó"}{" "}
-              <Text className="font-outfitBold">{movie.title}</Text>
+              <Text className="font-outfitBold">
+                {activity?.user?.username}{" "}
+              </Text>
+              reseñó{" "}
+              <Text className="font-outfitBold">{activity?.movie?.title}</Text>
             </Text>
 
-            {rating > 0 && (
+            {activity?.review?.rating > 0 && (
               <Rating
                 size={13}
-                rating={rating}
+                rating={activity?.review?.rating}
                 maxRating={5}
                 disabled={true}
                 baseColor={colors.floralWhite}
@@ -59,19 +62,19 @@ export default function ActivityCard({ activity, onPressUser, onPressMovie }) {
               />
             )}
 
-            {message && (
+            {activity?.review?.message && (
               <View className="flex-row" style={{ columnGap: hp("0%") }}>
                 <Text
                   className="text-floralWhite text-base font-outfitRegular text-wrap self-start"
                   style={{ width: wp("50%") }}
                 >
-                  {message}
+                  {activity?.review?.message}
                 </Text>
               </View>
             )}
 
-            <Text className="font-outfitRegular text-base text-floralWhite self-start">
-              {createdAt}
+            <Text className="font-outfitRegular text-base text-slate-400 self-start">
+              {formatRelativeDate(activity?.activityDate)}
             </Text>
           </View>
         );
@@ -81,8 +84,11 @@ export default function ActivityCard({ activity, onPressUser, onPressMovie }) {
     }
   };
 
-  // Para actividades simples (like, favorite)
-  if (type === "like" || type === "watchlist") {
+  // Para actividades simples (like, watchlist)
+  if (
+    activity?.activityType === "like" ||
+    activity?.activityType === "watchlist"
+  ) {
     return (
       <TouchableOpacity
         className="bg-prussianBlue rounded-md h-fit flex-row items-center justify-between"
@@ -92,26 +98,30 @@ export default function ActivityCard({ activity, onPressUser, onPressMovie }) {
       >
         <Pressable onPress={onPressUser}>
           <Image
-            source={{ uri: user.avatar }}
-            defaultSource={require("../../../assets/splash-expo.png")}
+            source={
+              activity?.user?.avatarUrl
+                ? { uri: activity.user.avatarUrl }
+                : require("../../../assets/william.png")
+            }
             className="rounded-full"
             resizeMode="cover"
             style={{ width: hp("5%"), height: hp("5%") }}
           />
         </Pressable>
 
-        {renderContent()}
-
-        <Text
-          className="font-outfitRegular text-base text-floralWhite self-start"
-          style={{ marginTop: hp("0.6%") }}
+        <View
+          className="flex-col"
+          style={{ rowGap: hp("0.6%"), width: wp("75%") }}
         >
-          {createdAt}
-        </Text>
+          {renderContent()}
+
+          <Text className="font-outfitRegular text-base text-slate-400">
+            {formatRelativeDate(activity?.activityDate)}
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   }
-
   // Para actividades que requieren más espacio (review)
   return (
     <TouchableOpacity
@@ -122,8 +132,11 @@ export default function ActivityCard({ activity, onPressUser, onPressMovie }) {
     >
       <Pressable onPress={onPressUser} className="self-start">
         <Image
-          source={{ uri: user.avatar }}
-          defaultSource={require("../../../assets/splash-expo.png")}
+          source={
+            activity?.user?.avatarUrl
+              ? { uri: activity.user.avatarUrl }
+              : require("../../../assets/william.png")
+          }
           className="rounded-full"
           resizeMode="cover"
           style={{ width: hp("5%"), height: hp("5%") }}
@@ -132,11 +145,11 @@ export default function ActivityCard({ activity, onPressUser, onPressMovie }) {
 
       {renderContent()}
 
-      {type === "review" && (
+      {activity?.activityType === "review" && (
         <PosterMovie
-          posterPath={movie.posterPath}
-          title={movie.title}
-          idMovie={movie.id}
+          posterPath={activity?.movie?.posterPath}
+          title={activity?.movie?.title}
+          idMovie={activity?.movie?.movieId}
           posterHeight={hp("16%")}
           posterWidth={wp("21%")}
         />

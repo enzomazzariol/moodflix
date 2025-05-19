@@ -1,14 +1,26 @@
 import { useRouter } from "expo-router";
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { useActivity } from "../../../../shared/hooks/useActivity";
 import ActivityCard from "../../components/activity/ActivityCard";
 import ActivityScreen from "../../components/screens/ActivityScreen";
-import { activities } from "../../lib/mocks/Activity"; // Mock de actividades
+import { colors } from "../../utils/colors";
 
 // Libreria de rating https://github.com/kolking/react-native-rating
 
 export default function Activity() {
   const router = useRouter();
+  const { activity: activities, isLoading, error } = useActivity();
+
+  if (isLoading) {
+    return (
+      <ActivityScreen>
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" color={colors.floralWhite} />
+        </View>
+      </ActivityScreen>
+    );
+  }
 
   const goToMoviePage = (idMovie, title) => {
     router.push({
@@ -31,18 +43,23 @@ export default function Activity() {
         className="flex-1 items-center"
         style={{ padding: hp("2%"), rowGap: hp("1.5%") }}
       >
-        {activities.map((activity, index) => (
-          <ActivityCard
-            key={index}
-            activity={activity}
-            onPressUser={() =>
-              goToUserProfile(activity.user.id, activity.user.name)
-            }
-            onPressMovie={() =>
-              goToMoviePage(activity.movie.id, activity.movie.title)
-            }
-          />
-        ))}
+        {[...activities]
+          .sort((a, b) => new Date(b.activityDate) - new Date(a.activityDate))
+          .map((activity, index) => (
+            <ActivityCard
+              key={index}
+              activity={activity}
+              onPressUser={() =>
+                goToUserProfile(
+                  activity?.user?.userId,
+                  activity?.user?.username
+                )
+              }
+              onPressMovie={() =>
+                goToMoviePage(activity?.movie?.movieId, activity?.movie?.title)
+              }
+            />
+          ))}
       </View>
     </ActivityScreen>
   );
