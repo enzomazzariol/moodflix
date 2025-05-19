@@ -53,7 +53,7 @@ public class ActivityService {
      * */
     public ResponseEntity<?> findActivitiesByUser(int userId) {
         try {
-            List<Activity> actividades = activityRepository.findByUser(userId);
+            List<ActivityResponseDTO> actividades = activityRepository.findByUser(userId);
             if(actividades.isEmpty()) {
                 return ResponseEntity.ok(
                         new ApiResponse(HttpStatus.NO_CONTENT.value(), "No hay actividades disponibles para el usuario " + userId)

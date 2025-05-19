@@ -3,6 +3,9 @@ package com.moodflix.backend.service;
 import com.moodflix.backend.dtos.FavoriteMovieRequest;
 import com.moodflix.backend.dtos.FavoriteMovieResponse;
 import com.moodflix.backend.exceptions.ApiResponse;
+import com.moodflix.backend.model.Activity;
+import com.moodflix.backend.model.enums.ActivityType;
+import com.moodflix.backend.repositories.ActivityRepository;
 import com.moodflix.backend.repositories.UserFavoritesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,17 +21,19 @@ import java.util.List;
 public class UserFavoritesService {
     private static final Logger logger = LoggerFactory.getLogger(UserFavoritesService.class);
     private final UserFavoritesRepository userFavoritesRepository;
+    private final ActivityRepository activityRepository;
 
     @Autowired
-    public UserFavoritesService(UserFavoritesRepository userFavoritesRepository) {
+    public UserFavoritesService(UserFavoritesRepository userFavoritesRepository, ActivityRepository activityRepository) {
         this.userFavoritesRepository = userFavoritesRepository;
+        this.activityRepository = activityRepository;
     }
 
+    @Transactional
     public ResponseEntity<?> addFavorite(FavoriteMovieRequest favoriteMovieRequest) {
         int userId = favoriteMovieRequest.user_id();
         int movieId = favoriteMovieRequest.movie_id();
         try {
-            // Check if movie is already a favorite
             if (userFavoritesRepository.isFavorite(userId, movieId)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "La película ya está en tus favoritos"));
@@ -35,6 +41,12 @@ public class UserFavoritesService {
 
             boolean result = userFavoritesRepository.addFavorite(userId, movieId);
             if (result) {
+                Activity activity = new Activity();
+                activity.setUser_id(userId);
+                activity.setMovie_id(movieId);
+                activity.setActivity_type(ActivityType.LIKE);
+                activityRepository.saveActivity(activity);
+
                 logger.info("Successfully added movie {} to favorites for user {}", movieId, userId);
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ApiResponse(HttpStatus.OK.value(), "Película añadida correctamente a tus favoritos"));
@@ -50,12 +62,14 @@ public class UserFavoritesService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> removeFavorite(FavoriteMovieRequest favoriteMovieRequest) {
         int movieId = favoriteMovieRequest.movie_id();
         int userId = favoriteMovieRequest.user_id();
         try {
             boolean result = userFavoritesRepository.removeFavorite(userId, movieId);
             if (result) {
+                activityRepository.deleteActivityByType(userId, movieId, ActivityType.LIKE.getValue());
                 logger.info("Successfully removed movie {} from favorites for user {}", movieId, userId);
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ApiResponse(HttpStatus.OK.value(), "Película eliminada de tus favoritos correctamente"));
@@ -70,6 +84,7 @@ public class UserFavoritesService {
                     .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
         }
     }
+
 
     public ResponseEntity<?> getUserFavorites(int userId) {
         try {

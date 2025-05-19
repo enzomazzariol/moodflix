@@ -4,8 +4,11 @@ import com.moodflix.backend.dtos.EmotionRequest;
 import com.moodflix.backend.dtos.MovieStatusDTO;
 import com.moodflix.backend.dtos.MovieStatusUpdateDTO;
 import com.moodflix.backend.exceptions.ApiResponse;
+import com.moodflix.backend.model.Activity;
 import com.moodflix.backend.model.Emotion;
 import com.moodflix.backend.model.Movie;
+import com.moodflix.backend.model.enums.ActivityType;
+import com.moodflix.backend.repositories.ActivityRepository;
 import com.moodflix.backend.repositories.UserFavoritesRepository;
 import com.moodflix.backend.repositories.UserMovieRepository;
 import com.moodflix.backend.repositories.WatchlistRepository;
@@ -32,6 +35,9 @@ public class MovieController {
 
     @Autowired
     private WatchlistRepository watchlistRepository;
+
+    @Autowired
+    private ActivityRepository activityRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovie(@PathVariable int id) {
@@ -69,8 +75,14 @@ public class MovieController {
         if (dto.favorite() != null) {
             if (dto.favorite()) {
                 userFavoritesRepository.addFavorite(userId, movieId);
+                Activity activity = new Activity();
+                activity.setUser_id(userId);
+                activity.setMovie_id(movieId);
+                activity.setActivity_type(ActivityType.LIKE);
+                activityRepository.saveActivity(activity);
             } else {
                 userFavoritesRepository.removeFavorite(userId, movieId);
+                activityRepository.deleteActivityByType(userId, movieId, ActivityType.LIKE.getValue());
             }
         }
 
@@ -85,8 +97,14 @@ public class MovieController {
         if (dto.inWatchlist() != null) {
             if (dto.inWatchlist()) {
                 watchlistRepository.addToWatchlist(userId, movieId);
+                Activity activity = new Activity();
+                activity.setUser_id(userId);
+                activity.setMovie_id(movieId);
+                activity.setActivity_type(ActivityType.WATCHLIST);
+                activityRepository.saveActivity(activity);
             } else {
                 watchlistRepository.removeFromWatchlist(userId, movieId);
+                activityRepository.deleteActivityByType(userId, movieId, ActivityType.WATCHLIST.getValue());
             }
         }
 

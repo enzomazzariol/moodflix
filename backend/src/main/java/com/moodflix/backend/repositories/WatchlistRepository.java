@@ -76,19 +76,13 @@ public class WatchlistRepository {
     /**
      * Añade una película a la watchlist del usuario
      */
-    public void addToWatchlist(int user_id, int movie_id) {
+    public boolean addToWatchlist(int user_id, int movie_id) {
         try {
-            long affected = jdbcClient.sql(INSERT)
+                jdbcClient.sql(INSERT)
                     .param("user_id", user_id)
                     .param("movie_id", movie_id)
                     .update();
-
-            if (affected != 1) {
-                logger.error("Failed to save movie in the watchlist with ID {}: Unexpected affected rows count: {}", movie_id, affected);
-                throw new DatabaseException("Could not add movie to the watchlist: Unexpected database response");
-            }
-
-            logger.info("Successfully saved movie in the watchlist with ID: {}", movie_id);
+                return true;
         } catch (DuplicateKeyException e) {
             logger.error("Failed to save movie with ID {}: Duplicate key violation", movie_id, e);
             throw new DatabaseException("Movie already exists in the watchlist", e);
@@ -129,20 +123,23 @@ public class WatchlistRepository {
     /**
      * Elimina una película de la watchlist del usuario
      */
-    public void removeFromWatchlist(int user_id, int movie_id) {
+    public boolean removeFromWatchlist(int user_id, int movie_id) {
         try {
             long affected = jdbcClient.sql(REMOVE_FROM_WATCHLIST)
                     .param(user_id)
                     .param(movie_id)
                     .update();
 
-            if(affected == 0) {
+            if (affected == 0) {
+                logger.warn("Movie with ID {} not found in user {}'s watchlist", movie_id, user_id);
                 throw new NotFoundException("Movie with ID " + movie_id + " not found in user's watchlist");
             }
 
             logger.info("Successfully removed movie with ID {} from user {}'s watchlist", movie_id, user_id);
+            return true;
+
         } catch (NotFoundException e) {
-            logger.warn("Failed to remove movie with ID {} from user {}'s watchlist: Not found", movie_id, user_id);
+            // Ya se ha logueado arriba, solo re-lanzamos
             throw e;
         } catch (DataAccessException e) {
             logger.error("Failed to remove movie with ID {} from user {}'s watchlist: Database access error", movie_id, user_id, e);
@@ -152,4 +149,5 @@ public class WatchlistRepository {
             throw new DatabaseException("Unexpected error occurred while removing movie from watchlist", e);
         }
     }
+
 }

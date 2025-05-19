@@ -8,9 +8,25 @@ import { colors } from "../../utils/colors";
 import { formatRelativeDate } from "../../utils/dateUtils";
 import PosterMovie from "../commoms/PosterMovie";
 
-export default function ActivityCard({ activity, onPressUser, onPressMovie }) {
-
+export default function ActivityCard({
+  activity,
+  onPressUser,
+  onPressMovie,
+  customText,
+}) {
   const renderContent = () => {
+    // Si hay texto personalizado, lo mostramos directamente
+    if (customText) {
+      return (
+        <Text
+          className="text-floralWhite text-base font-outfitRegular text-wrap"
+          style={{ width: wp("70%") }}
+        >
+          {customText}
+        </Text>
+      );
+    }
+
     switch (activity?.activityType) {
       case "like":
         return (
@@ -122,7 +138,8 @@ export default function ActivityCard({ activity, onPressUser, onPressMovie }) {
       </TouchableOpacity>
     );
   }
-  // Para actividades que requieren más espacio (review)
+
+  // Para actividades más complejas como reviews
   return (
     <TouchableOpacity
       className="bg-prussianBlue rounded-md h-fit flex-row items-center justify-between"
