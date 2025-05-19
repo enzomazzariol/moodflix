@@ -4,8 +4,12 @@ import { useMoviesByCategory } from "../../../../shared/hooks/useMoviesByCategor
 import EmotionSlider from "../../components/home/EmotionSlider";
 import MoviesSlider from "../../components/home/MoviesSlider";
 import HomeScreen from "../../components/screens/HomeScreen";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Home() {
+  const { currentEmotion, favoriteGenre } = useAuth();
+  console.log("currentEmotion", currentEmotion);
+  console.log("favoriteGenre", favoriteGenre);
   // Configuración de las secciones de películas
   const { movies: popularMovies } = useMoviesByCategory({
     category: "popular",

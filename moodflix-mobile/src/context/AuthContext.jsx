@@ -6,7 +6,11 @@ import { useMoodflix } from "../../../shared/hooks/useMoodflix";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    username: null,
+    email: null,
+    avatar_url: "../../../assets/user-profile-img-favicon.jpg",
+  });
   const isAuthenticated = !!user;
   const [currentEmotion, setCurrentEmotion] = useState(null);
   const [location, setLocation] = useState(null);

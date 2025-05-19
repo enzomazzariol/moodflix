@@ -14,6 +14,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import { useUserInfo } from "../../../../shared/hooks/useUserInfo";
 import ProfilePicture from "../../components/commoms/ProfilePicture";
 import MoviesSlider from "../../components/home/MoviesSlider";
 import ProfileInfoRow from "../../components/profile/ProfileInfoRow";
@@ -24,10 +25,9 @@ import { colors } from "../../utils/colors";
 // Screen de perfil de usuario
 export default function UserProfile() {
   const { id, username } = useLocalSearchParams();
+  const { userInfo, isLoading, error } = useUserInfo(id);
   const navigation = useNavigation();
   const [profileImageVisible, setProfileImageVisible] = useState(false);
-  const description =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
   // Setea el título de la pantalla en función del usuario
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function UserProfile() {
           >
             {/* Imagen de perfil */}
             <ProfilePicture
-              url={require("../../../assets/william.png")}
+              url={require("../../../assets/user-profile-img-favicon.jpg")}
               onPress={() => setProfileImageVisible(true)}
             />
 
@@ -71,7 +71,7 @@ export default function UserProfile() {
               style={{ rowGap: hp("1.5%") }}
             >
               <ProfileInfoRow
-                location={"London"}
+                location={"Madrid"}
                 emotion={"Miedo"}
                 genre={"Drama"}
               />
@@ -79,7 +79,7 @@ export default function UserProfile() {
                 className="text-floralWhite font-spaceGroteskRegular text-base"
                 style={{ width: wp("90%") }}
               >
-                {description}
+                Me gusta ver películas con un tono de emoción.
               </Text>
             </View>
           </View>
@@ -115,7 +115,7 @@ function UserImageModal({ profileImageVisible, setProfileImageVisible }) {
       >
         {/* Imagen de perfil ampliada (cambiar para que sea la imagen del usuario) */}
         <Image
-          source={require("../../../assets/william.png")}
+          source={require("../../../assets/user-profile-img-favicon.jpg")}
           style={styles.expandedImage}
         />
       </TouchableOpacity>

@@ -66,11 +66,12 @@ function ModalHeader({ title, onClose }) {
 }
 
 function ModalContent({ onClose}) {
-  const { user, location, favoriteGenre, currentEmotion } = useAuth();
+  const { user, location, favoriteGenre, setFavoriteGenre, currentEmotion, setCurrentEmotion } = useAuth();
   const[userData, setUserData] = useState({
     username: user?.username,
     email: user?.email,
     password: "contraseña",
+    avatar: user?.avatar_url,
     bio: "",
     location: location,
     currentMood: currentEmotion,
@@ -99,7 +100,7 @@ function ModalContent({ onClose}) {
       >
         Editar
       </Title>
-      <ChangeAvatar />
+      <ChangeAvatar imageUri={userData?.avatar} />
 
       <View className="flex-col">
         <EditableRow label={"Nombre de usuario"} value={userData?.username} onChangeText={(val) => handleInputChange("username", val)}/>

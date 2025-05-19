@@ -117,7 +117,7 @@ export default function ActivityCard({
             source={
               activity?.user?.avatarUrl
                 ? { uri: activity.user.avatarUrl }
-                : require("../../../assets/william.png")
+                : require("../../../assets/user-profile-img-favicon.jpg")
             }
             className="rounded-full"
             resizeMode="cover"
@@ -152,7 +152,7 @@ export default function ActivityCard({
           source={
             activity?.user?.avatarUrl
               ? { uri: activity.user.avatarUrl }
-              : require("../../../assets/william.png")
+              : require("../../../assets/user-profile-img-favicon.jpg")
           }
           className="rounded-full"
           resizeMode="cover"

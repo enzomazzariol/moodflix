@@ -42,7 +42,7 @@ export default function CustomProfileHeader() {
 
         <ProfilePicture 
           onPress={() => setProfileImageVisible(true)}
-          url={require("../../../assets/william.png")}
+          url={require("../../../assets/user-profile-img-favicon.jpg")}
         />
 
         <Modal visible={profileImageVisible} transparent animationType="slide">
@@ -53,7 +53,7 @@ export default function CustomProfileHeader() {
           >
             {/* Imagen de perfil ampliada (cambiar para que sea la imagen del usuario) */}
             <Image
-              source={require("../../../assets/william.png")}
+              source={require("../../../assets/user-profile-img-favicon.jpg")}
               style={styles.expandedImage}
             />
           </TouchableOpacity>

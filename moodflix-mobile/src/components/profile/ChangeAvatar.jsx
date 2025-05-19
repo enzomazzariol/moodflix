@@ -4,7 +4,7 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { colors } from "../../utils/colors";
 import { EditIcon } from "../ui/icons";
 
-export default function ChangeAvatar({ label, value, onChangeText }) {
+export default function ChangeAvatar({  }) {
   const [isPressed, setIsPressed] = useState(false);
   return (
     <TouchableOpacity
@@ -23,7 +23,7 @@ export default function ChangeAvatar({ label, value, onChangeText }) {
     >
       <Pressable className="relative" onPress={() => AlertModal()}>
         <Image
-          source={require("../../../assets/william.png")}
+          source={require("../../../assets/user-profile-img-favicon.jpg")}
           className="rounded-full"
           resizeMode="cover"
           style={{ width: hp("13%"), height: hp("13%") }}
