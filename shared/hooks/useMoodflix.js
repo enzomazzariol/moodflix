@@ -157,6 +157,14 @@ export const useMoodflix = () => {
     return data;
   };
 
+  const getActivities = async () => {
+    const data = await sendRequest({
+      url: `/activity`,
+      method: "GET",
+    });
+    return data;
+  };
+
   return {
     getMovie,
     loginAuth,
@@ -170,6 +178,7 @@ export const useMoodflix = () => {
     getUserWatchlist,
     getUserWatchedMovies,
     rateMovie,
+    getActivities,
     isLoading,
     data,
     error,

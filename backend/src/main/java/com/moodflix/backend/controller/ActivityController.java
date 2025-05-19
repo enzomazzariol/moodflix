@@ -24,7 +24,12 @@ public class ActivityController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findActivitiesByUser(@RequestParam int userId) {
+    public ResponseEntity<?> findAllActivities() {
+        return activityService.findAllActivities();
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> findActivitiesByUser(@PathVariable int userId) {
         return activityService.findActivitiesByUser(userId);
     }
 }

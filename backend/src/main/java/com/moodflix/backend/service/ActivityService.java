@@ -1,5 +1,6 @@
 package com.moodflix.backend.service;
 
+import com.moodflix.backend.dtos.ActivityResponseDTO;
 import com.moodflix.backend.exceptions.ApiResponse;
 import com.moodflix.backend.model.Activity;
 import com.moodflix.backend.repositories.ActivityRepository;
@@ -65,6 +66,26 @@ public class ActivityService {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al recuperar la lista de actividades para el usuario " + userId)
+            );
+        }
+    }
+
+    /**
+     * Método para recuperar todas las actividades
+     * */
+    public ResponseEntity<?> findAllActivities() {
+        try {
+            List<ActivityResponseDTO> actividades = activityRepository.findAll();
+            if (actividades.isEmpty()) {
+                return ResponseEntity.ok(
+                        new ApiResponse(HttpStatus.NO_CONTENT.value(), "No hay actividades disponibles")
+                );
+            }
+            return ResponseEntity.ok(actividades);
+        } catch (Exception e) {
+            logger.error("Error al recuperar la lista de actividades");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al recuperar todas las actividades")
             );
         }
     }
