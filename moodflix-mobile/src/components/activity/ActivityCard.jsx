@@ -14,132 +14,9 @@ export default function ActivityCard({
   onPressMovie,
   customText,
 }) {
-  const renderContent = () => {
-    // Si hay texto personalizado, lo mostramos directamente
-    if (customText) {
-      return (
-        <Text
-          className="text-floralWhite text-base font-outfitRegular text-wrap"
-          style={{ width: wp("70%") }}
-        >
-          {customText}
-        </Text>
-      );
-    }
+  const isSimpleActivity =
+    activity?.activityType === "like" || activity?.activityType === "watchlist";
 
-    switch (activity?.activityType) {
-      case "like":
-        return (
-          <Text
-            className="text-floralWhite text-base font-outfitRegular text-wrap"
-            style={{ width: wp("70%") }}
-          >
-            <Text className="font-outfitBold">{activity?.user?.username} </Text>
-            le ha gustado{" "}
-            <Text className="font-outfitBold">{activity?.movie?.title}</Text>
-          </Text>
-        );
-
-      case "watchlist":
-        return (
-          <Text
-            className="text-floralWhite text-base font-outfitRegular text-wrap"
-            style={{ width: wp("70%") }}
-          >
-            <Text className="font-outfitBold">{activity?.user?.username} </Text>
-            ha guardado{" "}
-            <Text className="font-outfitBold">{activity?.movie?.title} </Text>
-            en su lista de favoritos
-          </Text>
-        );
-
-      case "review":
-        return (
-          <View className="flex-col" style={{ rowGap: hp("0.8%") }}>
-            <Text
-              className="text-floralWhite text-base font-outfitRegular text-wrap"
-              style={{ width: wp("50%") }}
-            >
-              <Text className="font-outfitBold">
-                {activity?.user?.username}{" "}
-              </Text>
-              reseñó{" "}
-              <Text className="font-outfitBold">{activity?.movie?.title}</Text>
-            </Text>
-
-            {activity?.review?.rating > 0 && (
-              <Rating
-                size={13}
-                rating={activity?.review?.rating}
-                maxRating={5}
-                disabled={true}
-                baseColor={colors.floralWhite}
-                fillColor={colors.jasper}
-              />
-            )}
-
-            {activity?.review?.message && (
-              <View className="flex-row" style={{ columnGap: hp("0%") }}>
-                <Text
-                  className="text-floralWhite text-base font-outfitRegular text-wrap self-start"
-                  style={{ width: wp("50%") }}
-                >
-                  {activity?.review?.message}
-                </Text>
-              </View>
-            )}
-
-            <Text className="font-outfitRegular text-base text-slate-400 self-start">
-              {formatRelativeDate(activity?.activityDate)}
-            </Text>
-          </View>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  // Para actividades simples (like, watchlist)
-  if (
-    activity?.activityType === "like" ||
-    activity?.activityType === "watchlist"
-  ) {
-    return (
-      <TouchableOpacity
-        className="bg-prussianBlue rounded-md h-fit flex-row items-center justify-between"
-        style={{ width: wp("95%"), padding: hp("1%") }}
-        activeOpacity={0.8}
-        onPress={onPressMovie}
-      >
-        <Pressable onPress={onPressUser}>
-          <Image
-            source={
-              activity?.user?.avatarUrl
-                ? { uri: activity.user.avatarUrl }
-                : require("../../../assets/user-profile-img-favicon.jpg")
-            }
-            className="rounded-full"
-            resizeMode="cover"
-            style={{ width: hp("5%"), height: hp("5%") }}
-          />
-        </Pressable>
-
-        <View
-          className="flex-col"
-          style={{ rowGap: hp("0.6%"), width: wp("75%") }}
-        >
-          {renderContent()}
-
-          <Text className="font-outfitRegular text-base text-slate-400">
-            {formatRelativeDate(activity?.activityDate)}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  }
-
-  // Para actividades más complejas como reviews
   return (
     <TouchableOpacity
       className="bg-prussianBlue rounded-md h-fit flex-row items-center justify-between"
@@ -160,7 +37,85 @@ export default function ActivityCard({
         />
       </Pressable>
 
-      {renderContent()}
+      <View
+        className="flex-col"
+        style={{
+          rowGap: hp("0.6%"),
+          width: isSimpleActivity ? wp("75%") : wp("50%"),
+        }}
+      >
+        {customText ? (
+          <>
+            <Text className="text-floralWhite text-base font-outfitRegular text-wrap">
+              {customText.text}{" "}
+              <Text className="font-outfitBold">{customText.title}</Text>
+              {customText.suffix ? ` ${customText.suffix}` : ""}
+            </Text>
+
+            {customText.rating > 0 && (
+              <Rating
+                size={13}
+                rating={customText.rating}
+                maxRating={5}
+                disabled={true}
+                baseColor={colors.floralWhite}
+                fillColor={colors.jasper}
+              />
+            )}
+
+            {customText.message && (
+              <Text className="text-floralWhite text-base font-outfitRegular text-wrap">
+                {customText.message}
+              </Text>
+            )}
+          </>
+        ) : activity?.activityType === "like" ? (
+          <Text className="text-floralWhite text-base font-outfitRegular text-wrap">
+            <Text className="font-outfitBold">{activity?.user?.username} </Text>
+            ha guardado{" "}
+            <Text className="font-outfitBold">{activity?.movie?.title}</Text>
+            {" "}en su lista de favoritos
+          </Text>
+        ) : activity?.activityType === "watchlist" ? (
+          <Text className="text-floralWhite text-base font-outfitRegular text-wrap">
+            <Text className="font-outfitBold">{activity?.user?.username} </Text>
+            ha guardado{" "}
+            <Text className="font-outfitBold">{activity?.movie?.title} </Text>
+            en su watchlist
+          </Text>
+        ) : activity?.activityType === "review" ? (
+          <>
+            <Text className="text-floralWhite text-base font-outfitRegular text-wrap">
+              <Text className="font-outfitBold">
+                {activity?.user?.username}{" "}
+              </Text>
+              reseñó{" "}
+              <Text className="font-outfitBold">{activity?.movie?.title}</Text>
+            </Text>
+
+            {activity?.review?.rating > 0 && (
+              <Rating
+                size={13}
+                rating={activity?.review?.rating}
+                maxRating={5}
+                disabled={true}
+                baseColor={colors.floralWhite}
+                fillColor={colors.jasper}
+              />
+            )}
+
+            {activity?.review?.message && (
+              <Text className="text-floralWhite text-base font-outfitRegular text-wrap">
+                {activity?.review?.message}
+              </Text>
+            )}
+          </>
+        ) : null}
+
+        <Text className="font-outfitRegular text-base text-slate-400 self-start">
+          {formatRelativeDate(activity?.activityDate)}
+        </Text>
+      </View>
 
       {activity?.activityType === "review" && (
         <PosterMovie

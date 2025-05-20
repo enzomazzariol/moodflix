@@ -35,16 +35,24 @@ export default function ActivityTabsView() {
     });
   };
 
-  const getCustomText = (activityType, title) => {
+  const getCustomText = (activity) => {
+    const { activityType, movie, review } = activity;
+    const title = movie?.title;
+
     switch (activityType) {
-      case "LIKE":
-        return `Te ha gustado "${title}"`;
-      case "WATCHLIST":
-        return `Has añadido "${title}" a tu watchlist`;
-      case "VIEWED":
-        return `Has marcado "${title}" como vista`;
-      case "REVIEW":
-        return `Has hecho una reseña de "${title}"`;
+      case "like":
+        return { text: `Has guardado`, title, suffix: "en tu lista de favoritos" };
+      case "watchlist":
+        return { text: `Has añadido`, title , suffix: "a tu watchlist" };
+      case "viewed":
+        return { text: `Has marcado`, title, suffix: "como vista" };
+      case "review":
+        return {
+          text: `Has hecho una reseña de`,
+          title,
+          rating: review?.rating,
+          message: review?.message,
+        };
       default:
         return null;
     }
@@ -65,15 +73,13 @@ export default function ActivityTabsView() {
       >
         {sortedActivities.map((activity, i) => {
           const isCurrentUser = activity?.user?.userId === user?.user_id;
-          const customText = isCurrentUser
-            ? getCustomText(activity?.activityType, activity?.movie?.title)
-            : null;
+          const customText = isCurrentUser ? getCustomText(activity) : null;
 
           return (
             <ActivityCard
               key={i}
               activity={activity}
-              customText={isCurrentUser ? getCustomText(activity?.activityType, activity?.movie?.title) : null}
+              customText={customText}
               onPressUser={() =>
                 goToUserProfile(
                   activity?.user?.userId,
