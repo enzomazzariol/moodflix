@@ -5,14 +5,18 @@ import {
 import EmotionBtn from "../commoms/EmotionBtn";
 import { Title } from "../commoms/Title";
 
-export default function EmotionSlider({ title, emotions}) {
+export default function EmotionSlider({ title, emotions, onEmotionPress }) {
     return (
       <>
         <Title className="font-spaceGroteskBold" style={{ paddingLeft: hp("1.5%") }}>{title}</Title>
         <FlatList
           data={emotions}
           keyExtractor={(item) => item}
-          renderItem={({ item }) => <EmotionBtn width="25%">{item}</EmotionBtn>}
+          renderItem={({ item }) => (
+            <EmotionBtn width="25%" onPress={() => onEmotionPress(item)}>
+              {item}
+            </EmotionBtn>
+          )}
           contentContainerStyle={{
             paddingVertical: hp("1.7%"),
             paddingLeft: hp("1.5%"),

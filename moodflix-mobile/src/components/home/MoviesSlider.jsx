@@ -1,4 +1,4 @@
-import { FlatList, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
@@ -11,10 +11,17 @@ import { Title } from "../commoms/Title";
 export default function MoviesSlider({ title, movies, posterHeight, posterWidth, flatlistStyles, titleStyles }) {
     return (
       <View style={{ paddingVertical: hp("1%") }}>
-        <Title className={`font-spaceGroteskRegular`} style={{ ...titleStyles, fontSize: hp("2.5%") }}>{title}</Title>
+        <Title
+          className={`font-spaceGroteskRegular`}
+          style={{ ...titleStyles, fontSize: hp("2.5%") }}
+        >
+          {title}
+        </Title>
         <FlatList
           data={movies}
-          keyExtractor={(item) => item.id ?? item.movie_id}
+          keyExtractor={(item, index) =>
+            (item.id ?? item.movie_id ?? index).toString()
+          }
           renderItem={({ item }) => (
             <PosterMovie
               posterPath={item.poster_path ?? item.poster_url}
@@ -34,6 +41,14 @@ export default function MoviesSlider({ title, movies, posterHeight, posterWidth,
           showsHorizontalScrollIndicator={false}
           initialNumToRender={5}
           windowSize={3}
+          ListEmptyComponent={
+            <Text
+              style={{ color: "white", paddingHorizontal: 10 }}
+              className="font-spaceGroteskRegular text-2xl"
+            >
+              No hay películas para mostrar.
+            </Text>
+          }
         />
       </View>
     );

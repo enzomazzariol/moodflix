@@ -1,14 +1,18 @@
+import { useState } from "react";
 import { FlatList, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useRecommendedMoviesFromLastLike } from "../../../../shared/hooks/useLastLikedMovie";
 import { useMoviesByCategory } from "../../../../shared/hooks/useMoviesByCategory";
+import { Title } from "../../components/commoms/Title";
 import EmotionSlider from "../../components/home/EmotionSlider";
 import MoviesSlider from "../../components/home/MoviesSlider";
 import HomeScreen from "../../components/screens/HomeScreen";
 import { useAuth } from "../../context/AuthContext";
+import { colors } from "../../utils/colors";
 
 export default function Home() {
   const { currentEmotion, favoriteGenre, user } = useAuth();
+  const [selectedEmotion, setSelectedEmotion] = useState(null);
   const { recommendedMovies, basedOnTitle } = useRecommendedMoviesFromLastLike(
     user?.user_id
   );
@@ -55,19 +59,40 @@ export default function Home() {
   ];
 
   const renderHeader = () => (
-    <EmotionSlider
-      emotions={[
-        "amor",
-        "tristeza",
-        "feliz",
-        "alegre",
-        "enojado",
-        "esperanza",
-        "miedo",
-        "ansiedad",
-      ]}
-      title="¿Cómo te sientes hoy?"
-    />
+    <>
+      <EmotionSlider
+        emotions={[
+          "Amor",
+          "Nostalgia",
+          "Feliz",
+          "Enojado",
+          "Esperanza",
+          "Miedo",
+          "Ansiedad",
+          "Alegre",
+        ]}
+        title="¿Cómo te sientes hoy?"
+        onEmotionPress={setSelectedEmotion}
+      />
+      {selectedEmotion && (
+        <View
+          style={{
+            marginTop: hp("2%"),
+            marginHorizontal: hp("1.5%"),
+            padding: hp("2%"),
+            backgroundColor: colors.prussianBlue,
+            borderRadius: 12,
+            height: hp("20%"),
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Title className="text-white text-xl">
+            Seleccionaste: {selectedEmotion}
+          </Title>
+        </View>
+      )}
+    </>
   );
 
   // Renderizar cada sección de películas

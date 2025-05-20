@@ -1,7 +1,9 @@
+import { Rating } from "@kolking/react-native-rating";
 import { useNavigation } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   Modal,
   ScrollView,
@@ -14,20 +16,27 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import { useActivity } from "../../../../shared/hooks/useActivity";
 import { useUserInfo } from "../../../../shared/hooks/useUserInfo";
+import PosterMovie from "../../components/commoms/PosterMovie";
 import ProfilePicture from "../../components/commoms/ProfilePicture";
+import { Title } from "../../components/commoms/Title";
 import MoviesSlider from "../../components/home/MoviesSlider";
 import ProfileInfoRow from "../../components/profile/ProfileInfoRow";
 import MovieScreen from "../../components/screens/MovieScreen";
-import movies from "../../lib/mocks/movies.json";
+import { useUserMoviesProfile } from "../../hooks/useUserMoviesProfile";
 import { colors } from "../../utils/colors";
 
 // Screen de perfil de usuario
 export default function UserProfile() {
   const { id, username } = useLocalSearchParams();
-  const { userInfo, isLoading, error } = useUserInfo(id);
+  const { userInfo } = useUserInfo(id);
   const navigation = useNavigation();
   const [profileImageVisible, setProfileImageVisible] = useState(false);
+  const { error, isLoading, userFavorites, userWatchedMovies, userWatchlist } =
+    useUserMoviesProfile(id);
+  const { userActivity } = useActivity(id);
+  console.log(userActivity);
 
   // Setea el título de la pantalla en función del usuario
   useEffect(() => {
@@ -43,8 +52,11 @@ export default function UserProfile() {
         keyboardShouldPersistTaps="handled"
       >
         <View
-          className="items-center"
-          style={{ paddingHorizontal: wp("0%"), paddingVertical: hp("4%") }}
+          className=""
+          style={{
+            paddingHorizontal: wp("0%"),
+            paddingVertical: hp("4%"),
+          }}
         >
           <View
             className="items-center w-full"
@@ -83,22 +95,101 @@ export default function UserProfile() {
               </Text>
             </View>
           </View>
-          {/* Favoritas del usuario */}
+          <View
+            style={{ marginTop: hp("2%"), paddingHorizontal: wp("2%") }}
+            className="flex-col justify-start items-start"
+          >
+            {userActivity?.length > 0 && (
+              <>
+                <Title
+                  className="font-spaceGroteskRegular"
+                  style={{ fontSize: hp("2.5%") }}
+                >
+                  Últimas reseñas
+                </Title>
+
+                {userActivity
+                  ?.filter((activity) => activity.activityType === "review")
+                  .slice(0, 3)
+                  .map((activity, index) => (
+                    <View
+                      key={activity.activityId ?? index}
+                      style={{ marginVertical: hp("2%") }}
+                    >
+                      {/* Poster de la película */}
+                      <PosterMovie
+                        idMovie={activity.movie.movieId}
+                        posterPath={activity.movie.posterPath}
+                        title={activity.movie.title}
+                        posterHeight={hp("18%")}
+                        posterWidth={wp("24%")}
+                      />
+
+                      {/* Si es una reseña, muestra el rating */}
+                      {activity.activityType === "review" && (
+                        <View
+                          style={{
+                            marginTop: hp("1%"),
+                            flexDirection: "row",
+                          }}
+                        >
+                          <Rating
+                            size={13}
+                            rating={activity?.review?.rating}
+                            maxRating={5}
+                            disabled={true}
+                            baseColor={colors.floralWhite}
+                            fillColor={colors.jasper}
+                          />
+                        </View>
+                      )}
+                    </View>
+                  ))}
+              </>
+            )}
+          </View>
+
+          {/* Sliders de peliculas favoritas, vistas y watchlist */}
           <View
             style={{
               paddingHorizontal: wp("2%"),
               paddingVertical: hp("1%"),
             }}
           >
-            <MoviesSlider
-              movies={movies}
-              title={"Favoritas"}
-              posterHeight={hp("16%")}
-              posterWidth={wp("21%")}
-            />
-          </View>
+            {isLoading ? (
+              <View className="flex-1 items-center justify-center">
+                <ActivityIndicator size="large" color={colors.floralWhite} />
+              </View>
+            ) : (
+              <>
+                {userFavorites?.length > 0 && (
+                  <MoviesSlider
+                    movies={userFavorites}
+                    title={"Favoritas"}
+                    posterHeight={hp("16%")}
+                    posterWidth={wp("21%")}
+                  />
+                )}
+                {userWatchlist?.length > 0 && (
+                  <MoviesSlider
+                    movies={userWatchlist}
+                    title={"Watchlist"}
+                    posterHeight={hp("16%")}
+                    posterWidth={wp("21%")}
+                  />
+                )}
 
-          {/* Historial del usuario, reviews recientes */}
+                {userWatchedMovies?.length > 0 && (
+                  <MoviesSlider
+                    movies={userWatchedMovies}
+                    title={"Vistas"}
+                    posterHeight={hp("16%")}
+                    posterWidth={wp("21%")}
+                  />
+                )}
+              </>
+            )}
+          </View>
         </View>
       </ScrollView>
     </MovieScreen>
