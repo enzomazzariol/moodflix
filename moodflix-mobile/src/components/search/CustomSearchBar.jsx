@@ -1,14 +1,15 @@
 import { SearchBar } from "@rneui/themed";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useSearchContext } from "../../context/SearchContext";
+import { useSearchHistory } from "../../context/SearchHistoryContext";
 import { colors } from "../../utils/colors";
 import { Title } from "../commoms/Title";
 
 export default function CustomHeaderSearchBar() {
   const { searchText, setSearchText, setIsFocused } = useSearchContext();
-
+  const { saveSearchToHistory} = useSearchHistory();
   const onChangeText = useCallback((value) => {
     setSearchText(value);
   }, []);
@@ -25,11 +26,17 @@ export default function CustomHeaderSearchBar() {
         Buscar
       </Title>
       <SearchBar
-        placeholder="Buscar películas, actores, directores..."
+        placeholder="Buscar películas..."
         onChangeText={onChangeText}
         value={searchText}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => {
+          setIsFocused(false);
+          setSearchText(""); 
+        }}
+        onSubmitEditing={() => {
+          saveSearchToHistory(searchText); 
+        }}
         containerStyle={styles.searchBarContainer}
         inputContainerStyle={styles.searchBarInputContainer}
         inputStyle={{ color: colors.floralWhite }}

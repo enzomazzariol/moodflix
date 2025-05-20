@@ -1,22 +1,26 @@
 import { Animated, StyleSheet, Text } from "react-native";
-//import Animated from "react-native-reanimated";
 import { heightPercentageToDP } from "react-native-responsive-screen";
-import { useSearchContext } from "../../context/SearchContext";
+import { useSearchHistory } from "../../context/SearchHistoryContext";
 import RecentSearchText from "./recentSearchText";
 
-
 export default function RecentSearchComponent() {
-    const { isFocused } = useSearchContext();
-    //const {animatedStyle} = useSearchBarAnimation(isFocused);
-    return (
+  const { history, deleteSearchFromHistory } = useSearchHistory();
+
+  return (
     <Animated.View style={[styles.resultsContainer]}>
-      <Text className="text-2xl text-jasper font-outfitBold">
-        Búsquedas recientes
-      </Text>
-      <RecentSearchText>Interstellar</RecentSearchText>
-      <RecentSearchText>Inception</RecentSearchText>
-      <RecentSearchText>Shrek</RecentSearchText>
-      <RecentSearchText>Avengers</RecentSearchText>
+      {history.length > 0 && (
+        <Text className="text-2xl text-jasper font-outfitBold">
+          Búsquedas recientes
+        </Text>
+      )}
+      {history.map((query, index) => (
+        <RecentSearchText
+          key={index}
+          onDelete={() => deleteSearchFromHistory(query)}
+        >
+          {query}
+        </RecentSearchText>
+      ))}
     </Animated.View>
   );
 }

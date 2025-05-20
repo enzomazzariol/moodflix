@@ -206,6 +206,21 @@ export function useTMDB() {
     return movies[randomIndex];
   };
 
+  const searchMovies = async (query) => {
+    const data = await sendRequest({
+      url: `/search/movie?query=${encodeURIComponent(query)}`,
+      method: "GET",
+      params: {
+        language: "es-ES",
+        include_adult: true,
+        region: "ES",
+        page: 1,
+      },
+    });
+
+    return data;
+  };
+
   return {
     getPopularMovies,
     getUpcomingMovies,
@@ -217,6 +232,7 @@ export function useTMDB() {
     getSimilarMovies,
     getMovieRecommendations,
     getRandomMovieBaseOn,
+    searchMovies,
     isLoading,
     data,
     error,

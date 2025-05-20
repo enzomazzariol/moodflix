@@ -4,17 +4,20 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import { useSearchMovies } from "../../../../shared/hooks/useSearchMovies";
 import EmotionBtn from "../../components/commoms/EmotionBtn";
 import SectionLink from "../../components/commoms/SectionLink";
 import { Title } from "../../components/commoms/Title";
 import SearchScreen from "../../components/screens/SearchScreen";
 import RecentSearchComponent from "../../components/search/recentSearchComponent";
+import SearchCard from "../../components/search/searchCard";
 import { useSearchContext } from "../../context/SearchContext";
 import { emotionsNames } from "../../lib/searchData/emotionsNames";
 import { searchBrowseLinks } from "../../lib/searchData/searchBrowseLinks";
 
 export default function Search() {
   const { isFocused } = useSearchContext();
+  const { results, loading } = useSearchMovies();
   const router = useRouter();
 
   const handleNavigation = (link) => () => {
@@ -25,12 +28,24 @@ export default function Search() {
     router.push(`/search/emotion/${emotion}`);
   };
 
-  if (isFocused)
+  if (isFocused) {
     return (
       <SearchScreen>
-        <RecentSearchComponent />
+        {results.length > 0 ? (
+          <FlatList
+            data={results}
+            keyExtractor={(item) => item.id?.toString()}
+            renderItem={({ item }) => <SearchCard movie={item} />}
+            contentContainerStyle={{
+              paddingVertical: hp("2%"),
+            }}
+          />
+        ) : (
+          <RecentSearchComponent />
+        )}
       </SearchScreen>
     );
+  }
 
   // Separador entre secciones de películas
   const RenderSectionSeparator = () => <View style={{ height: hp("2%") }} />;

@@ -7,6 +7,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../../global.css";
 import { AuthProvider } from "../context/AuthContext";
 import { SearchProvider } from "../context/SearchContext";
+import { SearchHistoryProvider } from "../context/SearchHistoryContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -56,20 +57,22 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <AuthProvider>
         <SearchProvider>
-          <StatusBar style="auto" />
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              animation: "slide_from_right",
-            }}
-          >
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="(onboarding)"
-              options={{ headerShown: false }}
-            />
-          </Stack>
+          <SearchHistoryProvider>
+            <StatusBar style="auto" />
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                animation: "slide_from_right",
+              }}
+            >
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="(onboarding)"
+                options={{ headerShown: false }}
+              />
+            </Stack>
+          </SearchHistoryProvider>
         </SearchProvider>
       </AuthProvider>
     </SafeAreaProvider>
