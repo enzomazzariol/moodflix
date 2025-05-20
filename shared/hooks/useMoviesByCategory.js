@@ -13,6 +13,8 @@ export function useMoviesByCategory({
     getUpcomingMovies,
     getNowPlayingMovies,
     getTopRatedMovies,
+    getClassicMovies,
+    getIndieMovies,
     isLoading,
     error,
   } = useTMDB();
@@ -37,6 +39,12 @@ export function useMoviesByCategory({
             break;
           case "top_rated":
             data = await getTopRatedMovies(language, page);
+            break;
+          case "classic":
+            data = await getClassicMovies(language, page);
+            break;
+          case "indie":
+            data = await getIndieMovies(language, page);
             break;
           default:
             console.warn("Categoría no reconocida:", category);

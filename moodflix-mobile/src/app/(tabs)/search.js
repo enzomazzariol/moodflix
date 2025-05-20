@@ -16,7 +16,7 @@ import { emotionsNames } from "../../lib/searchData/emotionsNames";
 import { searchBrowseLinks } from "../../lib/searchData/searchBrowseLinks";
 
 export default function Search() {
-  const { isFocused } = useSearchContext();
+  const { isFocused, searchText } = useSearchContext();
   const { results, loading } = useSearchMovies();
   const router = useRouter();
 
@@ -28,7 +28,10 @@ export default function Search() {
     router.push(`/search/emotion/${emotion}`);
   };
 
-  if (isFocused) {
+  const shouldShowSearchResults =
+    isFocused || (searchText.trim().length >= 3 && results.length > 0);
+
+  if (shouldShowSearchResults) {
     return (
       <SearchScreen>
         {results.length > 0 ? (

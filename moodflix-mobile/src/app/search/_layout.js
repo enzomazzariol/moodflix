@@ -45,6 +45,16 @@ export default function SearchLayout() {
       />
 
       <Stack.Screen
+        name="classics"
+        options={{ title: "Clásicos", headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="indie"
+        options={{ title: "Indie", headerShown: true }}
+      />
+
+      <Stack.Screen
         name="emotion/[name]"
         options={{ title: "[Emotion]", headerShown: true }}
       />

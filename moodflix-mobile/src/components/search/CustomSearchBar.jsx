@@ -1,6 +1,6 @@
 import { SearchBar } from "@rneui/themed";
 import { useCallback } from "react";
-import { StyleSheet, View } from "react-native";
+import { Keyboard, StyleSheet, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useSearchContext } from "../../context/SearchContext";
 import { useSearchHistory } from "../../context/SearchHistoryContext";
@@ -32,9 +32,10 @@ export default function CustomHeaderSearchBar() {
         onFocus={() => setIsFocused(true)}
         onBlur={() => {
           setIsFocused(false);
-          setSearchText(""); 
         }}
         onSubmitEditing={() => {
+          if (searchText.trim().length < 3) return;
+          Keyboard.dismiss();
           saveSearchToHistory(searchText); 
         }}
         containerStyle={styles.searchBarContainer}

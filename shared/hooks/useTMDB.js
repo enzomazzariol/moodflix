@@ -221,6 +221,39 @@ export function useTMDB() {
     return data;
   };
 
+  const getClassicMovies = async (language = "es-ES", page = 1) => {
+    const data = await sendRequest({
+      url: "/discover/movie",
+      method: "GET",
+      params: {
+        language,
+        page,
+        sort_by: "popularity.desc",
+        "primary_release_date.lte": "1995-12-31", // antes de 1996
+      },
+    });
+
+    return data;
+  };
+
+  const getIndieMovies = async (language = "es-ES", page = 1) => {
+    const data = await sendRequest({
+      url: "/discover/movie",
+      method: "GET",
+      params: {
+        language,
+        page,
+        sort_by: "popularity.desc",
+        vote_count_gte: 50,
+        with_genres: "18,53,878", // Drama
+        "with_runtime.lte": 160, // duración <= 120 minutos
+        "release_date.lte": "2017-01-01",
+      },
+    });
+
+    return data;
+  };
+
   return {
     getPopularMovies,
     getUpcomingMovies,
@@ -233,6 +266,8 @@ export function useTMDB() {
     getMovieRecommendations,
     getRandomMovieBaseOn,
     searchMovies,
+    getClassicMovies,
+    getIndieMovies,
     isLoading,
     data,
     error,

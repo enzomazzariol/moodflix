@@ -4,4 +4,6 @@ export const searchBrowseLinks = [
   { name: "Mejor valoración", link: "/search/rating" },
   // { name: "Fecha de estreno", link: "/search/release" },
   { name: "Estrenos", link: "/search/new" },
+  { name: "Clásicos", link: "/search/classics" },
+  { name: "Indie", link: "/search/indie" },
 ];
