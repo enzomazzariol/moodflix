@@ -172,7 +172,6 @@ public class TmdbApiService {
     }
 
     public ResponseEntity<?> fetchRandomMovie(String genre, String decade, String provider, Double minRating, Integer maxDuration, int index) {
-        System.out.println(genre + decade + provider + minRating + maxDuration + index);
         try {
             // Asignar valores por defecto si son nulos o vacíos
             String genreFinal = (genre == null || genre.isEmpty()) ? null : genre;
@@ -192,6 +191,8 @@ public class TmdbApiService {
                 startDate = null;
                 endDate = null;
             }
+            System.out.printf("Filters => Genre: %s | Decade: %s | Provider: %s | Rating: %.1f | Duration: %d | Index: %d%n",
+                    genreFinal, decadeFinal, providerFinal, minRatingFinal, maxDurationFinal, index);
 
             //Construcción dinámica del URI eliminando parámetros innecesarios
             WebClient.RequestHeadersUriSpec<?> uriSpec = webClient.get();
@@ -200,7 +201,7 @@ public class TmdbApiService {
                         .queryParam("api_key", API_KEY)
                         .queryParam("language", "es-ES")
                         .queryParam("sort_by", "popularity.desc")
-                        .queryParam("vote_average.gte", minRatingFinal)
+                        .queryParam("vote_average.gte", minRatingFinal / 10)
                         .queryParam("with_runtime.lte", maxDurationFinal)
                         .queryParam("watch_region", "ES")
                         .queryParam("with_watch_monetization_types", "flatrate,free,ads,rent,buy");
@@ -222,6 +223,7 @@ public class TmdbApiService {
             TmdbRandomMovieResponse tmdbResponse = gson.fromJson(jsonResponse, TmdbRandomMovieResponse.class);
 
             List<Movie> movies = tmdbResponse.results();
+            System.out.println("Películas encontradas: " + movies.size() + ", Index solicitado: " + index);
 
             if (!movies.isEmpty() && index < movies.size()) {
                 Movie selectedMovie = movies.get(index);

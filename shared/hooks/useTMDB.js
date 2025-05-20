@@ -137,6 +137,75 @@ export function useTMDB() {
     return data;
   };
 
+  const getRandomMovieBaseOn = async ({
+    genre,
+    decade,
+    streaming,
+    rating,
+    duration,
+  }) => {
+    const startYear = decade ? parseInt(decade) : null;
+    const endYear = startYear ? startYear + 9 : null;
+
+    // Primera llamada: solo para obtener total_pages
+    const initialResponse = await sendRequest({
+      url: "/discover/movie",
+      method: "GET",
+      params: {
+        language: "es-ES",
+        sort_by: "popularity.desc",
+        vote_average_gte: rating / 10,
+        with_runtime_lte: duration,
+        watch_region: "ES",
+        with_watch_monetization_types: "flatrate,free,ads,rent,buy",
+        ...(genre && { with_genres: genre }),
+        ...(streaming && { with_watch_providers: streaming }),
+        ...(startYear && {
+          "release_date.gte": `${startYear}-01-01`,
+          "release_date.lte": `${endYear}-12-31`,
+        }),
+        page: 1,
+      },
+    });
+
+    const totalPages = Math.min(initialResponse.total_pages || 1, 500); // TMDB limita a 500 páginas
+
+    if (totalPages === 0) return null;
+
+    // Escoge una página aleatoria dentro del rango válido
+    const randomPage = Math.floor(Math.random() * totalPages) + 1;
+
+    // Segunda llamada para obtener resultados de la página aleatoria
+    const pageResponse = await sendRequest({
+      url: "/discover/movie",
+      method: "GET",
+      params: {
+        language: "es-ES",
+        sort_by: "popularity.desc",
+        vote_average_gte: rating / 10,
+        with_runtime_lte: duration,
+        watch_region: "ES",
+        with_watch_monetization_types: "flatrate,free,ads,rent,buy",
+        ...(genre && { with_genres: genre }),
+        ...(streaming && { with_watch_providers: streaming }),
+        ...(startYear && {
+          "release_date.gte": `${startYear}-01-01`,
+          "release_date.lte": `${endYear}-12-31`,
+        }),
+        page: randomPage,
+      },
+    });
+
+    const movies = pageResponse?.results || [];
+
+    if (!movies.length) return null;
+
+    // Índice aleatorio dentro de los resultados de la página
+    const randomIndex = Math.floor(Math.random() * movies.length);
+
+    return movies[randomIndex];
+  };
+
   return {
     getPopularMovies,
     getUpcomingMovies,
@@ -147,6 +216,7 @@ export function useTMDB() {
     getMovieDetails,
     getSimilarMovies,
     getMovieRecommendations,
+    getRandomMovieBaseOn,
     isLoading,
     data,
     error,

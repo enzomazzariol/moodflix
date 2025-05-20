@@ -73,19 +73,24 @@ export const useMoodflix = () => {
     duration,
     index,
   }) => {
-    const data = await sendRequest({
-      url: "/movies/random",
-      method: "GET",
-      params: {
-        genre: genre ?? "",
-        decade: decade ?? "",
-        provider: streaming ?? "",
-        minRating: rating,
-        maxDuration: duration,
-        index: index,
-      },
-    });
-    return data;
+    try {
+      const data = await sendRequest({
+        url: "/movies/random",
+        method: "GET",
+        params: {
+          genre: genre ?? "",
+          decade: decade ?? "",
+          provider: streaming ?? "",
+          minRating: rating,
+          maxDuration: duration,
+          index: index,
+        },
+      });
+      return data;
+    } catch (error) {
+      console.log("Error obteniendo película randomizada:", error);
+      return null;
+    }
   };
 
   const getMovieStatus = async (userId, movieId) => {

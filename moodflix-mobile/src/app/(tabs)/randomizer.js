@@ -1,7 +1,5 @@
-import { useRouter } from "expo-router";
-import { useState } from "react";
 import { heightPercentageToDP } from "react-native-responsive-screen";
-import { useMoodflix } from "../../../../shared/hooks/useMoodflix";
+import { useRandomizer } from "../../../../shared/hooks/useRandomizer";
 import RandomizerSlider from "../../components/commoms/Slider";
 import SubmitBtn from "../../components/commoms/SubmitBtn";
 import { Title } from "../../components/commoms/Title";
@@ -14,37 +12,8 @@ import {
 } from "../../lib/randomizerFields";
 
 export default function Randomizer() {
-  // TODO: Añadir boton de resetear cuando haya cambio en los inputs
-  const [randomizerData, setRandomizerData] = useState({
-    genre: null,
-    decade: null,
-    streaming: null,
-    rating: 1,
-    duration: 240,
-  });
-  const router = useRouter();
-  const [index, setIndex] = useState(0);
-
-  const { getRandomMovie, error, isLoading } = useMoodflix();
-
-  const handleSubmit = async () => {
-    const movie = await getRandomMovie({ ...randomizerData, index });
-    if (movie) {
-      goToRandomMovie(movie, index);
-      setIndex(index + 1);
-    }
-  };
-
-  const goToRandomMovie = (movie, currentIndex) => {
-    router.push({
-      pathname: `/randomizerMovie`,
-      params: {
-        movie: JSON.stringify(movie),
-        randomizerData: JSON.stringify(randomizerData),
-        index: currentIndex.toString(),
-      },
-    });
-  };
+  const { randomizerData, setRandomizerData, handleSubmit, isLoading } =
+    useRandomizer();
 
   return (
     <TabsScreen>
@@ -86,6 +55,7 @@ export default function Randomizer() {
         }
         options={StreamingServiceOptions}
       />
+
       <RandomizerSlider
         label="Rating"
         minValue={1}
@@ -96,12 +66,13 @@ export default function Randomizer() {
           setRandomizerData({ ...randomizerData, rating: val })
         }
       />
+
       <RandomizerSlider
         label="Duración máxima"
         minValue={60}
         maxValue={240}
-        value={randomizerData.duration}
         suffix="min"
+        value={randomizerData.duration}
         onChange={(val) =>
           setRandomizerData({ ...randomizerData, duration: val })
         }
