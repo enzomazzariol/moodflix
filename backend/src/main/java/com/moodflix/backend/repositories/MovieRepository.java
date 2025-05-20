@@ -41,6 +41,14 @@ public class MovieRepository {
             VALUES (:movie_id, :emotion_id)
             ON DUPLICATE KEY UPDATE movie_id = VALUES(movie_id), emotion_id = VALUES(emotion_id);
             """;
+    private static final String FIND_ONE_MOVIE_BY_EMOTION = """
+            SELECT *
+            FROM movie_with_emotions
+            WHERE JSON_CONTAINS(emotions, JSON_OBJECT('name', :emotion_name))
+            ORDER BY RAND()
+            LIMIT 1;
+    """;
+
 
     private final JdbcClient jdbcClient;
 
@@ -138,6 +146,21 @@ public class MovieRepository {
             throw new DatabaseException("Database error while finding movies by emotion", e);
         } catch (Exception e) {
             logger.error("Unexpected error finding movies by emotion {}", emotion_name, e);
+            throw new DatabaseException("Unexpected error occurred while finding movies by emotion", e);
+        }
+    }
+
+    public Optional<Movie> findOneByEmotion(String emotion) {
+        try {
+            return jdbcClient.sql(FIND_ONE_MOVIE_BY_EMOTION)
+                    .param("emotion_name", emotion)
+                    .query(new MovieRowRapper())
+                    .optional();
+        }catch(DataAccessException e) {
+            logger.error("Failed to find movies by emotion {}: Database access error", emotion, e);
+            throw new DatabaseException("Database error while finding movies by emotion", e);
+        } catch (Exception e) {
+            logger.error("Unexpected error finding movies by emotion {}", emotion, e);
             throw new DatabaseException("Unexpected error occurred while finding movies by emotion", e);
         }
     }

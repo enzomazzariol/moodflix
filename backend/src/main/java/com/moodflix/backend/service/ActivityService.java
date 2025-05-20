@@ -56,7 +56,7 @@ public class ActivityService {
             List<ActivityResponseDTO> actividades = activityRepository.findByUser(userId);
             if(actividades.isEmpty()) {
                 return ResponseEntity.ok(
-                        new ApiResponse(HttpStatus.NO_CONTENT.value(), "No hay actividades disponibles para el usuario " + userId)
+                        new ApiResponse(HttpStatus.NOT_FOUND.value(), "No hay actividades disponibles para el usuario " + userId)
                 );
             }
 

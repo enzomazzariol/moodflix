@@ -95,4 +95,18 @@ public class MovieService {
 
         return ResponseEntity.ok(movies);
     }
+
+    /*
+     * Metodo para buscar una pelicula por una emocion
+     */
+    public ResponseEntity<?> getMovieByEmotion(String emotion) {
+        Optional<Movie> movie = movieRepository.findOneByEmotion(emotion);
+
+        if(movie.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(HttpStatus.NOT_FOUND.value(), "No se encontró ninguna película para la emoción: " + emotion));
+        }
+
+        return ResponseEntity.ok(movie);
+    }
 }

@@ -65,20 +65,56 @@ export default function ActivityTabsView() {
     }
   };
 
+  
+  if (error) {
+    return (
+      <ActivityScreen>
+        <View className="flex-1 items-center justify-center gap-y-5">
+          <Text
+            className="font-outfitBold text-3xl"
+            style={{ color: colors.jasper, textAlign: "center" }}
+          >
+            Error al cargar las actividades.
+          </Text>
+          <SubmitBtn>
+            <Text className="text-xl font-outfitBold text-white">
+              Volver a intentarlo
+            </Text>
+          </SubmitBtn>
+        </View>
+      </ActivityScreen>
+    );
+  }
+
   const TabContent = useMemo(() => {
     const filteredActivities =
-      index === 0 ? [...(activities ?? [])] : [...(userActivity ?? [])];
+      index === 0 ? activities ?? [] : userActivity ?? [];
 
-    const sortedActivities = filteredActivities.sort(
+    const sortedActivities = [...filteredActivities].sort(
       (a, b) => new Date(b.activityDate) - new Date(a.activityDate)
     );
+
+    if (sortedActivities.length === 0 || sortedActivities === null) {
+      return (
+        <ActivityScreen>
+          <View className="flex-1 items-center justify-center">
+            <Text
+              className="font-outfitBold text-3xl"
+              style={{ color: colors.jasper, textAlign: "center" }}
+            >
+              No hay actividades para mostrar.
+            </Text>
+          </View>
+        </ActivityScreen>
+      );
+    }
 
     return (
       <View
         className="flex-1 items-center"
         style={{ padding: hp("1%"), rowGap: hp("1.5%") }}
       >
-        {sortedActivities.map((activity, i) => {
+        {sortedActivities?.map((activity, i) => {
           const isCurrentUser = activity?.user?.userId === user?.user_id;
           const customText = isCurrentUser ? getCustomText(activity) : null;
 
@@ -113,25 +149,6 @@ export default function ActivityTabsView() {
     );
   }
 
-  if (error) {
-    return (
-      <ActivityScreen>
-        <View className="flex-1 items-center justify-center gap-y-5">
-          <Text
-            className="font-outfitBold text-3xl"
-            style={{ color: colors.jasper, textAlign: "center" }}
-          >
-            Error al cargar las actividades.
-          </Text>
-          <SubmitBtn>
-            <Text className="text-xl font-outfitBold text-white">
-              Volver a intentarlo
-            </Text>
-          </SubmitBtn>
-        </View>
-      </ActivityScreen>
-    );
-  }
 
   return (
     <ActivityScreen>
