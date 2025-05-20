@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import { useMemo, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useMemo, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useActivity } from "../../../../shared/hooks/useActivity";
@@ -14,12 +14,19 @@ export default function ActivityTabsView() {
   const { user } = useAuth();
   const {
     activity: activities,
+    refetch: fetchActivity,
     userActivity,
     isLoading,
     error,
   } = useActivity(user?.user_id);
   const [index, setIndex] = useState(0);
   const router = useRouter();
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchActivity();
+    }, [])
+  );
 
   const goToMoviePage = (idMovie, title) => {
     router.push({
