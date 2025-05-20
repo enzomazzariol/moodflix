@@ -125,6 +125,18 @@ export function useTMDB() {
     return data;
   };
 
+  const getMovieRecommendations = async (movieId, language = "es-ES") => {
+    const data = await sendRequest({
+      url: `/movie/${movieId}/recommendations`,
+      method: "GET",
+      params: {
+        language,
+      },
+    });
+
+    return data;
+  };
+
   return {
     getPopularMovies,
     getUpcomingMovies,
@@ -134,6 +146,7 @@ export function useTMDB() {
     getCredits,
     getMovieDetails,
     getSimilarMovies,
+    getMovieRecommendations,
     isLoading,
     data,
     error,

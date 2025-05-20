@@ -1,4 +1,4 @@
 package com.moodflix.backend.dtos;
 
-public class MovieInfo {
-}
+public record MovieInfo(Integer movieId, String title) {}
+

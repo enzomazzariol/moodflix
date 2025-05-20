@@ -173,6 +173,22 @@ export const useMoodflix = () => {
     return data;
   };
 
+  const getUserById = async (userId) => {
+    const data = await sendRequest({
+      url: `/users/${userId}`,
+      method: "GET",
+    });
+    return data;
+  };
+
+  const getUserLikedMovies = async (userId) => {
+    const data = await sendRequest({
+      url: `/favorites/last-liked/${userId}`,
+      method: "GET",
+    });
+    return data;
+  };
+
   return {
     getMovie,
     loginAuth,
@@ -188,6 +204,8 @@ export const useMoodflix = () => {
     rateMovie,
     getActivities,
     getActivitiesByUser,
+    getUserById,
+    getUserLikedMovies,
     isLoading,
     data,
     error,

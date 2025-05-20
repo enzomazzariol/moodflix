@@ -5,6 +5,8 @@ import com.moodflix.backend.service.UserFavoritesService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/moodflix/favorites")
 @CrossOrigin("*")
@@ -34,5 +36,12 @@ public class UserFavoritesController {
     @GetMapping("/check")
     public ResponseEntity<?> checkFavorite(@RequestBody FavoriteMovieRequest favoriteMovieRequest) {
         return userFavoritesService.isFavorite(favoriteMovieRequest);
+    }
+
+    @GetMapping("/last-liked/{userId}")
+    public ResponseEntity<?> getLastLikedMovie(@PathVariable Long userId) {
+        return userFavoritesService.getLastLikedMovieId(userId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

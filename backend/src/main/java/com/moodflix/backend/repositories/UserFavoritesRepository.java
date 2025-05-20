@@ -1,6 +1,7 @@
 package com.moodflix.backend.repositories;
 
 import com.moodflix.backend.dtos.FavoriteMovieResponse;
+import com.moodflix.backend.dtos.MovieInfo;
 import com.moodflix.backend.exceptions.DatabaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserFavoritesRepository {
@@ -108,4 +110,21 @@ public class UserFavoritesRepository {
             return List.of();
         }
     }
+
+    public Optional<MovieInfo> findLastLikedMovieInfoByUser(Long userId) {
+        String sql = """
+        SELECT m.movie_id, m.title
+        FROM user_favorites uf
+        JOIN movies m ON uf.movie_id = m.movie_id
+        WHERE uf.user_id = ?
+        ORDER BY uf.created_at DESC
+        LIMIT 1
+    """;
+
+        return jdbcClient.sql(sql)
+                .param(userId)
+                .query(MovieInfo.class)
+                .optional();
+    }
+
 }

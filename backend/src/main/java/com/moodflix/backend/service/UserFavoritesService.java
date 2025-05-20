@@ -2,6 +2,7 @@ package com.moodflix.backend.service;
 
 import com.moodflix.backend.dtos.FavoriteMovieRequest;
 import com.moodflix.backend.dtos.FavoriteMovieResponse;
+import com.moodflix.backend.dtos.MovieInfo;
 import com.moodflix.backend.exceptions.ApiResponse;
 import com.moodflix.backend.model.Activity;
 import com.moodflix.backend.model.enums.ActivityType;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserFavoritesService {
@@ -111,5 +113,9 @@ public class UserFavoritesService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
         }
+    }
+
+    public Optional<MovieInfo> getLastLikedMovieId(Long userId) {
+        return userFavoritesRepository.findLastLikedMovieInfoByUser(userId);
     }
 }
