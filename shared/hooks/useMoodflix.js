@@ -194,6 +194,14 @@ export const useMoodflix = () => {
     return data;
   };
 
+  const getMoviesByEmotion = async (emotion) => {
+    const data = await sendRequest({
+      url: `/movies/emotion/${emotion}`,
+      method: "GET",
+    });
+    return data;
+  };
+
   return {
     getMovie,
     loginAuth,
@@ -211,6 +219,7 @@ export const useMoodflix = () => {
     getActivitiesByUser,
     getUserById,
     getUserLikedMovies,
+    getMoviesByEmotion,
     isLoading,
     data,
     error,
