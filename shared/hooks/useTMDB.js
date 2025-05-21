@@ -74,7 +74,7 @@ export function useTMDB() {
 
   const getMoviesByGenre = async (
     genreId,
-    page = 1,
+    page,
     language = "es-ES",
     region = "ES"
   ) => {

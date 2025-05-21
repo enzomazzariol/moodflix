@@ -39,7 +39,7 @@ export default function Movie() {
   const {
     movie: movieDetails,
     credits,
-    similarMovies,
+    recommenmedMovies,
     movieRating,
     isLoading,
     error,
@@ -199,7 +199,7 @@ export default function Movie() {
 
         <View className="flex-col" style={{ paddingTop: hp("3%") }}>
           <MoviesSlider
-            movies={similarMovies?.results}
+            movies={recommenmedMovies?.results}
             title={"Películas similares"}
             flatlistStyles={{ paddingHorizontal: wp("5%") }}
             titleStyles={{ paddingLeft: wp("5%") }}

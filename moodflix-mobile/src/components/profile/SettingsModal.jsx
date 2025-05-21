@@ -28,7 +28,7 @@ export default function SettingsModal({ visible, onClose}) {
                 className="shadow-lg bg-raisinBlack"
                 contentContainerStyle={{ flexGrow: 1 }}
               >
-                <ModalContent />
+                <ModalContent onClose={onClose} />
               </ScrollView>
             </KeyboardAvoidingView>
           </View>
@@ -67,6 +67,7 @@ function ModalHeader({ title, onClose }) {
 
 function ModalContent({ onClose}) {
   const { user, location, favoriteGenre, setFavoriteGenre, currentEmotion, setCurrentEmotion } = useAuth();
+
   const[userData, setUserData] = useState({
     username: user?.username,
     email: user?.email,

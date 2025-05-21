@@ -10,7 +10,7 @@ export default function MovieLayout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
+        //headerShown: true,
         headerStyle: {
           backgroundColor: colors.raisinBlack,
         },

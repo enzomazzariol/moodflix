@@ -58,10 +58,10 @@ export default function ReviewSummaryCard({ movie, movieRating }) {
             {totalReviews > 0 ? averageRating : "0"} / 5
           </Text>
         </View>
-        {totalReviews > 1 ? (
-          <Text className="text-slate-400">{totalReviews} reseñas</Text>
-        ) : (
+        {totalReviews === 1 ? (
           <Text className="text-slate-400">{totalReviews} reseña</Text>
+        ) : (
+          <Text className="text-slate-400">{totalReviews} reseñas</Text>
         )}
       </View>
     </View>

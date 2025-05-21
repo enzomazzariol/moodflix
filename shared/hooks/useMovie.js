@@ -4,12 +4,17 @@ import { useTMDB } from "./useTMDB";
 
 export function useMovie(movieId) {
   const { getMovie, getMovieRating } = useMoodflix();
-  const { getCredits, getMovieDetails, getSimilarMovies } = useTMDB();
+  const {
+    getCredits,
+    getMovieDetails,
+    getSimilarMovies,
+    getMovieRecommendations,
+  } = useTMDB();
 
   const [movie, setMovie] = useState(null);
   const [credits, setCredits] = useState(null);
   const [movieDetails, setMovieDetails] = useState(null);
-  const [similarMovies, setSimilarMovies] = useState(null);
+  const [recommenmedMovies, setRecommendedMovies] = useState(null);
   const [movieRating, setMovieRating] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,18 +32,18 @@ export function useMovie(movieId) {
       const [
         creditsData,
         movieDetailsData,
-        similarMoviesData,
+        recommenmedMoviesData,
         movieRatingData,
       ] = await Promise.all([
         getCredits(movieId),
         getMovieDetails(movieId),
-        getSimilarMovies(movieId),
+        getMovieRecommendations(movieId),
         getMovieRating(movieId),
       ]);
 
       setCredits(creditsData);
       setMovieDetails(movieDetailsData);
-      setSimilarMovies(similarMoviesData);
+      setRecommendedMovies(recommenmedMoviesData);
       setMovieRating(movieRatingData);
     } catch (err) {
       setError(err);
@@ -57,7 +62,7 @@ export function useMovie(movieId) {
     error,
     credits,
     movieDetails,
-    similarMovies,
+    recommenmedMovies,
     movieRating,
     refetchMovie: fetchMovieAndCredits,
   };
