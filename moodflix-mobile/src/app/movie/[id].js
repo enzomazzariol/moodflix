@@ -3,11 +3,11 @@ import { useNavigation } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useEffect, useRef, useState } from "react";
 import {
-  ActivityIndicator,
   Animated,
   Dimensions,
   Linking,
   Platform,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -43,10 +43,21 @@ export default function Movie() {
     movieRating,
     isLoading,
     error,
+    refetchMovie,
   } = useMovie(id);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await refetchMovie();
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const headerOpacity = scrollY.interpolate({
     inputRange: [hp("33%"), hp("38%")],
@@ -86,16 +97,6 @@ export default function Movie() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <MovieScreen>
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color={colors.floralWhite} />
-        </View>
-      </MovieScreen>
-    );
-  }
-
   if (error) {
     return (
       <MovieScreen>
@@ -106,7 +107,7 @@ export default function Movie() {
           >
             Error al cargar la película.
           </Text>
-          <SubmitBtn>
+          <SubmitBtn handleSubmit={() => goToMoviePage(id)}>
             <Text className="text-xl font-outfitBold text-white">
               Volver a intentarlo
             </Text>
@@ -149,6 +150,14 @@ export default function Movie() {
         )}
         contentContainerStyle={styles.scrollContainer}
         bounces={true}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={["#EDE9E3"]} // Android
+            tintColor="#EDE9E3" // iOS
+          />
+        }
       >
         <Animated.View
           style={[

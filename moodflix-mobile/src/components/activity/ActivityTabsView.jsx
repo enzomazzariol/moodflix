@@ -94,7 +94,7 @@ export default function ActivityTabsView() {
       (a, b) => new Date(b.activityDate) - new Date(a.activityDate)
     );
 
-    if (sortedActivities.length === 0 || sortedActivities === null) {
+    if (sortedActivities.length === 0) {
       return (
         <ActivityScreen>
           <View className="flex-1 items-center justify-center">

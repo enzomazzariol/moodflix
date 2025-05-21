@@ -181,7 +181,7 @@ function ModalContent({
             value={review}
             className="text-lg text-floralWhite border border-prussianBlue rounded-xl"
             style={{
-              paddingStart: hp("2%"),
+              paddingHorizontal: hp("2%"),
               height: hp("30%"),
             }}
             clearButtonMode="always"

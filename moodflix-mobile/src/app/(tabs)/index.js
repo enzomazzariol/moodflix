@@ -104,6 +104,7 @@ export default function Home() {
           onPress={() =>
             handleEmotionMoviePress(selectedEmotionMovie?.movie_id)
           }
+          className="h-fit"
           activeOpacity={0.7}
           style={{
             marginHorizontal: hp("1.5%"),
@@ -143,6 +144,7 @@ export default function Home() {
                   <Title
                     className="text-jasper text-lg font-spaceGroteskBold"
                     maxFontSizeMultiplier={1.3}
+                    style={{ width: widthPercentageToDP("60%") }}
                   >
                     {selectedEmotionMovie?.title}
                   </Title>
