@@ -2,8 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useRouter } from "expo-router";
 
-// Crear una variable de entorno para la API Key
-const BASE_URL = "http://192.168.0.19:8080/moodflix"; // CAMBIAR IP SEGUN WIFI
+const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
 
 const router = useRouter();
 

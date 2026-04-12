@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         const authToken = await AsyncStorage.getItem("authToken");
         const rememberMe = await AsyncStorage.getItem("rememberMe");
 
-        if (!hasSeenOnboarding) {
+        if (hasSeenOnboarding !== "true") {
           router.replace("/(onboarding)/onboarding");
           return;
         }

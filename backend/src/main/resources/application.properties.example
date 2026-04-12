@@ -4,19 +4,19 @@ spring.application.name=backend
 # Configuracion del puerto del servidor
 server.port=8080
 
-#Configuracion de la base de datos MySQL
-spring.datasource.url=jdbc:mysql://localhost:3306/moodflix_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-spring.datasource.username=enzo
-spring.datasource.password=EnzoPaoloMazzariol
+# Configuracion de la base de datos MySQL
+spring.datasource.url=jdbc:mysql://localhost:3306/moodflix?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+spring.datasource.username=TU_USUARIO_DB
+spring.datasource.password=TU_PASSWORD_DB
 
 # Configuracion del driver de MySQL
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
-# Configuración del pool de conexiones
+# Configuracion del pool de conexiones
 spring.datasource.initialization-mode=always
 spring.datasource.hikari.maximum-pool-size=10
 
-#Validacionn de Conexion
+# Validacion de Conexion
 spring.datasource.hikari.validation-timeout=4000
 spring.datasource.hikari.connection-test-query=SELECT 1
 
@@ -24,6 +24,6 @@ spring.datasource.hikari.connection-test-query=SELECT 1
 logging.level.org.springframework.jdbc.core.JdbcTemplate=DEBUG
 logging.level.org.springframework.jdbc.datasource=DEBUG
 
-# JWT secret key
-jwt.secret=ahaYrJ3yOdPVG8eY52kHOTlOGMbjB9nVpgcOOIKkOow=
+# JWT secret key (generar con: openssl rand -base64 32)
+jwt.secret=TU_JWT_SECRET
 jwt.expiration=48
